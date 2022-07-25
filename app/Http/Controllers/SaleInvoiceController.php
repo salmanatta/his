@@ -34,8 +34,9 @@ class SaleInvoiceController extends Controller
             // return response()->json([$data,$data1]);
         }
          public function getBatches(Request $request)
-        {
+        {            
             $data=Stock::with('batch')->where('product_id',$request->product_id)->get();
+            return($data);
                  return response()->json($data);
         }
 

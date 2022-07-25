@@ -94,7 +94,7 @@ class PurchaseController extends Controller
             $product_id=$request->input('product_id')[$key];  
             $product_name=$request->input('product_name')[$key];  
             $line_total=$request->input('line_total')[$key];  
-            $bonus=$request->input('bonus')[$key];  
+            $bonus=$request->input('sale_tax_value')[$key];  
 
             PurchaseInvoiceDetail::create([
                         'product_id'     =>$product_id,

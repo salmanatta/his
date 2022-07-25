@@ -19,7 +19,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 ">
-                                        <input  value="{{date('M-d-y')}}"   class="form-control _date" name="date"  id="datepickercustom">
+                                        <input type="date"  value="{{date('M-d-y')}}" class="form-control _date" name="date"  id="datepickercustom">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -77,7 +77,8 @@
                     <th>Total Rate</th>
                     <th>Discount %</th>
                     <th>Discount Amount</th>
-                    <th>Bonus</th>
+                    <th>Sale Tax</th>                    
+                    <th>Adv. Tax</th>
                     <th>Line Total</th>
                     <th>Action</th>
                 </tr>
@@ -86,6 +87,7 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -184,7 +186,7 @@ placeholder: 'Search for a product',
 minimumInputLength: 2,
 }).on('change', function (data) {
 var id=$(this).val();
-console.log(id);
+// console.log(id);
 $.ajax({
     type: 'GET',
     url: '{{url("get_purchase-product")}}',
@@ -220,9 +222,14 @@ $.ajax({
         <td class="after_discount">
         <input type="number" class="form-control after_discount" style="text-align:right" value="`+(data.purchase_price - data.purchase_discount)+`"  name="after_discount[]" step="any" readonly/>
         </td>
-        <td class="bonus">
-        <input type="number" class="form-control bonus" value="0"   name="bonus[]" step="any"/>
+        <td class="sale_tax_value">
+        <input type="number" class="form-control sale_tax_value" onKeyup="do_calculation()" value="`+data.sale_tax_value+`"  name="sale_tax_value[]" step="any"/>
         </td>
+
+        <td class="adv_tax_value">
+        <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="`+data.adv_tax_non_filer+`"  name="sale_tax_value[]" step="any"/>
+        </td>
+
         <td class="line_total">
         <input type="number" class="form-control line_total" style="text-align:right" value="`+(data.purchase_price)+`"  name="line_total[]" step="any" readonly/>
         </td><input type="hidden" class="hidden_total" name="total">
@@ -266,6 +273,12 @@ function do_calculation()
         //   console.log(purchase_price * qty);
           var total_price = parseFloat(purchase_price * qty).toFixed(2);
           var purchase_discount=$(this).find('.purchase_discount').find('input').val();
+
+          var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val()); // Get Sale Tqx value
+
+          var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val()); // Get Adv Tax Value
+          
+
           var all_qty=parseFloat($(this).find('.all_qty').val());
         //   grand_discount+=(purchase_discount*all_qty);
           //grand_order_discount+=discount;
@@ -275,13 +288,12 @@ function do_calculation()
         //    console.log(price_after_discount);
           $(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
 
-          var row_sub_total = parseFloat(total_price - price_after_discount).toFixed(2);
-
+          var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
 
           $(this).find('.sub_total').val(row_sub_total);
           $(this).find('.line_total').val(row_sub_total);
           //grand_subtotal= row_sub_total;          
-          grand_subtotal = parseFloat(grand_subtotal)  + parseFloat(row_sub_total);
+          grand_subtotal = (parseFloat(grand_subtotal)  + parseFloat(row_sub_total)).toFixed(2);
 
           $(".total_price").val(total_price);
           $(".hidden_total").val(grand_subtotal);  
@@ -300,8 +312,8 @@ function do_calculation()
       $(this).val("0");
 });
 
-    
-
+    // To restict the datepicker
+    // disableDate();
         </script>
 @endpush
 

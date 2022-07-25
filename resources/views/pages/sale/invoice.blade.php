@@ -29,8 +29,10 @@
                                         <div class="col-md-6">
                                             <div class="_invoice_header">
                                                 <input type="hidden" name="branch_id" value="1">
-                                                <p class=""><span><input name="date"
-                                                     value="{{date('M-d-y')}}" id="datepickercustom" class="form-control _date"></p>
+                                                <p class="">
+                                                    <span>
+                                                    <input type="date" name="date" value="{{date('M-d-y')}}" id="datepickercustom" class="form-control _date">
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -62,9 +64,10 @@
                                 <th>Stock Quanity</th>
                                 <th>Quanity</th>
                                 <th>Price</th>
+                                <th>Bonus</th>
                                 <th>Discount</th>
                                 <th>After Discount</th>
-                                <th>Bonus</th>
+                                <th>Sales Tax</th>
                                 <th>Line Total</th>
                                 <th>Action</th>
                             </tr>
@@ -79,6 +82,9 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>                                                                
                                 <td style="width:10%;text-align:right">Grand Total</td>
                                 <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
                             </tr>
@@ -102,7 +108,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myLargeModalLabel"> Batch Detail</h5>
+                <h5 class="modal-title" id="myLargeModalLabel"> Batch Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -119,8 +125,8 @@
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary update_modal">Update</button>
-        </div>
-</form>
+    </div>
+<!-- </form> -->
             </div>
         </div>
     </div>
@@ -200,36 +206,44 @@ url: '{{url("get-stock")}}/'+id,
 //       },
 success: function(data)  
 {
-console.log(data);
+//  console.log(data);
 var table_body=$("table.order-list tbody"); // assign table body to variable used in different area   
 var new_row= `<tr class="table_append_rows" id="table_append_rows_`+row_id+`" >
 
 <td class="product_count">`+product_count+`</td>
-<td class="name"><input type="hidden" name="id[]" value="`+data.productArr.id+`"/>
+<td class="name">
+    <input type="hidden" name="id[]" value="`+data.productArr.id+`"/>
      <input type="hidden" id="product_id" name="product_id[]" value="`+data.productArr.product_id+`"/>
-     <input type="hidden" id="product_name" name="product_name[]" value="`+data.productArr.product.name+`"/>
-     `+data.productArr.product.name+`</td>
-      <td class="batch_no_id"> <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="`+data.productArr.id+`" >`+data.productArr.batch.batch_no+` <i class="dripicons-document-edit"></i></button></td>
+     <input type="hidden" id="product_name" name="product_name[]" value="`+data.productArr.product.name+`"/>`+data.productArr.product.name+`
+</td>
+<td class="batch_no_id">
+    <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="`+data.productArr.product_id+`" >`+data.productArr.batch.batch_no+` <i class="dripicons-document-edit"></i>
+    </button>
+</td>
 <td class="qty">
-<input type="number" class="form-control all_qty" id="all_qty" min="1" value="`+data.productArr.quantity+`" step="any" readonly="" required/>
+<input type="number" class="form-control all_qty" id="all_qty" min="1" value="`+data.productArr.quantity+`" step="any" required/>
 </td>
 <td class="qty_sale">
-<input type="number" class="form-control qty_sale" id="qty_salet" min="1"  onkeyup="do_calculation()"  name="quanity[]" value="1" step="any" required/>
+<input type="number" class="form-control qty_sale" id="qty_sale" min="1" onkeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
 </td>
 <td class="purchase_price">
-<input type="number" class="form-control purchase_price price" id="price" value="`+data.productArr.price+`"  name="purchase_price[]" step="any" required/>
+<input type="number" class="form-control purchase_price price" id="price" onkeyup="do_calculation()" value="`+data.productArr.price+`"  name="purchase_price[]" step="any" required/>
+<input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="`+(data.productArr.quantity * data.productArr.price)+`"/>
+</td>
+<td class="bouns">
+<input type="number" class="form-control bouns" onkeyup="do_calculation()" value="0" id="bouns" name="bouns[]" step="any"/>
 </td>
 <td class="purchase_discount">
-<input type="number" class="form-control purchase_discount" id="purchase_discount" value="`+data.productArr.product.purchase_discount+`"  name="purchase_discount[]" step="any" required/>
+<input type="number" class="form-control purchase_discount" id="purchase_discount" onkeyup="do_calculation()" value="`+data.productArr.product.purchase_discount+`"  name="purchase_discount[]" step="any"/>
 </td>
 <td class="after_discount">
-<input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" required/>
+<input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" readonly/>
 </td>
-<td class="bonus">
-<input type="number" class="form-control bonus" value="0" id="bonus" name="bonus[]" step="any" required/>
+<td class="sales_tax">
+<input type="number" class="form-control sales_tax" onkeyup="do_calculation()" value="`+data.productArr.product.sale_tax_value+`" id="sales_tax" name="sales_tax[]" step="any" required/>
 </td>
 <td class="line_total">
-<input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" required/>
+<input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
 <input type="hidden" class="hidden_total"             name="total" value="0">
@@ -258,29 +272,48 @@ var grand_discount=0;
 var total_qty=0; 
 var  product_count=1;
 var  grand_subtotal=0;
+var total_rate=0;
+
+
 $('.table_append_rows').each(function()  // run loop on all append rows for calculation and value reseting
 {
 $(this).find('.product_count').text(product_count);// get qty from row
 var qty=$(this).find('.qty_sale').find('input').val(); // get qty from row
 total_qty+=parseInt(qty);
 // var purchase_price=parseInt($(this).find('.purchase_price').val()); // take unit price from row
-var purchase_price=$(this).find('.purchase_price').find('input').val(); // get qty from row
-//  var tax_type=$(this).find('.hidden_tax_type').val(); // get tax type from hidden filed
-// var tax_percentage=$(this).find('.hidden_tax_percentage').val(); // get tax percentage from hidden 
+var purchase_price=parseFloat($(this).find('.purchase_price').find('input').val()); // get qty from row
+var sale_qty = parseInt($(this).find('#qty_sale').val()); // get qty from row
+// var bouns = sale_qty + parseInt($(this).find('#bouns').val());
+
+
+
 $(this).find('.hidden_purchase_price').val(purchase_price); // put unit price in hidden input field
-// var purchase_discount=parseFloat($(this).find('.purchase_discount').val());
-var purchase_discount=$(this).find('.purchase_discount').find('input').val();
+total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
+$(this).find('#total_rate').val(total_rate);
+purchase_discount=$(this).find('.purchase_discount').find('input').val();
+var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
+$(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
+
 var all_qty=parseFloat($(this).find('.qty_sale').val());
 grand_discount+=(purchase_discount*all_qty);
-var price_after_discount=purchase_price-purchase_discount; // calculate unit price after discount
-console.log(price_after_discount);
-$(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
-var row_sub_total=parseFloat(qty*price_after_discount);
+
+
+
+var sales_tax = parseFloat($(this).find('#sales_tax').val());
+
+if(isNaN(sales_tax))
+{
+    sales_tax = 0;
+}
+    
+
+// console.log("Total Rate = "+total_rate+ " Discount Price = "+price_after_discount+" Sales Tax = "+sales_tax);
+
+var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
 $(this).find('.sub_total').val(row_sub_total);
 $(this).find('.line_total').val(row_sub_total);
 grand_subtotal+=row_sub_total;
 $("._tfootTotal").text(grand_subtotal);
-
 $("input[name='total_qty']").val(total_qty);
 $("input[name='item']").val(product_count);
 product_count++;
@@ -304,11 +337,10 @@ $("._tfootTotal").text(line);
   var row_id=$(this).closest('.table_append_rows').attr('id');
       $('input[name="edit_row_id"]').val(row_id);
 
-   // console.log(row_id);
+//    console.log(row_id);
   // return false;
   var product_id=$(this).data('product_id');
-  var product_id_modal=$(this).data('product_id');
-  // console.log(product_id);
+  var product_id_modal=$(this).data('product_id');  
   
   $.ajax({
     type:'get',
@@ -321,9 +353,9 @@ $("._tfootTotal").text(line);
           var op = "";
           $('#product_modal').val(product_id_modal); //this is used to get against this product batch
           $.each(data, function(k,val)
-            {
+            {                
              if (val.batch.id!=null && val.batch.id!="") {
-                op +="<option value='"+val.batch.id+"' data-price="+val.price+"  data-quantity="+val.quantity+">"+val.batch.batch_no+" "+" Quantity - "+val.quantity+"</option>";
+                op +="<option value='"+val.batch.id+"' data-price="+val.price+"  data-quantity="+val.quantity+">"+val.batch.batch_no+" "+" | Quantity -> "+val.quantity+" "+" | Expiry Date -> "+val.batch.date+"</option>";
             }  
             }); 
              $('input[name="edit_row_id"]').val(row_id) ;
@@ -335,7 +367,7 @@ $("._tfootTotal").text(line);
 });
 
 
- // @@@@@@@@@@@@@@@@@@@@@@   batch update@@@@@@@@@@@@@@@@
+ // @@@@@@@@@@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@
 // var product_count=1;
 // var row_id=1;
  $(document).on('click', '.update_modal', function (){

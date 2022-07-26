@@ -54,9 +54,8 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //  dd($request->all());
-        $this->validate($request,[
-            'description'=>'string|nullable',
+        //   dd($request->all());
+        $this->validate($request,[            
             'product_id'=>'required|exists:products,id',
             'suplier_id'=>'required|exists:suppliers,id',
             'branch_id'=>'required|exists:branches,id', 
@@ -76,10 +75,22 @@ class PurchaseController extends Controller
         //  $batch->save();
         //  $batch_id=$batch->id;
          
-        $user_id=auth()->user()->id;
-        $order_data=$request->only(['invoice_no', 'suplier_id','date','branch_id','description','dropt','total']);
-        $order_data['user_id'] = $user_id;
-        $order=PurchaseInvoice::create($order_data);
+        // $user_id=auth()->user()->id;
+        // $order_data=$request->only(['invoice_no', 'suplier_id','date','branch_id','description','dropt','total']);
+        // $order_data['user_id'] = $user_id;
+        $order=PurchaseInvoice::create(
+            [
+                'invoice_no'    =>$request->invoice_no,
+                'suplier_id'    =>$request->suplier_id,
+                'date'          =>$request->date,
+                'branch_id'     =>$request->branch_id,
+                'description'   =>$request->description,
+                'trans_type'    =>'PURCHASE',
+                'inv_status'    =>'Un-Post',
+                'freight'       =>$request->freight,
+                'user_id'       =>auth()->user()->id,
+                'total'         =>$request->total,
+            ]);
         if($order){
         $purchase_invoice_detail_id=$order->id;
         $rows=$request->input('product_id');
@@ -94,7 +105,7 @@ class PurchaseController extends Controller
             $product_id=$request->input('product_id')[$key];  
             $product_name=$request->input('product_name')[$key];  
             $line_total=$request->input('line_total')[$key];  
-            $bonus=$request->input('sale_tax_value')[$key];  
+            $bonus=$request->input('sale_tax_value')[$key];
 
             PurchaseInvoiceDetail::create([
                         'product_id'     =>$product_id,
@@ -106,6 +117,9 @@ class PurchaseController extends Controller
                         'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
                         'bonus'          =>$bonus,
                         'line_total'     =>$line_total,
+                        'sales_tax'      =>$request->input('sale_tax_value')[$key],
+                        'adv_tax'        =>$request->input('adv_tax_value')[$key],
+                        
              ]);
             $batch = Batch::where('batch_no',$request->batch)
                             ->where('date',$request->expiry_date)
@@ -122,16 +136,15 @@ class PurchaseController extends Controller
               }else{
                 $batch = $batch->first();
                 $batch_id = $batch->id;                
-              }
-             if($request->dropt==''){
-                Stock::create([
-                    'product_id' =>$product_id,
-                    'quantity'   =>$quanity,
-                    'price'      =>$purchase_price,
-                    'batch_id'   =>$batch_id,
-                    'branch_id'  =>$branch_id,
-                     ]);
-             }
+              }             
+              Stock::create([
+                'product_id' =>$product_id,
+                'quantity'   =>$quanity,
+                'price'      =>$purchase_price,
+                'batch_id'   =>$batch_id,
+                'branch_id'  =>$branch_id,
+              ]);
+             
         }
     }
         return back()->with('success',"Data Added Successfully!");

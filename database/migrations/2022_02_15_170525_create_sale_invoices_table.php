@@ -18,9 +18,9 @@ class CreateSaleInvoicesTable extends Migration
                     $table->string("invoice_no");
                     // $table->string("date");
                     $table->date('date')->nullable();
-                    $table->text("description");
-                    $table->integer("sub_total");
-                    $table->integer("total");
+                    $table->text("description")->nullable();
+                    $table->integer("sub_total")->nullable();
+                    $table->integer("total")->nullable();
                     //  $table->integer('product_id')->unsigned()->index()->nullable();
                     // $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
                     

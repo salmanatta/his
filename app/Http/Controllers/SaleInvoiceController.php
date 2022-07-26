@@ -104,7 +104,7 @@ class SaleInvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        //  dd($request->all());
         $this->validate($request,[
             'description'=>'string|nullable',
             // 'product_id'=>'required|exists:products,id',
@@ -126,8 +126,10 @@ class SaleInvoiceController extends Controller
         $rows=$request->input('product_id');
         $branch_id=$request->input('branch_id');
     // dd($request->all());   $request->quanity  
+    // dd($request->input('bouns'));
         foreach($rows as $key=>$row) 
         {
+            
             $purchase_price = $request->input('purchase_price')[$key];
             $after_discount = $request->input('after_discount')[$key];
             $purchase_discount = $request->input('purchase_discount')[$key];
@@ -135,9 +137,9 @@ class SaleInvoiceController extends Controller
             $product_id=$request->input('product_id')[$key];  
             $product_name=$request->input('product_name')[$key];  
             $line_total=$request->input('line_total')[$key];  
-            $bonus=$request->input('bonus')[$key];  
+            $bonus=$request->input('bouns')[$key];
             $sale=SaleInvoiceDetail::create([
-                        'product_id'  =>$product_id,
+                        'product_id'    =>$product_id,
                         'item'           =>$product_name,
                         'qty'            =>$quanity,
                         'price'          =>$purchase_price,

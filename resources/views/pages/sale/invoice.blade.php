@@ -305,14 +305,12 @@ if(isNaN(sales_tax))
 {
     sales_tax = 0;
 }
-    
-
 // console.log("Total Rate = "+total_rate+ " Discount Price = "+price_after_discount+" Sales Tax = "+sales_tax);
 
 var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
 $(this).find('.sub_total').val(row_sub_total);
 $(this).find('.line_total').val(row_sub_total);
-grand_subtotal+=row_sub_total;
+grand_subtotal = (parseFloat(grand_subtotal)  + parseFloat(row_sub_total)).toFixed(2);
 $("._tfootTotal").text(grand_subtotal);
 $("input[name='total_qty']").val(total_qty);
 $("input[name='item']").val(product_count);

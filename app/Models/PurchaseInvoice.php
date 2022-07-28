@@ -10,9 +10,11 @@ use App\Models\User;
 class PurchaseInvoice extends Model
 {
     use HasFactory;
-     protected $guarded = ['id'];
+    protected $guarded = ['id'];
 
-      public function setDateAttribute($date) {//get method same the set method
+    protected $appends = ['sumSaleTax','sumAdvancTax','sumDiscountAmount','sumQty','lineTotal'];
+
+    public function setDateAttribute($date) {//get method same the set method
       $this->attributes['date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
     }
      public function branch()
@@ -26,5 +28,40 @@ class PurchaseInvoice extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class,'suplier_id','id');
+    }
+    public function scopeReportData($query,$fromDate,$todate)
+    {
+        return $query->whereBetween('date',[ $fromDate,$todate])                    
+                     ->where('dropt','0');
+    }
+    public function purchaseDetail()
+    {
+        return $this->hasMany(PurchaseInvoiceDetail::class,'purchase_invoice_detail_id','id');
+    }
+
+    public function getSumSaleTaxAttribute()
+    {
+        return $this->purchaseDetail()->sum('sales_tax');
+    }
+    public function getFreightAttribute()
+    {
+        return $this->attributes['freight'] ?? 0;
+    }
+    public function getSumDiscountAmountAttribute()
+    {
+        return $this->purchaseDetail()->sum('after_discount');
+    }
+    public function getSumAdvancTaxAttribute()
+    {
+        return $this->purchaseDetail()->sum('adv_tax');
+    }
+    public function getSumQtyAttribute()
+    {
+        return $this->purchaseDetail()->sum('qty');
+    
+    }
+    public function getLineTotalAttribute()
+    {
+        return $this->purchaseDetail()->sum('line_total');
     }
 }   

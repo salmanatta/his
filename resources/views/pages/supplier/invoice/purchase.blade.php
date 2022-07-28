@@ -26,12 +26,9 @@
                                         <div class="col-md-6 ">
                                             <div class="mb-1">
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
-                                                <input type="date" class="form-control _date" value="{{date('M-d-y')}}" name="date" id="InvoiceDate" />
+                                                <input type="date" class="form-control _date" value="<?php echo date('Y-m-d');?>" name="date" id="InvoiceDate" />
                                             </div>
                                         </div>
-
-                                        <!-- <input type="date" value="{{date('M-d-y')}}" class="form-control _date" name="date" id="datepickercustom">
-                                    </div> -->
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -60,16 +57,13 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="freight">Freight</label>
                                                 <input type="text" class="form-control" onkeyup="do_calculation()" name="freight" id="freight">
-                                            </div>
-                                            <!-- <textarea placeholder="description" name="description" class="form-control _description" style="resize: none"></textarea> -->
+                                            </div>                                           
                                         </div>
                                         <div class="col-md-6 mt-2">
                                             <div class="mb-1">
                                                 <label class="form-label" for="description">Description</label>
                                                 <textarea class="form-control _description" name="description" id="description"></textarea>
-                                            </div>
-
-                                            <!-- <textarea placeholder="description" name="description" class="form-control _description" style="resize: none"></textarea> -->
+                                            </div>                                        
                                         </div>
                                     </div>
                                     <div class="row">
@@ -85,18 +79,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- <div class="row">
-                                    <div class="col-md-6 mt-2">
-                                        <label>Save As Draft</label>
-                                        <input type="checkbox" id="yes" class="_dropt" value="0" name="dropt" />                                  
-                                    </div>
-                                </div> -->
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <!-- </div> -->
+                    </div>                
                 <table class="table  order-list _purchaseTable">
                     <thead>
                         <tr>
@@ -134,35 +121,12 @@
                         </tr>
                     </tfoot>
                 </table>
-
-                <!-- <div class="row d-flex justify-content-end form-horizontal" >
-            <label for="inputType" class="col-sm-2 control-label me-4">freight</label>
-            <div class="col-md-1 form-group">            
-                <div class="me-4">                              
-                <input type="number" class="form-control" name="freight" value="" id="freight" style="text-align:right">                    
-                </div>
-            </div>
-        </div> -->
                 <div class="row">
                     <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-success me-1">Save</button>
-                        <button class="btn btn-danger mx-0" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
-                        Exit
-                    </button>
+                        <button type="submit" class="btn btn-success me-1">Save</button>                        
+                        <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
                     </div>
                 </div>
-
-
-
-                <!-- <div class="d-flex justify-content-end">
-                    <button class="btn btn-success waves-effect waves-float waves-light me-1" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
-                        Save
-                    </button>
-                    <button class="btn btn-danger waves-effect waves-float waves-light mx-0" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
-                        Exit
-                    </button>
-                </div> -->
-
             </div>
             <!-- end card body -->
         </div>
@@ -350,7 +314,7 @@
                 var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
                 $(this).find('.sub_total').val(row_sub_total);
                 $(this).find('.line_total').val(row_sub_total);
-                grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total) + freight).toFixed(2);
+                grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
                 $(".total_price").val(total_price);
                 $(".hidden_total").val(grand_subtotal);
                 $("._tfootTotal").text(grand_subtotal);

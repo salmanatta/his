@@ -13,6 +13,7 @@ use App\Models\purchases\Supplier;
 use App\Http\Controllers\Controller;
 use App\Models\products\Product;
 use function PHPUnit\Framework\isNull;
+use Carbon\Carbon;
 class PurchaseController extends Controller
 {
     /**
@@ -65,19 +66,6 @@ class PurchaseController extends Controller
             'suplier_id.required'=> 'Please select any Supplier, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
        ]);       
-
-        //  $batchID = Batch::pluck('id')->last();//this is save before every invoice
-        //  $batchID="Batch-". $batchID;
-        //   ++$batchID;
-        //  $batch = new Batch();
-        //  $batch->batch_no = $batchID;  
-        //  $batch->date=$request->input('date');
-        //  $batch->save();
-        //  $batch_id=$batch->id;
-         
-        // $user_id=auth()->user()->id;
-        // $order_data=$request->only(['invoice_no', 'suplier_id','date','branch_id','description','dropt','total']);
-        // $order_data['user_id'] = $user_id;
         $order=PurchaseInvoice::create(
             [
                 'invoice_no'    =>$request->invoice_no,
@@ -94,8 +82,7 @@ class PurchaseController extends Controller
         if($order){
         $purchase_invoice_detail_id=$order->id;
         $rows=$request->input('product_id');
-        $branch_id=$request->input('branch_id');
-        // $batch_id=$batch_id;
+        $branch_id=$request->input('branch_id');        
         foreach($rows as $key=>$row) 
         {
             $purchase_price = $request->input('purchase_price')[$key];
@@ -151,11 +138,28 @@ class PurchaseController extends Controller
     }
     public function purchaseReport(Request $request)
     {
-        return view('pages.reports.purchase.purchase_report');
+        if(count($request->all()) > 0) 
+        {
+            $from=$request->from_date;
+            $to=$request->to_date;
+            $fromDate=date('Y-m-d', strtotime($from));
+            $todate=date('Y-m-d', strtotime($to));
+        }else{
+            $fromDate = Carbon::now();
+            $fromDate =date('Y-m-d', strtotime($fromDate));
+            $todate = Carbon::now();
+            $todate =date('Y-m-d', strtotime($todate));
+        }        
+        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate)
+                                        ->with('supplier','branch','user')
+                                        ->get();        
+        //return $purchaseData;
+        return view('pages.reports.purchase.purchase_report',compact('purchaseData'));
 
     }
-    public function unstokePurchaseReport(Request $request)
+    public function unstokePurchaseReport(Request $request)    
     {
+
         return view('pages.reports.purchase.unstokepurchase_report');
 
     }
@@ -164,10 +168,11 @@ class PurchaseController extends Controller
     {
         $from=$request->from_date;
         $to=$request->to_date;
-         $from_date=date('Y-m-d', strtotime($from));
-         $to_date=date('Y-m-d', strtotime($to));
-        $new = PurchaseInvoice::whereBetween('date',[ $from_date,$to_date])->with('supplier','branch','user')->where('dropt','0')->get();
-    
+        $fromDate=date('Y-m-d', strtotime($from));
+        $todate=date('Y-m-d', strtotime($to));
+        $new = PurchaseInvoice::ReportData($fromDate,$todate)
+                                ->with('supplier','branch','user')                                
+                                ->get();    
         return response()->json($new);
     }
     public function searchUnstokePufrchaseReport(Request $request)

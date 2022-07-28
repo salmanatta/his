@@ -11,7 +11,6 @@
                         <img src="{{ URL::asset ('/assets/images/logo-dark.png') }}" alt="" height="17">
                     </span>
                 </a>
-
                 <a href="{{url('/')}}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ URL::asset ('/assets/images/logo-light.svg') }}" alt="" height="22">
@@ -21,11 +20,9 @@
                     </span>
                 </a>
             </div>
-
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
                 <i class="fa fa-fw fa-bars"></i>
             </button>
-
             <!-- App Search-->
             <form class="app-search d-none d-lg-block">
                 <div class="position-relative">
@@ -206,24 +203,16 @@
                     @endswitch
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-
                     <!-- item-->
                     <a href="{{ url('index/en') }}" class="dropdown-item notify-item language" data-lang="eng">
                         <img src="{{ URL::asset ('/assets/images/flags/us.jpg') }}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
                     </a>
-
-
                     <!-- item-->
                     <a href="{{ url('index/it') }}" class="dropdown-item notify-item language" data-lang="it">
                         <img src="{{ URL::asset ('/assets/images/flags/italy.jpg') }}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
                     </a>
-
-
                 </div>
             </div>
-
-
-
             <div class="dropdown d-none d-lg-inline-block ml-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                     <i class="bx bx-fullscreen"></i>
@@ -351,11 +340,6 @@
 
             <div class="collapse navbar-collapse" id="topnav-menu-content">
                 <ul class="navbar-nav">
-
-                    
-
-
-                    <!-- +================= -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Configuration</span>
@@ -363,7 +347,6 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
                             <a href="{{route('companies.index')}}" class="dropdown-item" key="t-saas">Company </a>
-
                             <a href="{{route('branches.index')}}" class="dropdown-item" key="t-saas">Branch </a>
                             <a href="{{route('cities.index')}}" class="dropdown-item" key="t-default">City </a>
                             <a href="{{route('regions.index')}}" class="dropdown-item" key="t-saas">Region </a>
@@ -377,28 +360,55 @@
                             <a href="{{url('general')}}" class="dropdown-item" key=" t-default">Define Product Rule</a>
                             <a href="{{url('apply-rule')}}" class="dropdown-item" key=" t-default">Apply Product Rule</a>
                             <a href="{{route('customers.index')}}" class="dropdown-item" key="t-saas">Customer </a>
-                             <a href="{{route('suppliers.index')}}" class="dropdown-item" key="t-saas">Supplier </a>
-                            <a href="{{route('products.index')}}" class="dropdown-item" key="t-saas">Product </a> 
-
-
-
+                            <a href="{{route('suppliers.index')}}" class="dropdown-item" key="t-saas">Supplier </a>
+                            <a href="{{route('products.index')}}" class="dropdown-item" key="t-saas">Product </a>
                         </div>
                     </li>
-                    <!-- ++++++++++================== -->
-                    <!-- +================= -->
+
+
+                    @if(auth()->user()->hasRole(['purchase']))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Product</span>
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchases</span>
+                            <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard"></div>
+                    </li>
+                    @endif
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchase </span>
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                            
-                             <a href="{{url('storetostore')}}" class="dropdown-item" key="t-saas">Product Transfer </a>
-                              <a href="{{url('storetoStoreList')}}" class="dropdown-item" key="t-saas">Product Transfer List </a>
+                            <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Create Purchase Invoice </a>
+                            <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">View Purchase Invoice </a>
                         </div>
                     </li>
-                    <!-- ++++++++++================== -->
-                    <!-- +================= -->
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Sales</span>
+                            <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
+                            <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Create Sale Invoice </a>
+                            <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas"> View Sale Reports</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Stock Transfer</span>
+                            <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
+
+                            <a href="{{url('storetostore')}}" class="dropdown-item" key="t-saas">Product Transfer </a>
+                            <a href="{{url('storetoStoreList')}}" class="dropdown-item" key="t-saas">Product Transfer List </a>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Users</span>
@@ -409,63 +419,13 @@
                             <a href="{{route('roles.index')}}" class="dropdown-item" key="t-saas">Role </a>
                             <a href="{{route('permissions.index')}}" class="dropdown-item" key="t-saas">Permission </a>
                             <a href="{{url('roles/attached/permissions')}}" class="dropdown-item" key="t-saas">Roles & Attached Permissions </a>
-
-
-                        </div>
-                    </li>
-                    <!-- ++++++++++================== -->
-                    <!-- +================= -->
-                    @if(auth()->user()->hasRole(['purchase']))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchases</span>
-                            <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                           
-                        </div>
-                    </li>
-                    @endif
-                    <!-- ++++++++++================== -->
-                  
-                    <!-- +================= -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchase </span>
-                            <div class="arrow-down"></div>
-                        </a>
-                        
-
-                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                             <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Create Purchase Invoice </a>
-                            <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">View  Purchase Invoice </a>
-                        </div>
-                    </li>
-                    <!-- ++++++++++================== -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Sales</span>
-                            <div class="arrow-down"></div>
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                         
-                             <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Create Sale Invoice </a>
-                             <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas"> View Sale Reports
-                            </a>
                         </div>
                     </li>
 
-
-
-
- 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
                             <i class="bx bx-collection me-2"></i><span key="t-components">Reports</span>
-                            <div class="arrow-down">
-
-                            </div>
+                            <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                             <div class="dropdown">
@@ -483,22 +443,15 @@
                                     <div class="arrow-down"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
-                                   
                                     <a href="{{url('unstokepurchaseReport')}}" class="dropdown-item" key="t-form-elements">Drop Purchase</a>
-                                    
                                 </div>
-                                
                             </div>
-                            <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs
-                            </a>
-                        
-                            
-                            <a href="{{url('storetoStoreReport')}}" class="dropdown-item" key="t-saas">Transfer Product Reports
-                            </a>
-                            <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Stock Reports
-                            </a>
-                        </div>
+                            <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
+                            <a href="{{url('storetoStoreReport')}}" class="dropdown-item" key="t-saas">Transfer Product Reports</a>
+                            <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Stock Reports</a>
+                        </div>                        
                     </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
                             <i class="bx bx-collection me-2"></i><span key="t-components">Orders</span>
@@ -516,6 +469,7 @@
                             </div>
                         </div>
                     </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Create Expense</span>
@@ -524,10 +478,7 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
 
                             <a href="{{route('expense_categories.index')}}" class="dropdown-item" key="t-default">Expense Categories</a>
-                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>
-                           <!--  <a href="#" class="dropdown-item" key="t-saas">Utility</a>
-                            <a href="#" class="dropdown-item" key="t-crypto">Exta Note</a> -->
-                            <!-- <a href="dashboard-blog" class="dropdown-item" key="t-blog">@lang('translation.Blog')</a> -->
+                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>                            
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -536,7 +487,6 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-
                             <a href="{{url('backup')}}" class="dropdown-item" key="t-default">Full Backup</a>
                             <a href="{{url('list-backups')}}" class="dropdown-item" key="t-saas">Restore</a>
                             <div class="dropdown">
@@ -549,9 +499,7 @@
                                     <a href="#" onclick="disableDateFive()" class="dropdown-item" key="t-form-elements">Five Days</a>
                                     <a href="#" onclick="disableDateSeven()" class="dropdown-item" key="t-form-elements">Seven Days</a>
                                 </div>
-                            </div>
-                            <!--<a href="dashboard-crypto" class="dropdown-item" key="t-crypto">Date Setting</a>-->
-                            <!-- <a href="dashboard-blog" class="dropdown-item" key="t-blog">@lang('translation.Blog')</a> -->
+                            </div>                           
                         </div>
                     </li>
                 </ul>

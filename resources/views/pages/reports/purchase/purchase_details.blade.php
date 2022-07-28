@@ -13,7 +13,9 @@
                                         height="20" />
                                 </div>
                                 <div class="col-lg-4">
+                                    <h4 class="float-end font-size-16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$purchase->inv_status}}</h4>
                                     <h4 class="float-end font-size-16">Order # {{$purchase->invoice_no}}</h4>
+                                    
                                 </div>
                                 <div class="col-lg-4">
                                     <a href="javascript:window.print()"
@@ -47,7 +49,7 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <address>
-                                        <strong>Order Date:</strong><br>
+                                        <strong>Invoice Date:</strong><br>
                                         {{$purchase->date}}
                                     </address>
                                 </div>
@@ -65,22 +67,34 @@
                                 <table class="table table-nowrap" border="1px">
                                     <thead>
                                         <tr style="background-color:#e4e6eb;">
-                                            {{-- <th style="width: 70px;">No.</th> --}}
+                                            <!-- {{-- <th style="width: 70px;">No.</th> --}} -->
+                                            <th>#</th>
                                             <th>Product</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
-                                            <th>Discount</th>
+                                            <th>Total Amount</th>
+                                            <th>Discount %</th>
+                                            <th>Discount Amount</th>
+                                            <th>Sales Tax</th>
+                                            <th>Advance Tax</th>
                                             <th class="text-end">Line Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $counter = 1 ?>
                                         @foreach ($purchase_details as $item)
-                                        <tr>
+                                        <tr>                                        
+                                            <td>{{$counter}}</td>
                                             <td>{{$item->item}}</td>
                                             <td>{{$item->price}}</td>
                                             <td>{{$item->qty}}</td>
+                                            <td class="text-center">{{$item->qty * $item->price}}</td>
                                             <td>{{$item->discount}}</td>
+                                            <td class="text-center">{{$item->after_discount}}</td>
+                                            <td>{{$item->sales_tax}}</td>
+                                            <td>{{$item->adv_tax}}</td>
                                             <td class="text-end">{{$item->line_total}}</td>
+                                            <?php $counter++ ?>
                                         </tr>
                                         @endforeach
                                         @php
@@ -95,16 +109,25 @@
                                         @endphp
                                         @endforeach
                                         <tr>
-                                            <td colspan="4" class="border-0 text-end">
+                                            <td colspan="9" class="border-0 text-end">
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="border-0 text-end">
-                                                <h4 class="m-0">{{$subTotal}}</h4>
+                                                <h4 class="m-0">{{$purchase->total}}</h4>
                                             </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        </tr>                                        
+                                    </tbody>                                    
+                                </table>                                
                             </div>
+                            <div class="col-md-12 d-flex justify-content-end me-2">
+                                <strong>Freight Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                                <h4 class="m-0">{{$purchase->freight}}</h4>
+                            </div>  
+                            <br>                                                                      
+                            <div class="col-md-12 d-flex justify-content-end me-2">
+                                <strong>Gross Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                                <h4 class="m-0">{{$purchase->total - $purchase->freight}}</h4>
+                            </div>                                                                        
                         </div>
                     </div>
                 </div>

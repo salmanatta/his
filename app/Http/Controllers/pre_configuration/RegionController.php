@@ -19,7 +19,7 @@ class RegionController extends Controller
     {
         $data['regions'] = Region::with('belong_to_region')->get();
         // dd($data);
-        return view('pages.pre_configuration.region.index', $data);
+        return view('pages.pre_configuration.region.index',$data);
     }
 
 
@@ -30,12 +30,11 @@ class RegionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        // $data['employees']=Employee::all();
-        $data['cities'] = City::all();
-        $data['regions'] = Region::all();
-
-        return view('pages.pre_configuration.region.create', $data);
+    {        
+        $cities  = City::all();
+        $treeCities  = City::all();
+        $regions = Region::all();
+        return view('pages.pre_configuration.region.create', compact('cities','regions','treeCities'));
     }
 
     /**

@@ -18,29 +18,29 @@
                     </thead>
                     <tbody>
                         @foreach($citys as $city)
-                        <tr>
-                            <!-- <td><a href="javascript: void(0);" class="text-body fw-bold">$city->id</a> </td> -->
-                            <td>{{$city->city_id.' - '.$city->name}}</td>
-                        </tr>
-                        @php
-                        $regions=App\Models\region\Region::where(['city_id'=> $city->id,'region_id'=>null])->get();
-                        @endphp
-                        @foreach($regions as $region)
-                        <tr>
-                            <td> </td>
-                            <td> {{$region->region_code.'-'.$region->name}}</td>
-                        </tr>
-                        @php
-                        $child_regions=$region->childrenRecursive()->get();
-                        @endphp
-                        @foreach($child_regions as $child_region)
-                        <tr>
-                            <td> </td>
-                            <td> </td>
-                            <td> {{$child_region->region_code.'-'.$child_region->name}}</td>
-                        </tr>
-                        @endforeach
-                        @endforeach
+                            <tr>
+                                <!-- <td><a href="javascript: void(0);" class="text-body fw-bold">$city->id</a> </td> -->
+                                <td>{{$city->city_id.' - '.$city->name}}</td>
+                            </tr>
+                            @php
+                                $regions=App\Models\region\Region::where(['city_id'=> $city->id,'region_id'=>null])->get();
+                            @endphp
+                            @foreach($regions as $region)
+                                <tr>
+                                    <td> </td>
+                                    <td> {{$region->region_code.'-'.$region->name}}</td>
+                                </tr>
+                                @php
+                                    $child_regions=$region->childrenRecursive()->get();
+                                @endphp
+                                @foreach($child_regions as $child_region)                        
+                                    <tr>
+                                        <td> </td>
+                                        <td> </td>
+                                        <td> {{$child_region->region_code.'-'.$child_region->name}}</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -53,8 +53,7 @@
 <!-- end row -->
 <!-- end row -->
 <!-- Modal -->
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-    aria-hidden="true">
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -92,18 +91,18 @@
 @endsection
 @push('script')
 <script>
-    $(document).ready(function(){
-            $(document).on('click','.detail_view_button',function(){
-               $('.m_region_code').text($(this).data('region_code'));
-               $('.m_region_name').text($(this).data('region_name'));
-               $('.m_city_name').text($(this).data('city_name'));
-               var row_status=$(this).data('region_status');
-               if(row_status==1)
-                status='<span class="badge bg-success font-size-12"> Active</span>';
-               else
-                status='<span class="badge bg-danger font-size-12"> InActive</span>';
-                $('.m_region_status').html(status);
-            });
+    $(document).ready(function() {
+        $(document).on('click', '.detail_view_button', function() {
+            $('.m_region_code').text($(this).data('region_code'));
+            $('.m_region_name').text($(this).data('region_name'));
+            $('.m_city_name').text($(this).data('city_name'));
+            var row_status = $(this).data('region_status');
+            if (row_status == 1)
+                status = '<span class="badge bg-success font-size-12"> Active</span>';
+            else
+                status = '<span class="badge bg-danger font-size-12"> InActive</span>';
+            $('.m_region_status').html(status);
         });
+    });
 </script>
 @endpush

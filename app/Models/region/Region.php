@@ -22,7 +22,6 @@ class Region extends Model
         return $this->belongsTo(Self::class,'region_id');
     }
 
-
     // relation of one to many
     public function belong_cities()
     {

@@ -70,24 +70,9 @@ Route::get('list-backups', function () {
     return view('backup_folder.backup_list',compact('backups'));
 })->name('list-backups')->middleware('auth');
 // ===================restore backup to ====================================
-
-// Auth::routes(['register' => false]);
 Route::get('/user_register', [RegisterController::class, 'showRegistrationForm']);
-
-// Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-// Route::redirect('/', '/home');
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
-// Route::get('backup', 'App\Http\Controllers\BackupController@serverDBBackup')->name('backup');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Update User Details
-// Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
-// Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
-
-// Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
-
-//Language Translation
-// Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 // ==============work on product ====================
 Route::get('getProduct/{id}', 'App\Http\Controllers\pre_configuration\ProductController@getProduct')->name('getProduct');
 Route::post('infoFind', 'App\Http\Controllers\ProductInfoController@infoFind')->name('infoFind');
@@ -143,7 +128,6 @@ Route::GET('/get-all-users', [UserController::class, "getAllUsers"])->middleware
 Route::GET('/attached-permissins/{role_id}', [PermissionController::class, "attachedPermissions"])->middleware('auth');
 Route::GET('/roles/attached/permissions', [RoleController::class, "rolesAttachedPermission"])->middleware('auth');
 /*----------  End cities  Resource Route  ----------*/
-
 
 // ======================use for define Rules Product Bonus and Discount======
 Route::get('apply-rule', 'App\Http\Controllers\GeneralController@applyRule')->name('applyRule');

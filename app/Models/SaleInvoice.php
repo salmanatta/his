@@ -11,6 +11,7 @@ class SaleInvoice extends Model
 {
     use HasFactory;
      protected $guarded = [];
+     protected $appends = ['sumLineTotal','sumDiscountAmount','sumSalesTax'];
 
      public function setDateAttribute($date) {//get method same the set method
         $this->attributes['date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
@@ -26,5 +27,21 @@ class SaleInvoice extends Model
       public function customer()
       {
           return $this->belongsTo(Customer::class,'customer_id','id');
+      }
+      public function saleDetail()
+      {
+        return $this->hasMany(SaleInvoiceDetail::class,'sale_invoice_id','id');
+      }
+      public function getSumLineTotalAttribute()
+      {
+        return $this->saleDetail()->sum('line_total');
+      }
+      public function getSumDiscountAmountAttribute()
+      {
+        return $this->saleDetail()->sum('after_discount');
+      }
+      public function getSumSalesTaxAttribute()
+      {
+        return $this->saleDetail()->sum('sales_tax');
       }
 }

@@ -33,8 +33,9 @@ class RegionController extends Controller
     {        
         $cities  = City::all();
         $treeCities  = City::all();
+        $treeRegions = Region::whereNull('region_id')->get();
         $regions = Region::all();
-        return view('pages.pre_configuration.region.create', compact('cities','regions','treeCities'));
+        return view('pages.pre_configuration.region.create', compact('cities','regions','treeCities','treeRegions'));
     }
 
     /**

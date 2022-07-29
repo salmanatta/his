@@ -8,7 +8,7 @@ use App\Models\SaleInvoiceDetail;
 use App\Models\products\Product;
 use App\Models\Stock;
 use App\Models\Batch;
-
+use Carbon\Carbon;
 class SaleInvoiceController extends Controller
 {
     /**
@@ -48,8 +48,24 @@ class SaleInvoiceController extends Controller
     }
 
     public function purchaseSale(Request $request)
-    {
-        return view('pages.reports.sale.sale_report');
+    {        
+        if(count($request->all()) > 0) 
+        {
+            $from=$request->from_date;
+            $to=$request->to_date;
+            $fromDate=date('Y-m-d', strtotime($from));
+            $todate=date('Y-m-d', strtotime($to));
+        }else{
+            $fromDate = Carbon::now();
+            $fromDate =date('Y-m-d', strtotime($fromDate));
+            $todate = Carbon::now();
+            $todate =date('Y-m-d', strtotime($todate));
+        }                
+        $saleData = SaleInvoice::whereBetween('date', [$fromDate, $todate])
+                            ->with('customer', 'branch', 'user')
+                            ->get(); 
+        // dd($saleData);
+        return view('pages.reports.sale.sale_report',compact('saleData'));
     }
     public function allSaleProducts(Request $request)
     {
@@ -73,7 +89,9 @@ class SaleInvoiceController extends Controller
         $to = $request->to_date;
         $from_date = date('Y-m-d', strtotime($from));
         $to_date = date('Y-m-d', strtotime($to));
-        $new = SaleInvoice::whereBetween('date', [$from_date, $to_date])->with('customer', 'branch', 'user')->get();
+        $new = SaleInvoice::whereBetween('date', [$from_date, $to_date])
+                            ->with('customer', 'branch', 'user')
+                            ->get();
         return response()->json($new);
     }
     public function saleDetail(Request $request, $id)

@@ -20,17 +20,14 @@
                                     <i class="jstree-icon jstree-themeicon far fa-folder jstree-themeicon-custom" role="presentation"></i>
                                     <b>{{ $treeCity->name }}</b>
                                 </a>
-                                <ul role="group" class="jstree-children">
-                                    @php
-                                    $regionss =App\Models\region\Region::where(['city_id'=> $treeCity->id,'region_id'=>null])->get();
-                                    @endphp
-                                    @foreach ($regionss as $cdata)
-                                    @if ($treeCity->id == $cdata->city_id)
-                                    <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $cdata->id }}" class="jstree-node  jstree-leaf">
+                                <ul role="group" class="jstree-children">                                    
+                                    @foreach ($treeRegions as $treeRegion)
+                                    @if ($treeCity->id == $treeRegion->city_id)
+                                    <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $treeRegion->id }}" class="jstree-node  jstree-leaf">
                                         <i class="jstree-icon jstree-ocl" role="presentation"></i>
-                                        <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $cdata->id }}" role="treeitem" aria-selected="false" aria-level="2" id="j1_{{ $cdata->id }}_anchor">
+                                        <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $treeRegion->id }}" role="treeitem" aria-selected="false" aria-level="2" id="j1_{{ $treeRegion->id }}_anchor">
                                             <i class="jstree-icon jstree-themeicon far fa-file-image jstree-themeicon-custom" role="presentation"></i>
-                                            {{ $cdata->name }}
+                                            {{ $treeRegion->name }}
                                         </a>
                                     </li>
                                     @endif
@@ -138,8 +135,9 @@
 @stop
 @push('script')
 <!-- apexcharts -->
-<script src="{{asset('assets/js/ext-component-tree.min.js')}}"></script>
+
 <script src="{{asset('assets/js/jstree.min.js')}}"></script>
+<script src="{{asset('assets/js/ext-component-tree.min.js')}}"></script>
 <script type="text/javascript">
     // for third fourth guarantor
     function Function() {

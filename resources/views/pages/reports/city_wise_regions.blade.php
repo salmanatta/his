@@ -20,27 +20,40 @@
                         @foreach($citys as $city)
                             <tr>
                                 <!-- <td><a href="javascript: void(0);" class="text-body fw-bold">$city->id</a> </td> -->
-                                <td>{{$city->city_id.' - '.$city->name}}</td>
-                            </tr>
-                            @php
-                                $regions=App\Models\region\Region::where(['city_id'=> $city->id,'region_id'=>null])->get();
-                            @endphp
+                                <td>{{$city->name}}</td>
+                            </tr>                            
                             @foreach($regions as $region)
-                                <tr>
-                                    <td> </td>
-                                    <td> {{$region->region_code.'-'.$region->name}}</td>
-                                </tr>
-                                @php
-                                    $child_regions=$region->childrenRecursive()->get();
-                                @endphp
-                                @foreach($child_regions as $child_region)                        
+                                @if ($city->id == $region->city_id && $region->region_id == '')
+                                    <tr>
+                                        <td></td>
+                                        <td> {{$region->name}}</td>
+                                    </tr>
+                                    @foreach($region->childrenRecursive as $region_l2)                        
                                     <tr>
                                         <td> </td>
                                         <td> </td>
-                                        <td> {{$child_region->region_code.'-'.$child_region->name}}</td>
+                                        <td> {{$region_l2->name}}</td>
                                     </tr>
-                                @endforeach
-                            @endforeach
+                                        @foreach($region_l2->childrenRecursive as $region_l3)                        
+                                        <tr>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> {{$region_l3->name}}</td>
+                                        </tr>
+                                        @endforeach
+                                            @foreach($region_l3->childrenRecursive as $region_l4)                        
+                                            <tr>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> {{$region_l4->name}}</td>
+                                            </tr>
+                                            @endforeach
+                                    @endforeach
+                                @endif                                
+                            @endforeach                            
                         @endforeach
                     </tbody>
                 </table>

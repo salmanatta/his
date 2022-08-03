@@ -9,4 +9,9 @@ class PurchaseInvoiceDetail extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function purchase()
+    {
+        return $this->belongsTo(PurchaseInvoice::class , 'purchase_invoice_detail_id' , 'id');
+    }
 }

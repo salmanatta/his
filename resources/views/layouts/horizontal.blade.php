@@ -382,7 +382,8 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                            <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Create Purchase Invoice </a>
+                            <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Purchase Invoice </a>
+                            <a href="{{url('/purchase/return')}}" class="dropdown-item" key="t-saas">Purchase Return Invoice </a>
                             <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">View Purchase Invoice </a>
                         </div>
                     </li>
@@ -449,7 +450,13 @@
                             <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
                             <a href="{{url('storetoStoreReport')}}" class="dropdown-item" key="t-saas">Transfer Product Reports</a>
                             <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Stock Reports</a>
-                        </div>                        
+                            <a href="{{url('stock-report')}}" class="dropdown-item" key="t-saas">Item Reports</a>
+                        </div>
+                                                
+
+
+
+
                     </li>
 
                     <li class="nav-item dropdown">

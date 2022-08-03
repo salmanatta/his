@@ -50,10 +50,11 @@
                                 <th scope="col">A.Tax</th>
                                 <th scope="col">Freight</th>
                                 <th scope="col">Net Amount</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="append_here">
+                        <tbody id="append_here">                            
                             @foreach ($purchaseData as $data)
                                 <tr>
                                     <td>{{ $data->invoice_no }}</td>
@@ -68,6 +69,13 @@
                                     <td>{{ $data->sumAdvancTax }}</td>
                                     <td>{{ $data->freight }}</td>
                                     <td>{{ $data->lineTotal }}</td>
+                                    @if($data->inv_status == 'Post')
+                                        <td style="text-align:center;">{{ $data->inv_status }}</td>
+                                    @else
+                                        <td style="text-align:center;">
+                                            <a href="" class="fas fa-check"></a>
+                                        </td>
+                                    @endif
                                     <td>
                                         <a href="{{ url('purchase_details') . '/' . $data->id }}" style="border-radius: 44px;"
                                             class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">

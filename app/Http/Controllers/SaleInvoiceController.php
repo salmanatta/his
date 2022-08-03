@@ -168,7 +168,9 @@ class SaleInvoiceController extends Controller
                     'bonus'          => $bonus,
                     'line_total'     => $line_total,
                 ]);
-                $stock = Stock::where('id', $request->id[$key])->where('product_id', $product_id)->first();
+                $stock = Stock::where('id', $request->id[$key])
+                              ->where('product_id', $product_id)
+                              ->first();
                 $stock->quantity -= $quanity;
                 $stock->save();
             }

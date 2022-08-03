@@ -7,27 +7,22 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="card-title mb-4">Purchase invoice </h4>
+                            <h4 class="card-title mb-4">Purchase Return invoice </h4>
                             <div class="card">
                                 <div class="card-body">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <div class="_invoice_header">
                                                 <p class="_invoice_no"><span>Purchase Invoice No :</span>#
                                                     <span class="_invoice_no_txt">{{$invoice_no ?? ''}}
                                                         <input type="hidden" value="{{$invoice_no}}" name="invoice_no">
-                                                        <input type="hidden" value="PURCHASE" name="trans_type">
+                                                        <input type="hidden" value="PURCHASE RETURN" name="trans_type">
                                                     </span>
                                                 </p>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3 d-flex">
-                                            <div class="">
-                                                <h4><b><label class="form-label" for="InvoiceDate" style="color:red">Un-Post</label></b></h4>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 ">
+                                        </div>                                        
+                                        <div class="col-md-6">
                                             <div class="mb-1">
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
                                                 <input type="date" class="form-control _date" value="<?php echo date('Y-m-d');?>" name="date" id="InvoiceDate" />
@@ -35,25 +30,21 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="branch">Branch Name</label>
-                                                <select class="select2 form-control _branch_select" name="branch_id" id="branch">
-                                                </select>
-                                                @error('branch_id')
-                                                <span class="text-danger">{{$message}}</span>
-                                                @enderror
-                                            </div>
+                                        <div class="col-md-6 mb-1">                                            
+                                            <label class="form-label" for="branch">Branch Name</label>
+                                            <select class="select2 form-control _branch_select" name="branch_id" id="branch">
+                                            </select>
+                                            @error('branch_id')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror                                            
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="supplier">Supplier Name</label>
-                                                <select class="select2 form-control _supplier_select" name="suplier_id" id="supplier">
-                                                </select>
-                                                @error('suplier_id')
-                                                    <span class="text-danger">{{$message}}</span>
-                                                @enderror
-                                            </div>
+                                        <div class="col-md-6 mb-1">                                            
+                                            <label class="form-label" for="supplier">Supplier Name</label>
+                                            <select class="select2 form-control _supplier_select" name="suplier_id" id="supplier">
+                                            </select>
+                                            @error('suplier_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror                                            
                                         </div>
                                     </div>
                                     <div class="row">
@@ -250,11 +241,9 @@
         <td class="sale_tax_value">
         <input type="number" class="form-control sale_tax_value" onKeyup="do_calculation()" value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
         </td>
-
         <td class="adv_tax_value">
         <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
-
         <td class="line_total">
         <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
         </td><input type="hidden" class="hidden_total" name="total">
@@ -273,7 +262,6 @@
         $(this).closest('tr').remove();
         do_calculation();
     });
-
     function do_calculation() {        
         // alert('dddd');
         // Declare variable for grand calculation
@@ -290,11 +278,9 @@
         }
         $('.table_append_rows').each(function() // run loop on all append rows for calculation and value reseting
             {
-
                 $(this).find('.product_count').text(product_count); // get qty from row
                 var qty = $(this).find('.qty').find('input').val(); // get qty from row
                 total_qty += parseInt(qty);
-
                 // var purchase_price=parseInt($(this).find('.purchase_price').val()); // take unit price from row
                 var purchase_price = $(this).find('.purchase_price').find('input').val(); // get qty from row
                 $(this).find('.hidden_purchase_price').val(purchase_price); // put unit price in hidden input field
@@ -314,7 +300,6 @@
                 {
                     adv_tax_value = 0;
                 }
-
                 var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
                 $(this).find('.sub_total').val(row_sub_total);
                 $(this).find('.line_total').val(row_sub_total);

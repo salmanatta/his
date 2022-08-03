@@ -163,6 +163,9 @@ Route::put('transferProductUpdate/{id}', 'App\Http\Controllers\StoreController@t
 // ===================== Product Purchase Side======
 Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
 Route::GET("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
+Route::get("/purchase/return",[PurchaseController::class,"pruchaseReturn"])->middleware("auth");
+Route::post("/purchase/return",[PurchaseController::class,"pruchaseReturnInsert"])->name("purchase-return")->middleware("auth");
+
 // ===================== Product Purchase Side======
 
 // Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
@@ -179,6 +182,10 @@ Route::get('unstokepurchase_details/{id}',[PurchaseController::class,"unstokePur
 Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoStoreReport')->name('storetoStoreReport');//product transfer
 //for stock report
 Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('stock_detail')->middleware("auth");
+
+
+Route::get('stock-report',[PurchaseController::class,"currentStockReport"])->name('item_report');
+
 // ==================End Reports =================
 
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");

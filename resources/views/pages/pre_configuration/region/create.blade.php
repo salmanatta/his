@@ -8,46 +8,101 @@
             <div class="card-body">
                 <h4 class="card-title mb-4">Region Preview </h4>
 
-                <div class="row">
-                    
-
+                <div class="row">        
+                <!-- <div class="card-body">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+                        </div>
+                        <div class="carousel-inner">
+                        <div class="carousel-item">
+                            <img src="{{url('/assets/images/megamenu-img.png')}}" class="d-block w-100" alt="First slide">
+                        </div>
+                        <div class="carousel-item active">
+                            <img src="{{url('/assets/images/profile-img.png')}}" class="d-block w-100" alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="{{url('/assets/images/verification-img.png')}}" class="d-block w-100" alt="Third slide">
+                        </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div> -->
+     
                     <div id="jstree-basic" class="jstree jstree-1 jstree-default" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="j1_1" aria-busy="false">
                         <ul class="jstree-container-ul jstree-children" role="group">
-                            @foreach ($treeCities as $treeCity)
-                            <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-folder&quot;}" id="j1_{{ $treeCity->id }}" class="jstree-node jstree-open">
+                            @foreach ($treeCities as $pdata)
+                            <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-folder&quot;}" id="j1_{{ $pdata->id }}" class="jstree-node jstree-open">
                                 <i class="jstree-icon jstree-ocl" role="presentation"></i>
-                                <a class="jstree-anchor jstree-clicked" href="#" tabindex="-1" role="treeitem" aria-selected="true" aria-level="1" aria-expanded="true" id="j1_{{ $treeCity->id }}_anchor">
+                                <a class="jstree-anchor jstree-clicked" href="#" tabindex="-1" role="treeitem" aria-selected="true" aria-level="1" aria-expanded="true" id="j1_{{ $pdata->id }}_anchor">
                                     <i class="jstree-icon jstree-themeicon far fa-folder jstree-themeicon-custom" role="presentation"></i>
-                                    <b>{{ $treeCity->name }}</b>
+                                    <b>{{ $pdata->name }}</b>
                                 </a>
-                                <ul role="group" class="jstree-children">                                    
-                                    @foreach ($treeRegions as $treeRegion)
-                                    @if ($treeCity->id == $treeRegion->city_id)
-                                    <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $treeRegion->id }}" class="jstree-node  jstree-leaf">
+                                <ul role="group" class="jstree-children">
+                                    @foreach ($treeRegions as $cdata)
+                                    @if ($pdata->id == $cdata->city_id && $cdata->region_id == '')
+                                    <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $cdata->id }}" class="jstree-node  jstree-leaf">
                                         <i class="jstree-icon jstree-ocl" role="presentation"></i>
-                                        <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $treeRegion->id }}" role="treeitem" aria-selected="false" aria-level="2" id="j1_{{ $treeRegion->id }}_anchor">
+                                        <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $cdata->id }}" role="treeitem" aria-selected="false" aria-level="2" id="j1_{{ $cdata->id }}_anchor">
                                             <i class="jstree-icon jstree-themeicon far fa-file-image jstree-themeicon-custom" role="presentation"></i>
-                                            {{ $treeRegion->name }}
+                                            {{ $cdata->name }}
                                         </a>
+                                        <ul role="group" class="jstree-children">
+                                            @foreach($cdata->childrenRecursive as $cdata_L2)
+                                            @if ($cdata->id == $cdata_L2->region_id)
+                                            <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $cdata_L2->id }}" class="jstree-node  jstree-leaf">
+                                                <i class="jstree-icon jstree-ocl" role="presentation"></i>
+                                                <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $cdata_L2->id }}" role="treeitem" aria-selected="false" aria-level="3" id="j1_{{ $cdata_L2->id }}_anchor">
+                                                    <i class="jstree-icon jstree-themeicon far fa-file-image jstree-themeicon-custom" role="presentation"></i>
+                                                    {{ $cdata_L2->name }}
+                                                </a>
+                                                <ul role="group" class="jstree-children">
+                                                    @foreach($cdata_L2->childrenRecursive as $cdata_L3)
+                                                    @if ($cdata_L2->id == $cdata_L3->region_id)
+                                                    <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $cdata_L3->id }}" class="jstree-node  jstree-leaf">
+                                                        <i class="jstree-icon jstree-ocl" role="presentation"></i>
+                                                        <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $cdata_L3->id }}" role="treeitem" aria-selected="false" aria-level="4" id="j1_{{ $cdata_L3->id }}_anchor">
+                                                            <i class="jstree-icon jstree-themeicon far fa-file-image jstree-themeicon-custom" role="presentation"></i>
+                                                            {{ $cdata_L3->name }}
+                                                        </a>
+                                                        <ul role="group" class="jstree-children">
+                                                            @foreach($cdata_L3->childrenRecursive as $cdata_L4)
+                                                            @if ($cdata_L3->id == $cdata_L4->region_id)
+                                                            <li role="none" data-jstree="{&quot;icon&quot; : &quot;far fa-file-image&quot;}" id="j1_{{ $cdata_L4->id }}" class="jstree-node  jstree-leaf">
+                                                                <i class="jstree-icon jstree-ocl" role="presentation"></i>
+                                                                <a class="jstree-anchor showDoc" href="#" tabindex="-1" data-tree="{{ $cdata_L3->id }}" role="treeitem" aria-selected="false" aria-level="5" id="j1_{{ $cdata_L4->id }}_anchor">
+                                                                    <i class="jstree-icon jstree-themeicon far fa-file-image jstree-themeicon-custom" role="presentation"></i>
+                                                                    {{ $cdata_L4->name }}
+                                                                </a>
+                                                                @endif
+                                                            </li>
+                                                            @endforeach
+                                                        </ul>
+                                                        @endif
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                                @endif
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                        @endif
                                     </li>
-                                    @endif
                                     @endforeach
                                 </ul>
                             </li>
                             @endforeach
                         </ul>
                     </div>
-
-
-
-
-
-
-
-
-
-
-
                 </div>
 
 
@@ -136,8 +191,7 @@
 @push('script')
 <!-- apexcharts -->
 
-<script src="{{asset('assets/js/jstree.min.js')}}"></script>
-<script src="{{asset('assets/js/ext-component-tree.min.js')}}"></script>
+
 <script type="text/javascript">
     // for third fourth guarantor
     function Function() {
@@ -160,6 +214,7 @@
         }
     }
 </script>
+
 <!-- dashboard init -->
 
 @endpush

@@ -7,6 +7,9 @@
     <title> @yield('title') | {{env('app_name')}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 
+
+    
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
   <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -16,8 +19,10 @@
   <link href="{{asset('assets')}}/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
   <link href="{{asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
   <link href="{{asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-  <link href="{{asset('assets/css/ext-component-tree.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-  <link href="{{asset('assets/css/jstree.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+
+  
+  <!-- <link href="{{asset('assets/css/jstree.min.css') }}" id="app-style" rel="stylesheet" type="text/css" /> -->
+  <!-- <link href="{{asset('assets/css/ext-component-tree.min.css') }}" id="app-style" rel="stylesheet" type="text/css" /> -->
 </head>
 
 @section('body')
@@ -51,6 +56,9 @@
     <!-- END wrapper -->
 
     <!-- JAVASCRIPT -->
+
+    
+
 <script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('assets/libs/bootstrap/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/libs/metismenu/metismenu.min.js')}}"></script>
@@ -58,10 +66,15 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css">
 <script src="{{asset('assets/libs/datatables/datatables.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
- <script src="{{asset('assets/libs/select2/select2.min.js')}}"></script>
- <script src="{{asset('assets/libs/toastr/toastr.min.js')}}"></script>
- <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
- <script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>
+<script src="{{asset('assets/libs/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/libs/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+<script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>
+<script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+
+
+ <!-- <script src="{{asset('assets/js/jstree.min.js')}}"></script> -->
+<script src="{{asset('assets/js/ext-component-tree.min.js')}}"></script>
 <script>
 $('.select2').select2();
 </script>

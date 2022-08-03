@@ -1,0 +1,10 @@
+<script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('assets/libs/bootstrap/bootstrap.min.js')}}"></script>
+<script src="{{asset('assets/libs/metismenu/metismenu.min.js')}}"></script>
+<script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables/datatables.min.js')}}"></script>
+<script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+<script src="{{asset('assets/libs/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/libs/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+<script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>

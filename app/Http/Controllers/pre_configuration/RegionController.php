@@ -136,9 +136,10 @@ class RegionController extends Controller
      public function all_regions_report()
     { 
         $citys = City::all();
+        $regions = Region::whereNull('region_id')->get();
         // $data['regions']=Region::with('belong_to_region')->get();
         // dd($citys); 
-       return view('pages/reports/city_wise_regions',compact('citys'));
+       return view('pages/reports/city_wise_regions',compact('citys','regions'));
     }
 }
 

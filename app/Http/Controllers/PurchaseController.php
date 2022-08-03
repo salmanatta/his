@@ -23,13 +23,24 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        
     }
     public function render()
     {
         $invoice_no=mt_rand(0,8889);
         // $batches=Batch::all();
         return view("pages/supplier/invoice/purchase",compact("invoice_no"));
+    }
+    public function pruchaseReturn()
+    {
+        $invoice_no=mt_rand(0,8889);
+        
+        return view("pages/supplier/invoice/purchase-return",compact("invoice_no"));
+
+    }
+    public function pruchaseReturnInsert(Request $request)
+    {
+        dd($request);
     }
     /**
      * Show the form for creating a new resource.
@@ -65,7 +76,14 @@ class PurchaseController extends Controller
             'product_id.required'=> 'Please select any Product, Thank You.',
             'suplier_id.required'=> 'Please select any Supplier, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
-       ]);       
+       ]);    
+       if($request->trans_type == 'PURCHASE')
+       {
+            $invStatus = 'Un-Post';      
+
+       }else{
+            $invStatus = 'Post';
+       }
         $order=PurchaseInvoice::create(
             [
                 'invoice_no'    =>$request->invoice_no,
@@ -73,8 +91,8 @@ class PurchaseController extends Controller
                 'date'          =>$request->date,
                 'branch_id'     =>$request->branch_id,
                 'description'   =>$request->description,
-                'trans_type'    =>'PURCHASE',
-                'inv_status'    =>'Un-Post',
+                'trans_type'    =>$request->trans_type,
+                'inv_status'    =>$invStatus,
                 'freight'       =>$request->freight,
                 'user_id'       =>auth()->user()->id,
                 'total'         =>$request->total,
@@ -94,20 +112,6 @@ class PurchaseController extends Controller
             $line_total=$request->input('line_total')[$key];  
             $bonus=$request->input('sale_tax_value')[$key];
 
-            PurchaseInvoiceDetail::create([
-                        'product_id'     =>$product_id,
-                        'item'           =>$product_name,
-                        'qty'            =>$quanity,
-                        'price'          =>$purchase_price,
-                        'discount'       =>$purchase_discount,
-                        'after_discount' =>$after_discount,
-                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
-                        'bonus'          =>$bonus,
-                        'line_total'     =>$line_total,
-                        'sales_tax'      =>$request->input('sale_tax_value')[$key],
-                        'adv_tax'        =>$request->input('adv_tax_value')[$key],
-                        
-             ]);
             $batch = Batch::where('batch_no',$request->batch)
                             ->where('date',$request->expiry_date)
                             ->get();                                        
@@ -123,15 +127,45 @@ class PurchaseController extends Controller
               }else{
                 $batch = $batch->first();
                 $batch_id = $batch->id;                
-              }             
-              Stock::create([
-                'product_id' =>$product_id,
-                'quantity'   =>$quanity,
-                'price'      =>$purchase_price,
-                'batch_id'   =>$batch_id,
-                'branch_id'  =>$branch_id,
-              ]);
-             
+              }
+
+            PurchaseInvoiceDetail::create([
+                        'product_id'     =>$product_id,
+                        'item'           =>$product_name,
+                        'qty'            =>$quanity,
+                        'price'          =>$purchase_price,
+                        'discount'       =>$purchase_discount,
+                        'after_discount' =>$after_discount,
+                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
+                        'bonus'          =>$bonus,
+                        'line_total'     =>$line_total,
+                        'sales_tax'      =>$request->input('sale_tax_value')[$key],
+                        'adv_tax'        =>$request->input('adv_tax_value')[$key],
+                        'batch_id'       =>$batch_id,
+             ]);
+            if($invStatus == 'Post')
+            {
+                $stock = Stock::where('product_id',$product_id)
+                           ->where('batch_id',$batch_id)
+                           ->where('branch_id',$branch_id)
+                           ->get();
+                if($stock->isEmpty())
+                {
+                    Stock::create([
+                        'product_id' =>$product_id,
+                        'quantity'   =>$quanity*-1,
+                        'price'      =>$purchase_price,
+                        'batch_id'   =>$batch_id,
+                        'branch_id'  =>$branch_id,
+                    ]);
+                }else{
+                    $stock = $stock->first();
+                    $stock->quantity -= $quanity;
+                    $stock->save();
+                }
+            }
+
+            
         }
     }
         return back()->with('success',"Data Added Successfully!");
@@ -149,8 +183,9 @@ class PurchaseController extends Controller
             $fromDate =date('Y-m-d', strtotime($fromDate));
             $todate = Carbon::now();
             $todate =date('Y-m-d', strtotime($todate));
-        }        
-        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate)
+        }
+        $transType = 'PURCHASE';
+        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,$transType)
                                         ->with('supplier','branch','user')
                                         ->get();        
         //return $purchaseData;
@@ -241,5 +276,10 @@ class PurchaseController extends Controller
     public function destroy(Purchase $purchase)
     {
         //
+    }
+    public function currentStockReport()
+    {
+        $product = Product::all();
+        return view('pages.reports.purchase.item_report' , compact('product'));
     }
 }

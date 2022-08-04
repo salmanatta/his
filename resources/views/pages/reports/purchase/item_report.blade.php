@@ -46,7 +46,6 @@
                             <th scope="col">Closeing Qty</th>
                             <th scope="col">Price</th>
                             <th scope="col">Total Amount</th>
-
                         </tr>
                     </thead>
                     <tbody id="append_here">

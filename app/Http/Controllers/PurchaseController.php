@@ -282,4 +282,26 @@ class PurchaseController extends Controller
         $product = Product::all();
         return view('pages.reports.purchase.item_report' , compact('product'));
     }
+    public function updatePurchaseStatus($id)
+    {
+        $purchaseMaster = PurchaseInvoice::find($id);
+        $purchaseMaster->inv_status = 'Post';
+        $purchaseMaster->status_changed_by = auth()->user()->id;
+        $purchaseMaster->status_changed_on = Carbon::now();
+        $purchaseMaster->update();        
+
+        $purchaseD = PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$id)->get();
+        foreach($purchaseD as $purchaseData)
+        {
+            Stock::create([
+                'product_id' =>$purchaseData->product_id,
+                'quantity'   =>$purchaseData->qty,
+                'price'      =>$purchaseData->price,
+                'batch_id'   =>$purchaseData->batch_id,
+                'branch_id'  =>$purchaseMaster->branch_id,
+            ]);
+        }
+        return back()->with('success',"Invoice Status Updated Successfully!");
+
+    }
 }

@@ -452,11 +452,6 @@
                             <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Stock Reports</a>
                             <a href="{{url('stock-report')}}" class="dropdown-item" key="t-saas">Item Reports</a>
                         </div>
-                                                
-
-
-
-
                     </li>
 
                     <li class="nav-item dropdown">

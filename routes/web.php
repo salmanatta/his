@@ -185,7 +185,7 @@ Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('
 
 
 Route::get('stock-report',[PurchaseController::class,"currentStockReport"])->name('item_report');
-
+Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchaseStatus'])->name('updatePurchaseStatus');
 // ==================End Reports =================
 
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");

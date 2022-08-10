@@ -50,7 +50,7 @@
                                 <div class="col-sm-4">
                                     <address>
                                         <strong>Invoice Date:</strong><br>
-                                        {{$purchase->date}}
+                                        {{$purchase->invoice_date}}
                                     </address>
                                 </div>
                                 <div class="col-sm-6">

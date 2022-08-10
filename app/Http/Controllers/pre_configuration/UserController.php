@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\pre_configuration;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -11,6 +13,7 @@ use Carbon\Traits\Date;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     /**
@@ -20,15 +23,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data['users']=$this->users();
-        // dd($data['users']);
-        return view('pages.pre_configuration.user.index',$data);
+        $data['users'] = $this->users();
+        //  dd($data['users']);
+        return view('pages.pre_configuration.user.index', $data);
     }
     public function getAllUsers()
     {
         return response()->json($this->users());
     }
-    public function users(){
+    public function users()
+    {
         return User::all();
     }
 
@@ -39,8 +43,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $data['roles']=Role::all();
-        return view('pages.pre_configuration.user.create',$data);
+        $data['roles'] = Role::all();
+        return view('pages.pre_configuration.user.create', $data);
     }
 
     /**
@@ -52,25 +56,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-         $data_reg=[
-              'name'     => $request->input('name'),
-              'email'    => $request->input('email'),
-              'role_id'     => $request->input('role_id'),
-              'password' => Hash::make($request->input('password')),
+        $data_reg = [
+            'name'     => $request->input('name'),
+            'email'    => $request->input('email'),
+            'role_id'     => $request->input('role_id'),
+            'password' => Hash::make($request->input('password')),
             // 'dob' => date('Y-m-d', strtotime($data['dob'])),
             // 'avatar' => "/images/" . $avatarName,
         ];
-                if (request()->has('avatar')) 
-                {            
-                    $avatar = request()->file('avatar');
-                    $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-                    $avatarPath = public_path('/images/');
-                    $avatar->move($avatarPath, $avatarName);
-                    $data_reg['avatar']="/images/" . $avatarName;
-               }
-                $user =User::create($data_reg);
-                            return redirect()->route('users.index')
-                    ->with('success','Data Added Successfully!');
+        if (request()->has('avatar')) {
+            $avatar = request()->file('avatar');
+            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatarPath = public_path('/images/');
+            $avatar->move($avatarPath, $avatarName);
+            $data_reg['avatar'] = "/images/" . $avatarName;
+        }
+        $user = User::create($data_reg);
+        return redirect()->route('users.index')
+            ->with('success', 'Data Added Successfully!');
     }
 
     /**
@@ -81,7 +84,6 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      
     }
 
     /**
@@ -92,8 +94,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data['user']=User::find($id);
-      return view('pages.pre_configuration.user.edit',$data);
+        $data['user'] = User::find($id);
+        return view('pages.pre_configuration.user.edit', $data);
     }
 
     /**
@@ -106,38 +108,29 @@ class UserController extends Controller
     // update(['password'=> Hash::make($request->new_password)]);
     public function update(Request $request, $id)
     {
-        $user=User::find($id);  
-        $password="";
-              $name     = $request->input('name');
-              $email    = $request->input('email');
-              $role_id     = $request->input('role_id');
-              $password =Hash::make($request->input('password'));
-              if (request()->has('avatar')) 
-                {            
-                    $avatar = request()->file('avatar');
-                    $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-                    $avatarPath = public_path('/images/');
-                    $avatar->move($avatarPath, $avatarName);
-                    $data_reg['avatar']="/images/" . $avatarName;
-               }
-if (empty($password)) {
-    $user->update([
-    'name' => $name,
-    'email' => $email,
-    'role_id' => $role_id,
-]);
-   
-}
 
-$user->update([
-    'name' => $name,
-    'email' => $email,
-    'password' => $password,
-    'role_id' => $role_id,
-]);
-           return redirect()->route('users.index')->with('info','User Updated successfully');
-
+        $user = User::find($id);
+        // dd($$request);                
+        $user->name     = $request->name;        
+        $user->email    = $request->email;        
+        $user->role_id  = $request->role_id;
+        if ($request->password != $user->password) {
+            $user->password =  Hash::make($request->password);
+        }
+        //   $password =Hash::make($request->input('password'));
+        if (request()->has('avatar')) {
+            $avatar = request()->file('avatar');
+            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatarPath = public_path('/images/');
+            $avatar->move($avatarPath, $avatarName);
+            $data_reg['avatar'] = "/images/" . $avatarName;
+        }    
+        $user->save();    
+                                
+        return redirect()->route('users.index')->with('info', 'User Updated successfully');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -148,7 +141,7 @@ $user->update([
     public function destroy($id)
     {
         User::find($id)->delete();
-     return redirect()->route('users.index')
-                    ->with('success','Data Deleted Successfully!');    //
+        return redirect()->route('users.index')
+            ->with('success', 'Data Deleted Successfully!');    //
     }
 }

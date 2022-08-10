@@ -31,7 +31,7 @@ class PurchaseInvoice extends Model
     }
     public function scopeReportData($query,$fromDate,$todate,$transType)
     {
-        return $query->whereBetween('date',[ $fromDate,$todate])                    
+        return $query->whereBetween('invoice_date',[ $fromDate,$todate])                    
                      ->where('trans_type',$transType);
     }
     public function purchaseDetail()

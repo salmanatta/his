@@ -1,42 +1,65 @@
 @extends('layouts.main')
 @section('content')
 <form class="" method="post" action="{{route('purchase_invoices.store')}}">
+    @csrf
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="card-title mb-4">Purchase invoice </h4>
+                            <div class="d-flex justify-content-between">
+                                <div class="">
+                                    <h3 class="card-title mb-1">Purchase invoice </h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <h3><b><label class="form-label" for="invStatus" style="color:red">Un-Post</label></b></h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <p class="font-weight-bold">
+                                        <b><label class="form-label" for="InvoiceNo">Invoice No # {{$invoice_no ?? ''}}</label></b>
+                                        <input type="hidden" value="{{$invoice_no}}" name="invoice_no">
+                                        <input type="hidden" value="PURCHASE" name="trans_type">
+                                        <input type="hidden" value="Un-Post" name="inv_status">                                        
+                                    </p>
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-body">
-                                    @csrf
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="_invoice_header">
-                                                <p class="_invoice_no"><span>Purchase Invoice No :</span>#
-                                                    <span class="_invoice_no_txt">{{$invoice_no ?? ''}}
-                                                        <input type="hidden" value="{{$invoice_no}}" name="invoice_no">
-                                                        <input type="hidden" value="PURCHASE" name="trans_type">
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 d-flex">
-                                            <div class="">
-                                                <h4><b><label class="form-label" for="InvoiceDate" style="color:red">Un-Post</label></b></h4>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 ">
-                                            <div class="mb-1">
+                                        <div class="col-4">
+                                            <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
-                                                <input type="date" class="form-control _date" value="<?php echo date('Y-m-d');?>" name="date" id="InvoiceDate" />
+                                                <input type="text" class="form-control" value="<?php echo date('Y-m-d');?>" name="invoiceDate" id="fiveDays"/>
+                                            </div>                                            
+                                            <div class="mb-3 col-md-12">
+                                                <label class="form-label" for="supplier">Supplier Name</label>
+                                                <select class="select2 form-control _supplier_select" name="suplier_id" id="supplier">
+                                                </select>
+                                                @error('suplier_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-3 col-md-12">
+                                                <label class="form-label" for="freight">Freight</label>
+                                                <input type="text" class="form-control" onkeyup="do_calculation()" name="freight" id="freight">
+                                            </div>
+                                            <div class="mb-3 col-md-12">
+                                                <label class="form-label" for="description">Product</label>
+                                                <select class="select2 form-control _products_select" id="_products_select" name="product_id">
+                                                </select>
+                                                @error('product_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-1">
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="branch">Branch Name</label>
                                                 <select class="select2 form-control _branch_select" name="branch_id" id="branch">
                                                 </select>
@@ -44,99 +67,65 @@
                                                 <span class="text-danger">{{$message}}</span>
                                                 @enderror
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="supplier">Supplier Name</label>
-                                                <select class="select2 form-control _supplier_select" name="suplier_id" id="supplier">
-                                                </select>
-                                                @error('suplier_id')
-                                                    <span class="text-danger">{{$message}}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mt-2">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="freight">Freight</label>
-                                                <input type="text" class="form-control" onkeyup="do_calculation()" name="freight" id="freight">
-                                            </div>                                           
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <div class="mb-1">
+                                            <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="description">Description</label>
-                                                <textarea class="form-control _description" name="description" id="description"></textarea>
-                                            </div>                                        
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 mt-2">
-                                            <div class="col-md-6 justify-content-center mx-auto">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="description">Product</label>
-                                                    <select class="select2 form-control _products_select" id="_products_select" name="product_id">
-                                                    </select>
-                                                    @error('product_id')
-                                                    <span class="text-danger">{{$message}}</span>
-                                                    @enderror
-                                                </div>
+                                                <textarea class="form-control" name="description" id="description" rows="8"></textarea>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>                
-                <table class="table  order-list _purchaseTable">
-                    <thead>
-                        <tr>
-                            <th>S.NO</th>
-                            <th>Item</th>
-                            <th>Batch #</th>
-                            <th>Exp. Date</th>
-                            <th>Quanity</th>
-                            <th>Price</th>
-                            <th>Total Rate</th>
-                            <th>Discount %</th>
-                            <th>Discount Amount</th>
-                            <th>Sale Tax</th>
-                            <th>Adv. Tax</th>
-                            <th>Line Total</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="width:10%;text-align:right">Grand Total</td>
-                            <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="row">
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-success me-1">Save</button>                        
-                        <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                    </div>
+                    <table class="table  order-list _purchaseTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Item</th>
+                                <th>Batch No</th>
+                                <th>Exp. Date</th>
+                                <th>Quanity</th>
+                                <th>Price</th>
+                                <th>Total Rate</th>
+                                <th>Discount %</th>
+                                <th>Discount Amount</th>
+                                <th>Sale Tax</th>
+                                <th>Adv. Tax</th>
+                                <th>Line Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="width:10%;text-align:right">Grand Total</td>
+                                <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="row">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success me-1">Save</button>
+                            <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                        </div>
                     </div>
                 </div>
+                <!-- end card body -->
             </div>
-            <!-- end card body -->
+            <!-- end card -->
         </div>
-        <!-- end card -->
-    </div>
-    <!-- end col -->
+        <!-- end col -->
     </div>
 </form>
 <!-- end row -->
@@ -154,7 +143,7 @@
                 };
             },
             processResults: function(data, params) {
-                console.log(data);
+                // console.log(data);
                 return {
                     results: data.items,
                 };
@@ -201,7 +190,7 @@
                 };
             },
             processResults: function(data, params) {
-                console.log(data);
+                // console.log(data);
                 return {
                     results: data.items,
                 };
@@ -220,7 +209,7 @@
                 id: id
             },
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 var table_body = $("table.order-list tbody");
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `">
         <td class="product_count">` + product_count + ` </td>
@@ -232,14 +221,14 @@
         <td class="expiry_date">
         <input type="date" class="form-control expiry_date" value="" name="expiry_date[]" step="any" required/>
         </td>
-        <td class="qty all_qty">
-        <input type="number" class="form-control all_qty" style="text-align:center" min="1" onkeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
+        <td class="quanity">
+        <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
         </td>
         <td class="purchase_price">
         <input type="number" class="form-control purchase_price" style="text-align:center" onKeyup="do_calculation()" value="` + data.purchase_price + `"  name="purchase_price[]" step="any" required/>
         </td>
         <td class="total_price">
-        <input type="number" class="form-control total_price" style="text-align:right" value="` + data.purchase_price * 1 + `"  name="total_price" step="any" readonly/>
+        <input type="number" class="form-control total_price" style="text-align:right" value=""  name="total_price[]" step="any" readonly/>
         </td>
         <td class="purchase_discount">
         <input type="number" class="form-control purchase_discount" onKeyup="do_calculation()" value="` + data.purchase_discount + `"  name="purchase_discount[]" step="any"/>
@@ -250,11 +239,9 @@
         <td class="sale_tax_value">
         <input type="number" class="form-control sale_tax_value" onKeyup="do_calculation()" value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
         </td>
-
         <td class="adv_tax_value">
         <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
-
         <td class="line_total">
         <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
         </td><input type="hidden" class="hidden_total" name="total">
@@ -273,10 +260,7 @@
         $(this).closest('tr').remove();
         do_calculation();
     });
-
-    function do_calculation() {        
-        // alert('dddd');
-        // Declare variable for grand calculation
+    function do_calculation() {
         var line_total = 0;
         var sub_total = 0;
         var grand_discount = 0;
@@ -284,42 +268,32 @@
         var product_count = 1;
         var grand_subtotal = 0;
         var freight = parseFloat(document.getElementById('freight').value);
-        if(isNaN(freight))
-        {
+        if (isNaN(freight)) {
             freight = 0;
         }
-        $('.table_append_rows').each(function() // run loop on all append rows for calculation and value reseting
+        $('.table_append_rows').each(function() 
             {
-
-                $(this).find('.product_count').text(product_count); // get qty from row
-                var qty = $(this).find('.qty').find('input').val(); // get qty from row
-                total_qty += parseInt(qty);
-
-                // var purchase_price=parseInt($(this).find('.purchase_price').val()); // take unit price from row
-                var purchase_price = $(this).find('.purchase_price').find('input').val(); // get qty from row
-                $(this).find('.hidden_purchase_price').val(purchase_price); // put unit price in hidden input field
-                var total_price = parseFloat(purchase_price * qty).toFixed(2);
+                $(this).find('.product_count').text(product_count); 
+                var quanity = $(this).find('.quanity').find('input').val(); 
+                var purchase_price = $(this).find('.purchase_price').find('input').val();                 
+                var total_price = parseFloat(purchase_price * quanity).toFixed(2);
+                $(this).find(".total_price").val(total_price);
                 var purchase_discount = $(this).find('.purchase_discount').find('input').val();
-                var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val()); // Get Sale Tqx value
-                var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val()); // Get Adv Tax Value
-                var all_qty = parseFloat($(this).find('.all_qty').val());
-                var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2); // calculate unit price after discount
-                $(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
-
-                if(isNaN(sale_tax_value))
-                {
+                var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val()); 
+                var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val());                 
+                var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2); 
+                $(this).find('.after_discount').val(price_after_discount); 
+                if (isNaN(sale_tax_value)) {
                     sale_tax_value = 0;
                 }
-                if(isNaN(adv_tax_value))
-                {
+                if (isNaN(adv_tax_value)) {
                     adv_tax_value = 0;
                 }
-
                 var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
                 $(this).find('.sub_total').val(row_sub_total);
                 $(this).find('.line_total').val(row_sub_total);
                 grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
-                $(".total_price").val(total_price);
+                
                 $(".hidden_total").val(grand_subtotal);
                 $("._tfootTotal").text(grand_subtotal);
                 $("input[name='total_qty']").val(total_qty);
@@ -334,8 +308,13 @@
         else
             $(this).val("0");
     });
+    $(document).ready(function() {        
+        $("#fiveDays").datepicker({
+            minDate: -5,
+            maxDate: "+5D"
+        });       
 
-    // To restict the datepicker
-    // disableDate();
+    })
+
 </script>
 @endpush

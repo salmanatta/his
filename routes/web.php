@@ -89,7 +89,7 @@ Route::resource('max_sale_qtyes', 'App\Http\Controllers\ProductMaxSalQuantityCon
 Route::resource('discounts', 'App\Http\Controllers\ProducDiscountController')->middleware('auth');
 Route::get('getProductDetail', 'App\Http\Controllers\ProductInfoController@getProductDetail')->name('getProductDetail');
 /*----------  cities  Resource Route  ----------*/
-Route::resource('users', 'App\Http\Controllers\pre_configuration\UserController');
+Route::resource('users', 'App\Http\Controllers\pre_configuration\UserController')->middleware('auth');
 Route::resource('cities', 'App\Http\Controllers\pre_configuration\CityController')->middleware('auth');
 Route::resource('groups', 'App\Http\Controllers\pre_configuration\GroupController')->middleware('auth');
 Route::resource('products', 'App\Http\Controllers\pre_configuration\ProductController')->middleware('auth');

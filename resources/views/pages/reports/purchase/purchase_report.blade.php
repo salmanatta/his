@@ -57,7 +57,7 @@
                         @foreach ($purchaseData as $data)
                         <tr>
                             <td>{{ $data->invoice_no }}</td>
-                            <td>{{ $data->date }}</td>
+                            <td>{{ $data->invoice_date }}</td>
                             <td>{{ $data->user->name }}</td>
                             <td>{{ $data->supplier->name }}</td>
                             <td>{{ $data->branch->name }}</td>

@@ -121,7 +121,7 @@ class SaleInvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //  dd($request->all());
+        
         $this->validate(
             $request,
             [
@@ -138,7 +138,7 @@ class SaleInvoiceController extends Controller
         );
 
         $user_id = auth()->user()->id;
-        $order_data = $request->only(['invoice_no', 'customer_id', 'date', 'branch_id', 'description', 'sub_total']);
+        $order_data = $request->only(['invoice_no', 'customer_id', 'invoice_date', 'branch_id', 'description', 'total']);
         $order_data['user_id'] = $user_id;
         $order = SaleInvoice::create($order_data);
         if ($order) {
@@ -167,6 +167,7 @@ class SaleInvoiceController extends Controller
                     'sale_invoice_id' => $sale_invoice_detail_id,
                     'bonus'          => $bonus,
                     'line_total'     => $line_total,
+                    'sales_tax'      =>$request->input('sales_tax')[$key],
                 ]);
                 $stock = Stock::where('id', $request->id[$key])
                               ->where('product_id', $product_id)

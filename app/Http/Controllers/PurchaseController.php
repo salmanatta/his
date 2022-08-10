@@ -66,7 +66,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //   dd($request->all());
+        // dd($request);
         $this->validate($request,[            
             'product_id'=>'required|exists:products,id',
             'suplier_id'=>'required|exists:suppliers,id',
@@ -76,23 +76,16 @@ class PurchaseController extends Controller
             'product_id.required'=> 'Please select any Product, Thank You.',
             'suplier_id.required'=> 'Please select any Supplier, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
-       ]);    
-       if($request->trans_type == 'PURCHASE')
-       {
-            $invStatus = 'Un-Post';      
-
-       }else{
-            $invStatus = 'Post';
-       }
+       ]);           
         $order=PurchaseInvoice::create(
             [
                 'invoice_no'    =>$request->invoice_no,
                 'suplier_id'    =>$request->suplier_id,
-                'date'          =>$request->date,
+                'invoice_date'  =>Carbon::createFromFormat('m/d/Y', $request->invoiceDate)->format('Y-m-d'),
                 'branch_id'     =>$request->branch_id,
                 'description'   =>$request->description,
                 'trans_type'    =>$request->trans_type,
-                'inv_status'    =>$invStatus,
+                'inv_status'    =>$request->inv_status,
                 'freight'       =>$request->freight,
                 'user_id'       =>auth()->user()->id,
                 'total'         =>$request->total,
@@ -110,7 +103,7 @@ class PurchaseController extends Controller
             $product_id=$request->input('product_id')[$key];  
             $product_name=$request->input('product_name')[$key];  
             $line_total=$request->input('line_total')[$key];  
-            $bonus=$request->input('sale_tax_value')[$key];
+            // $bonus=$request->input('sale_tax_value')[$key];
 
             $batch = Batch::where('batch_no',$request->batch)
                             ->where('date',$request->expiry_date)
@@ -136,14 +129,13 @@ class PurchaseController extends Controller
                         'price'          =>$purchase_price,
                         'discount'       =>$purchase_discount,
                         'after_discount' =>$after_discount,
-                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
-                        'bonus'          =>$bonus,
+                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,                        
                         'line_total'     =>$line_total,
                         'sales_tax'      =>$request->input('sale_tax_value')[$key],
                         'adv_tax'        =>$request->input('adv_tax_value')[$key],
                         'batch_id'       =>$batch_id,
              ]);
-            if($invStatus == 'Post')
+            if($request->inv_status == 'Post')
             {
                 $stock = Stock::where('product_id',$product_id)
                            ->where('batch_id',$batch_id)
@@ -164,8 +156,6 @@ class PurchaseController extends Controller
                     $stock->save();
                 }
             }
-
-            
         }
     }
         return back()->with('success',"Data Added Successfully!");

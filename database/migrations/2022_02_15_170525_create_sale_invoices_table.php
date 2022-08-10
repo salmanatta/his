@@ -15,12 +15,12 @@ class CreateSaleInvoicesTable extends Migration
     {
         Schema::create('sale_invoices', function (Blueprint $table) {
                     $table->increments('id');
-                    $table->string("invoice_no");
+                    $table->string("invoice_no")->nullable();
                     // $table->string("date");
-                    $table->date('date')->nullable();
+                    $table->date('invoice_date')->nullable();
                     $table->text("description")->nullable();
-                    $table->integer("sub_total")->nullable();
-                    $table->integer("total")->nullable();
+                    $table->double("sub_total")->nullable();
+                    $table->double("total")->nullable();
                     //  $table->integer('product_id')->unsigned()->index()->nullable();
                     // $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
                     

@@ -6,47 +6,61 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
-                <form class="" method="post" action="{{route('sale_invoices.store')}}">
+                <form method="post" action="{{route('sale_invoices.store')}}">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                            <div class="d-flex justify-content-between">                                
+                                <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>                                
+                            </div>                                                  
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <p>
+                                        <span>Sale Invoice No # {{$invoice_no ?? ''}}
+                                            <input type="hidden" value="{{$invoice_no}}" name="invoice_no">
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <p class="_invoice_no "><span>Sale Invoice No :</span>#<span class="_invoice_no_txt">{{$invoice_no ?? ''}}<input type="hidden" value="{{$invoice_no}}" name="invoice_no"></span></p>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control _customers_select" name="customer_id">
-                                            </select>
-                                            @error('customer_id')
-                                            <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="_invoice_header">
-                                                <input type="hidden" name="branch_id" value="1">
-                                                <p class="">
-                                                    <span>
-                                                        <input type="date" name="date" value="{{date('M-d-y')}}" id="datepickercustom" class="form-control _date">
-                                                </p>
+                                        <div class="col-4">
+                                            <div class="col-md-12 mb-3">
+                                                <div class="_invoice_header">
+                                                    <p class="">
+                                                        <span>
+                                                            <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>" id="datepickercustom" class="form-control _date">
+                                                    </p>
+                                                    <input type="hidden" name="branch_id" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label" for="description">Product</label>
+                                                <select class="select2 form-control _products_select" id="_products_select" name="product_id">
+                                                </select>                                                
+                                                @error('product_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mt-2">
-                                            <select class="select2 form-control _products_select" id="_products_select" name="product_id">
-                                            </select>
-                                            <!--  <input type="text" class="_products_select form-control" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" /> -->
-                                            @error('product_id')
-                                            <span class="text-danger">{{$message}}</span>
-                                            @enderror
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label" for="Customer">Customer Name</label>
+                                                <select class="select2 form-control _customers_select" name="customer_id">
+                                                </select>
+                                                @error('customer_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
+                                            </div>
+                                                <div class="col-12 mb-3">
+                                                <label class="form-label" for="description">Description</label>
+                                                <textarea placeholder="description" name="description" rows="4" class="form-control _description"></textarea>
+                                            </div>                                    
                                         </div>
-                                        <div class="col-md-6 mt-2">
-                                            <textarea placeholder="description" cols="12" name="description" rows="3" class="form-control _description" style="resize: none"></textarea>
-                                        </div>
                                     </div>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -86,8 +100,11 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <div class="mx-10">
-                        <button type="submit" class="btn btn-primary w-md ">Submit</button>
+                    <div class="row">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success me-1">Save</button>
+                            <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -118,8 +135,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary update_modal">Update</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary update_modal" data-bs-dismiss="modal">Update</button>
                     </div>
                     <!-- </form> -->
             </div>
@@ -275,37 +292,25 @@
         var total_rate = 0;
 
 
-        $('.table_append_rows').each(function() // run loop on all append rows for calculation and value reseting
+        $('.table_append_rows').each(function() 
             {
                 $(this).find('.product_count').text(product_count); // get qty from row
                 var qty = $(this).find('.qty_sale').find('input').val(); // get qty from row
-                total_qty += parseInt(qty);
-                // var purchase_price=parseInt($(this).find('.purchase_price').val()); // take unit price from row
+                total_qty += parseInt(qty);                
                 var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val()); // get qty from row
                 var sale_qty = parseInt($(this).find('#qty_sale').val()); // get qty from row
-                // var bouns = sale_qty + parseInt($(this).find('#bouns').val());
-
-
-
                 $(this).find('.hidden_purchase_price').val(purchase_price); // put unit price in hidden input field
                 total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
                 $(this).find('#total_rate').val(total_rate);
                 purchase_discount = $(this).find('.purchase_discount').find('input').val();
                 var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
                 $(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
-
                 var all_qty = parseFloat($(this).find('.qty_sale').val());
                 grand_discount += (purchase_discount * all_qty);
-
-
-
                 var sales_tax = parseFloat($(this).find('#sales_tax').val());
-
                 if (isNaN(sales_tax)) {
                     sales_tax = 0;
                 }
-                // console.log("Total Rate = "+total_rate+ " Discount Price = "+price_after_discount+" Sales Tax = "+sales_tax);
-
                 var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
                 $(this).find('.sub_total').val(row_sub_total);
                 $(this).find('.line_total').val(row_sub_total);

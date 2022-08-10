@@ -82,7 +82,7 @@ $('.select2').select2();
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
   function disableDate() {
-    alert('For Three Days Plan');
+    // alert('For Three Days Plan');
     $("#datepickercustom").datepicker({
     minDate: -3,
     maxDate: "+3D"
@@ -90,19 +90,19 @@ $('.select2').select2();
   // Also, keep in mind, use mm/dd/yy format.
  }
  function disableDateFive() {
-  alert('For Five Days Plan');
-  $("#datepickercustom").datepicker({
-   minDate: -5,
-   maxDate: "+5D"
-});
+  // alert('For Five Days Plan');
+//   $("#datepickercustom").datepicker({
+//    minDate: -5,
+//    maxDate: "+5D"
+// });
 }
 
  function disableDateSeven() {
-  alert('For Seven Days Plan');
-  $("#datepickercustom").datepicker({
-   minDate: -7,
-   maxDate: "+7D"
-});
+  // alert('For Seven Days Plan');
+//   $("#datepickercustom").datepicker({
+//    minDate: -7,
+//    maxDate: "+7D"
+// });
   // window.location.reload();
   // Also, keep in mind, use mm/dd/yy format.
  }

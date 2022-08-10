@@ -19,7 +19,6 @@
                                 <th class="align-middle"> #</th>
                                 <th class="align-middle" width="15%">Image</th>
                                 <th class="align-middle" width="40%">user Name</th>
-
                                 <th class="align-middle">Email</th>
                                 <th class="align-middle">Role</th>
                                 <!-- <th class="align-middle">City</th> -->
@@ -36,7 +35,7 @@
                                 <td>{{$user->avater}}</td>
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email }}</td>
-                                <td>{{$user->role->name }}</td>
+                                <td>{{ $user->role->name ?? ''}}</td>
 
 
 
@@ -45,13 +44,10 @@
                                         <a data-modal="role" data-userid="{{$user->id ?? ''}}" class="btn btn-info btn-sm btn_assgn_role_to_user">
                                             Assign Role to this user
                                         </a>
-
                                         <a data-modal="permission" data-userid="{{$user->id ?? ''}}" class="btn btn-info btn-sm btn_assgn_permission_to_user">
                                             Assign Permission to this user
                                         </a>
-
-
-                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-user_code="{{$user->id}}" data-user_name="{{$user->name}}" data-user_email="{{$user->email}}" data-user_role="{{$user->role->name}}">
+                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-user_code="{{$user->id}}" data-user_name="{{$user->name}}" data-user_email="{{$user->email}}" data-user_role="{{$user->role->name ?? ''}}">
                                             View Details
                                         </a>
                                         <a href="{{route('users.edit',$user->id)}}" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>

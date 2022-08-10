@@ -28,20 +28,19 @@
                                         <td></td>
                                         <td> {{$region->name}}</td>
                                     </tr>
-                                    @foreach($region->childrenRecursive as $region_l2)                        
-                                    <tr>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td> {{$region_l2->name}}</td>
-                                    </tr>
-                                        @foreach($region_l2->childrenRecursive as $region_l3)                        
+                                    @foreach($region->childrenRecursive as $region_l2)                                    
                                         <tr>
                                             <td> </td>
                                             <td> </td>
-                                            <td> </td>
-                                            <td> {{$region_l3->name}}</td>
+                                            <td> {{$region_l2->name}}</td>
                                         </tr>
-                                        @endforeach
+                                        @foreach($region_l2->childrenRecursive as $region_l3)                                        
+                                            <tr>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> </td>
+                                                <td> {{$region_l3->name}}</td>
+                                            </tr>                                 
                                             @foreach($region_l3->childrenRecursive as $region_l4)                        
                                             <tr>
                                                 <td> </td>
@@ -49,8 +48,9 @@
                                                 <td> </td>
                                                 <td> </td>
                                                 <td> {{$region_l4->name}}</td>
-                                            </tr>
+                                            </tr>                                        
                                             @endforeach
+                                        @endforeach
                                     @endforeach
                                 @endif                                
                             @endforeach                            

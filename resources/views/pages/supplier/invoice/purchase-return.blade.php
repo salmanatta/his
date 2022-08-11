@@ -29,7 +29,7 @@
                                         <div class="col-4">
                                             <div class="mb-3 col-md-12">                                                
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
-                                                <input type="text" class="form-control" value="<?php echo date('Y-m-d'); ?>" name="invoiceDate" id="fiveDays" />                                                
+                                                <input type="text" class="form-control" value="<?php echo date('m/d/y'); ?>" name="invoiceDate" id="fiveDays" />                                                
                                             </div>
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="supplier">Supplier Name</label>

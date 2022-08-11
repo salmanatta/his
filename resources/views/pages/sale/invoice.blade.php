@@ -30,9 +30,11 @@
                                                 <div class="_invoice_header">
                                                     <p class="">
                                                         <span>
-                                                            <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>" id="datepickercustom" class="form-control _date">
+                                                            <label class="form-label" for="Customer">Invoice Date</label>
+                                                            <input type="date" name="invoice_date" value="<?php echo date('Y-m-d'); ?>" id="datepickercustom" class="form-control _date">
+                                                        </span>
                                                     </p>
-                                                    <input type="hidden" name="branch_id" value="">
+                                                    <input type="hidden" name="trans_type" value="{{ $transType }}">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
@@ -65,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table  order-list _saleTable">
+                    <table class="table order-list _saleTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -212,7 +214,7 @@
     custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
     $("._products_select").on('change', function(data) {
         var id = $(this).val();
-        console.log(id);
+        // console.log(id);
         // var count=0;
         // var total=0;
         // function productSearch(data) {
@@ -223,7 +225,7 @@
             //     id: id
             //       },
             success: function(data) {
-                //  console.log(data);
+                 console.log(data);
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
 
@@ -263,8 +265,9 @@
 <input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
-<input type="hidden" class="hidden_total"             name="total" value="0">
+<input type="hidden" class="hidden_total" name="total" value="0">
 <input type="hidden" class="sub_total" name="sub_total" value="0">
+<input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
 </tr>`;
                 // <input type="hidden" class="hidden_unit_tax"        name="unit_tax[]" value="0">
                 table_body.append(new_row); // append new row to table body
@@ -294,17 +297,17 @@
 
         $('.table_append_rows').each(function() 
             {
-                $(this).find('.product_count').text(product_count); // get qty from row
-                var qty = $(this).find('.qty_sale').find('input').val(); // get qty from row
+                $(this).find('.product_count').text(product_count); 
+                var qty = $(this).find('.qty_sale').find('input').val(); 
                 total_qty += parseInt(qty);                
-                var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val()); // get qty from row
-                var sale_qty = parseInt($(this).find('#qty_sale').val()); // get qty from row
-                $(this).find('.hidden_purchase_price').val(purchase_price); // put unit price in hidden input field
+                var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val()); 
+                var sale_qty = parseInt($(this).find('#qty_sale').val()); 
+                $(this).find('.hidden_purchase_price').val(purchase_price); 
                 total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
                 $(this).find('#total_rate').val(total_rate);
                 purchase_discount = $(this).find('.purchase_discount').find('input').val();
                 var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
-                $(this).find('.after_discount').val(price_after_discount); // set u_price after discount in row td
+                $(this).find('.after_discount').val(price_after_discount); 
                 var all_qty = parseFloat($(this).find('.qty_sale').val());
                 grand_discount += (purchase_discount * all_qty);
                 var sales_tax = parseFloat($(this).find('#sales_tax').val());
@@ -316,6 +319,7 @@
                 $(this).find('.line_total').val(row_sub_total);
                 grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
                 $("._tfootTotal").text(grand_subtotal);
+                $(".hidden_total").val(grand_subtotal);
                 $("input[name='total_qty']").val(total_qty);
                 $("input[name='item']").val(product_count);
                 product_count++;
@@ -334,7 +338,7 @@
     }
 
 
-    // @@@@@@@@@@@@@@@@@@@@@@   batch @@@@@@@@@@@@@@@@
+    // @@@@@@@@@@@@@@@@@@@@@@   batch  @@@@@@@@@@@@@@@@
     $(document).on('click', '.edit_modal', function() {
         var row_id = $(this).closest('.table_append_rows').attr('id');
         $('input[name="edit_row_id"]').val(row_id);
@@ -377,13 +381,18 @@
         // var tr=$(this).closest('.table_append_rows').attr('id');
         // console.log(tr);
         var product_id = $('#product_modal').val();
-        var price = $('#edit_batch :selected').data('price');
-        //   alert(price);
+        var price = $('#edit_batch :selected').data('price');        
         var quantity = $('#edit_batch :selected').data('quantity');
+        var batchId = $('#edit_batch :selected').val();
+
+        
+        
         // var price=$('#edit_batch').data('price');
         // var quantity=$('#edit_batch').data('quantity');
 
         var batch_id_modal = $("#edit_batch :selected").text();
+
+        
         // var batch_no_edit= $("#edit_batch :selected").text();
         // var row_id=$(this).closest('.table_append_rows').attr('id');
         //  $('input[name="edit_row_id"]').val(row_id);
@@ -391,9 +400,9 @@
 
         // var row_id_for_editing= $('input[name="edit_row_id"]').val();
         var row_id_for_editing = $('input[name="edit_row_id"]').val();
-        console.log(row_id_for_editing);
-        console.log(quantity);
-        console.log(price);
+        // console.log(row_id_for_editing);
+        // console.log(quantity);
+        // console.log(price);
 
         // $.ajax({
         //   type:'get',
@@ -406,6 +415,7 @@
         $('#' + row_id_for_editing).find('.all_qty').val(quantity);
         $('#' + row_id_for_editing).find('#batch_no_id').val(batch_id_modal);
         $('#' + row_id_for_editing).find('.price').val(price);
+        $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
         // $('#'+row_id_for_editing).find('#purchase_discount').find('input').val(data.product.purchase_discount);
 
         $(".bs-example-modal-lg").modal('hide');

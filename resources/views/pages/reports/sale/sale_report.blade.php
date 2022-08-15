@@ -60,7 +60,7 @@
                                         <tr>
                                             <td>{{ $counter }}</td>
                                             <td>{{ $data->invoice_no }}</td>
-                                            <td>{{ $data->date }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($data->invoice_date)) }}</td>
                                             <td>{{ $data->user->name }}</td>
                                             <td>{{ $data->customer->name }}</td>
                                             <td>{{ $data->branch->name }}</td>

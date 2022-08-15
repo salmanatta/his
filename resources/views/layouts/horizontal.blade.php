@@ -365,19 +365,18 @@
                         </div>
                     </li>
 
-
                     @if(auth()->user()->hasRole(['purchase']))
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-purchase" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchases</span>
                             <div class="arrow-down"></div>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard"></div>
+                        <div class="dropdown-menu" aria-labelledby="topnav-purchase"></div>
                     </li>
                     @endif
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-purchase" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Purchase </span>
                             <div class="arrow-down"></div>
                         </a>
@@ -394,7 +393,8 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                            <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Create Sale Invoice </a>
+                            <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Sale Invoice </a>
+                            <a href="{{url('sale/invoiceReturn')}}" class="dropdown-item" key="t-saas"> Sale Return Invoice </a>
                             <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas"> View Sale Reports</a>
                         </div>
                     </li>

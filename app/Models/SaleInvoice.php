@@ -14,7 +14,7 @@ class SaleInvoice extends Model
      protected $appends = ['sumLineTotal','sumDiscountAmount','sumSalesTax'];
 
      public function setDateAttribute($date) {//get method same the set method
-        $this->attributes['date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
+        $this->attributes['invoice_date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
       }
        public function branch()
       {

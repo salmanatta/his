@@ -49,7 +49,7 @@
                                 <div class="col-sm-4">
                                     <address>
                                         <strong>Order Date:</strong><br>
-                                        {{ !is_null($sale) ? $sale->date : '' }}
+                                        {{ !is_null($sale) ? $sale->invoice_date : '' }}
                                     </address>
                                 </div>
                                 <div class="col-sm-6">

@@ -26,6 +26,13 @@ class SaleInvoiceController extends Controller
         $transType = 'SALE';        
         return view("pages/sale/invoice", compact('invoice_no','transType'));
     }
+    public function invoiceReturn()
+    {
+        $invoice_no = mt_rand(0, 8889);
+        $transType = 'SALE RETURN';        
+        return view("pages/sale/invoice", compact('invoice_no','transType'));
+
+    }
 
     public function getStock(Request $request, $id)
     {
@@ -65,7 +72,7 @@ class SaleInvoiceController extends Controller
             $todate   = Carbon::now();
             $todate   = date('Y-m-d', strtotime($todate));
         }                
-        $saleData = SaleInvoice::whereBetween('date', [$fromDate, $todate])
+        $saleData = SaleInvoice::whereBetween('invoice_date', [$fromDate, $todate])
                             ->with('customer', 'branch', 'user')
                             ->get(); 
         // dd($saleData);

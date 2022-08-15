@@ -139,6 +139,7 @@ Route::post('generalDiscount', 'App\Http\Controllers\GeneralController@generalDi
 // ===================== Product Sale Side======
 Route::resource('sale_invoices', 'App\Http\Controllers\SaleInvoiceController')->middleware('auth');
 Route::GET("/sale/invoice",[SaleInvoiceController::class,"render"])->middleware("auth");
+Route::GET("/sale/invoiceReturn",[SaleInvoiceController::class,"invoiceReturn"])->middleware("auth");
 Route::get("get-all-sale-products",[SaleInvoiceController::class,"allSaleProducts"]);
 Route::get("get-stock/{id}",[SaleInvoiceController::class,"getStock"]);
 Route::get("common_customer",[CustomerController::class,"commonCustomer"]);

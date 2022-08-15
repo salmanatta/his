@@ -10,8 +10,13 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-flex justify-content-between">                                
-                                <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>                                
+                            <div class="d-flex justify-content-between">  
+                                @if($transType == 'SALE')                                
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                                @else
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
+                                @endif
+                                
                             </div>                                                  
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
@@ -225,7 +230,7 @@
             //     id: id
             //       },
             success: function(data) {
-                 console.log(data);
+                //  console.log(data);
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
 
@@ -236,7 +241,8 @@
      <input type="hidden" id="product_name" name="product_name[]" value="` + data.productArr.product.name + `"/>` + data.productArr.product.name + `
 </td>
 <td class="batch_no_id">
-    <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + ` <i class="dripicons-document-edit"></i>
+    <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
+        <i class="dripicons-document-edit"></i>
     </button>
 </td>
 <td class="qty">

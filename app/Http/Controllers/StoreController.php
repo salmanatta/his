@@ -57,37 +57,52 @@ class StoreController extends Controller
         return response()->json($data);
     }
     public function transferProduct(Request $request){
-        $rows=$request->input('product_id');
-        $to_branch_id=$request->input('to_branch_id');
-        $from_branch_id=$request->input('from_branch_id');
-        $expire_date=$request->input('expire_date');
-        $description=$request->input('description');
-        foreach($rows as $key=>$row) 
-        {
-                    $product_id = $request->input('product_id')[$key];
-                    $price      = $request->input('price')[$key];
-                    $quantity   = $request->input('quantity')[$key];
-            $storeTransfer=StoreTransfer::create([
-                    'product_id' =>$product_id,
-                    'price' =>$price,
-                     'quantity' =>$quantity,
-                    'to_branch_id' =>$to_branch_id,
-                    'from_branch_id' =>$from_branch_id,
-                    'description'=>$description,
-                    'expire_date' =>$expire_date
-             ]);
-            $store_transfer_id=$storeTransfer->id;
-            StoreTransferDetail::create([
-                    'store_transfer_id' =>$store_transfer_id,
-                    'product_id' =>$product_id,
-                    'price' =>$price,
-                     'quantity' =>$quantity,
-                    'to_branch_id' =>$to_branch_id,
-                    'from_branch_id' =>$from_branch_id,
-                    'description'=>$description,
-                    'expire_date' =>$expire_date
-             ]);
-        }
+        // dd($request);
+        $request->validate(
+            [
+                'to_branch_id'  => 'required',
+                'product_id'    =>'required|exists:products,id',
+                // 'customer_id'=>'required|exists:suppliers,id',
+                // 'branch_id'=>'required|exists:branches,id', 
+            ],
+            [
+                'to_branch_id.required' => 'Please select Branch to Transfer.',
+                'product_id.required'   => 'Atleast One Product Must be Selected.',
+                // 'branch_id.required' => 'Please select any Branch, Thank You.',
+            ]
+        ); 
+        dd($request);            
+        // $rows=$request->input('product_id');
+        // $to_branch_id=$request->input('to_branch_id');
+        // $from_branch_id=$request->input('from_branch_id');
+        // $expire_date=$request->input('expire_date');
+        // $description=$request->input('description');
+        // foreach($rows as $key=>$row) 
+        // {
+        //             $product_id = $request->input('product_id')[$key];
+        //             $price      = $request->input('price')[$key];
+        //             $quantity   = $request->input('quantity')[$key];
+        //     $storeTransfer=StoreTransfer::create([
+        //             'product_id' =>$product_id,
+        //             'price' =>$price,
+        //              'quantity' =>$quantity,
+        //             'to_branch_id' =>$to_branch_id,
+        //             'from_branch_id' =>$from_branch_id,
+        //             'description'=>$description,
+        //             'expire_date' =>$expire_date
+        //      ]);
+        //     $store_transfer_id=$storeTransfer->id;
+        //     StoreTransferDetail::create([
+        //             'store_transfer_id' =>$store_transfer_id,
+        //             'product_id' =>$product_id,
+        //             'price' =>$price,
+        //              'quantity' =>$quantity,
+        //             'to_branch_id' =>$to_branch_id,
+        //             'from_branch_id' =>$from_branch_id,
+        //             'description'=>$description,
+        //             'expire_date' =>$expire_date
+        //      ]);
+        // }
          return back()->with('success', 'Data Added Successfully!');
     }
     public function transferProductUpdate(Request $request,$id){
@@ -147,10 +162,8 @@ class StoreController extends Controller
          return view('pages.pre_configuration.store.create',$data);
     } 
     public function storeToStore()
-    {
-         // dd('okk');
-         $data['branches']=Branch::all();
-         // $data['products']=Product::all();
+    {         
+         $data['branches']=Branch::whereNotIn('id',[ auth()->user()->branch_id])->get();         
          return view('pages.store_to_store',$data);
     } 
 
@@ -201,7 +214,7 @@ class StoreController extends Controller
      */
     public function update(Request $request,$id)
     {
-        $store=Store::find($id);
+       $store=Store::find($id);
        $store->name=$request->input('name');
        $store->address=$request->input('address');
        $store->branch_id=$request->input('branch_id');

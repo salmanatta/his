@@ -10,14 +10,14 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-flex justify-content-between">  
-                                @if($transType == 'SALE')                                
-                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                            <div class="d-flex justify-content-between">
+                                @if($transType == 'SALE')
+                                <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
                                 @else
-                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
+                                <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
                                 @endif
-                                
-                            </div>                                                  
+
+                            </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
                                     <p>
@@ -45,7 +45,7 @@
                                             <div class="col-12 mb-3">
                                                 <label class="form-label" for="description">Product</label>
                                                 <select class="select2 form-control _products_select" id="_products_select" name="product_id">
-                                                </select>                                                
+                                                </select>
                                                 @error('product_id')
                                                 <span class="text-danger">{{$message}}</span>
                                                 @enderror
@@ -61,65 +61,72 @@
                                                 <span class="text-danger">{{$message}}</span>
                                                 @enderror
                                             </div>
-                                                <div class="col-12 mb-3">
+                                            <div class="col-12 mb-3">
                                                 <label class="form-label" for="description">Description</label>
                                                 <textarea placeholder="description" name="description" rows="4" class="form-control _description"></textarea>
-                                            </div>                                    
+                                            </div>
                                         </div>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <table class="table order-list _saleTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Products</th>
-                                <th>Batch</th>
-                                <th>Stock Quanity</th>
-                                <th>Quanity</th>
-                                <th>Price</th>
-                                <th>Bonus</th>
-                                <th>Discount</th>
-                                <th>After Discount</th>
-                                <th>Sales Tax</th>
-                                <th>Line Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="width:10%;text-align:right">Grand Total</td>
-                                <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0 order-list _saleTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Products</th>
+                                            <th>Batch</th>
+                                            <th>Stock Quanity</th>
+                                            <th>Quanity</th>
+                                            <th>Price</th>
+                                            <th>Bonus</th>
+                                            <th>Discount</th>
+                                            <th>After Discount</th>
+                                            <th>Sales Tax</th>
+                                            <th>Line Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="width:10%;text-align:right">Grand Total</td>
+                                            <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>                    
                     <div class="row">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-success me-1">Save</button>
                             <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
                         </div>
                     </div>
-                </form>
-            </div>
-            <!-- end card body -->
+
+            </form>
         </div>
-        <!-- end card -->
+        <!-- end card body -->
     </div>
-    <!-- end col -->
+    <!-- end card -->
+</div>
+<!-- end col -->
 </div>
 
 <!-- Modal -->
@@ -301,35 +308,34 @@
         var total_rate = 0;
 
 
-        $('.table_append_rows').each(function() 
-            {
-                $(this).find('.product_count').text(product_count); 
-                var qty = $(this).find('.qty_sale').find('input').val(); 
-                total_qty += parseInt(qty);                
-                var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val()); 
-                var sale_qty = parseInt($(this).find('#qty_sale').val()); 
-                $(this).find('.hidden_purchase_price').val(purchase_price); 
-                total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
-                $(this).find('#total_rate').val(total_rate);
-                purchase_discount = $(this).find('.purchase_discount').find('input').val();
-                var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
-                $(this).find('.after_discount').val(price_after_discount); 
-                var all_qty = parseFloat($(this).find('.qty_sale').val());
-                grand_discount += (purchase_discount * all_qty);
-                var sales_tax = parseFloat($(this).find('#sales_tax').val());
-                if (isNaN(sales_tax)) {
-                    sales_tax = 0;
-                }
-                var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
-                $(this).find('.sub_total').val(row_sub_total);
-                $(this).find('.line_total').val(row_sub_total);
-                grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
-                $("._tfootTotal").text(grand_subtotal);
-                $(".hidden_total").val(grand_subtotal);
-                $("input[name='total_qty']").val(total_qty);
-                $("input[name='item']").val(product_count);
-                product_count++;
-            });
+        $('.table_append_rows').each(function() {
+            $(this).find('.product_count').text(product_count);
+            var qty = $(this).find('.qty_sale').find('input').val();
+            total_qty += parseInt(qty);
+            var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val());
+            var sale_qty = parseInt($(this).find('#qty_sale').val());
+            $(this).find('.hidden_purchase_price').val(purchase_price);
+            total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
+            $(this).find('#total_rate').val(total_rate);
+            purchase_discount = $(this).find('.purchase_discount').find('input').val();
+            var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
+            $(this).find('.after_discount').val(price_after_discount);
+            var all_qty = parseFloat($(this).find('.qty_sale').val());
+            grand_discount += (purchase_discount * all_qty);
+            var sales_tax = parseFloat($(this).find('#sales_tax').val());
+            if (isNaN(sales_tax)) {
+                sales_tax = 0;
+            }
+            var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
+            $(this).find('.sub_total').val(row_sub_total);
+            $(this).find('.line_total').val(row_sub_total);
+            grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
+            $("._tfootTotal").text(grand_subtotal);
+            $(".hidden_total").val(grand_subtotal);
+            $("input[name='total_qty']").val(total_qty);
+            $("input[name='item']").val(product_count);
+            product_count++;
+        });
         // }
         // function myFunction(){
         var qty_new = $('.qty_sale').find('input').val();
@@ -387,18 +393,18 @@
         // var tr=$(this).closest('.table_append_rows').attr('id');
         // console.log(tr);
         var product_id = $('#product_modal').val();
-        var price = $('#edit_batch :selected').data('price');        
+        var price = $('#edit_batch :selected').data('price');
         var quantity = $('#edit_batch :selected').data('quantity');
         var batchId = $('#edit_batch :selected').val();
 
-        
-        
+
+
         // var price=$('#edit_batch').data('price');
         // var quantity=$('#edit_batch').data('quantity');
 
         var batch_id_modal = $("#edit_batch :selected").text();
 
-        
+
         // var batch_no_edit= $("#edit_batch :selected").text();
         // var row_id=$(this).closest('.table_append_rows').attr('id');
         //  $('input[name="edit_row_id"]').val(row_id);

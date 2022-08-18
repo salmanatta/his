@@ -38,7 +38,6 @@ class PurchaseInvoice extends Model
     {
         return $this->hasMany(PurchaseInvoiceDetail::class,'purchase_invoice_detail_id','id');
     }
-
     public function getSumSaleTaxAttribute()
     {
         return $this->purchaseDetail()->sum('sales_tax');
@@ -57,8 +56,7 @@ class PurchaseInvoice extends Model
     }
     public function getSumQtyAttribute()
     {
-        return $this->purchaseDetail()->sum('qty');
-    
+        return $this->purchaseDetail()->sum('qty');    
     }
     public function getLineTotalAttribute()
     {

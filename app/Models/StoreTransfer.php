@@ -11,17 +11,16 @@ class StoreTransfer extends Model
     use HasFactory;
 
        protected $guarded = [];
+       protected $appends = ['sumQty','countProduct','sumLineTotal'];
 
-
-public function product()
+    public function user()
     {
-        return $this->belongsTo(Product::class,'product_id','id');
-    }
-   
-    public function store()
-    {
-        return $this->belongsTo(Store::class,'store_transfer_id','id');
-    }
+        return $this->belongsTo(User::class,'created_by','id');
+    }   
+    // public function store()
+    // {
+    //     return $this->belongsTo(Store::class,'store_transfer_id','id');
+    // }
     public function branchFrom()
     {
         return $this->belongsTo(Branch::class,'from_branch_id','id');
@@ -30,5 +29,21 @@ public function product()
     {
         return $this->belongsTo(Branch::class,'to_branch_id','id');
     }
+    public function transferDetail()
+    {
+        return $this->hasMany(storeTransferDetail::class,'trans_id','id');
+    }
+    public function getSumQtyAttribute()
+    {
+        return $this->transferDetail()->sum('qty');
+    }
+    public function getCountProductAttribute()
+    {
+        return $this->transferDetail()->count('product_id');
+    }
+    public function getSumLineTotalAttribute()
+    {
+        return $this->transferDetail()->sum('line_total');
+    }    
 
 }

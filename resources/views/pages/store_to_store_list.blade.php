@@ -4,51 +4,36 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">storeTransfer Details</h4>
-                <div class="col-sm-12">
-                    <div class="text-sm-end">
-                        <a type="button" class="btn btn-primary btn waves-effect waves-light mb-2 me-2"
-                            href="{{url('storetostore')}}"><i class="mdi mdi-plus me-1"></i> Add storeTransfer</a>
-                    </div>
-                </div><!-- end col-->
-                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                <h4 class="card-title">Store Transfer Details</h4>                
+                <br><br>
+                <table id="datatable-buttons" class="table table-responsive nowrap w-100">
                     <thead class="table-light">
                         <tr>
                             <th class="align-middle">#</th>
-                            <th class="align-middle">Product Name</th>
-                            <th class="align-middle">Quantity</th>
-                            <th class="align-middle">Price</th>
-                            <th class="align-middle">From</th>
-                            <th class="align-middle">To</th>
-                            <th class="align-middle">Expire Date</th>
-                            <!-- <th class="align-middle">Store </th> -->
-                            <th class="align-middle">Decription </th>
+                            <th class="align-middle">Transfer From</th>
+                            <th class="align-middle">Transfer Date</th>
+                            <th class="align-middle">Discription</th>
+                            <th class="align-middle">Total Items</th>
+                            <th class="align-middle">Total Qty</th>
+                            <th class="align-middle">Net Amount</th>                            
                             <th class="align-middle">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($storeTransfers as $storeTransfer)
-                        <tr data-id="{{$storeTransfer->id}}">
+                        @foreach($transfers as $transfer)
+                        <tr data-id="{{$transfer->id}}">
                             <td>
                                 {{$loop->iteration}}
                             </td>
-                            <td>{{! is_null($storeTransfer->product) ? $storeTransfer->product->short_name :''}}</td>
-                            <td>{{$storeTransfer->quantity}}</td>
-                            <td>{{$storeTransfer->price}}</td>
-                            <td>{{$storeTransfer->branchFrom->name }}</td>
-                            <td>{{$storeTransfer->branchTo->name }}</td>
-                            <td>{{$storeTransfer->expire_date }}</td>
-                            <td>{{$storeTransfer->description }}</td>
+                            <td>{{ $transfer->branchFrom->name }}</td>
+                            <td>{{ $transfer->trans_date }}</td>
+                            <td>{{ $transfer->remarks }}</td>
+                            <td>{{ $transfer->countProduct }}</td>
+                            <td>{{ $transfer->sumQty }}</td>
+                            <td>{{ $transfer->sumLineTotal }}</td>
                             <td>
-                                 <div class="d-flex gap-3">
-                                    <a data-bs-toggle="modal"  class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"  data-store_id="{{$storeTransfer->id}}" data-store_quantity="{{$storeTransfer->quantity}}" data-store_price="{{$storeTransfer->price}}" data-store_from="{{$storeTransfer->branchFrom->name}}" data-store_to="{{$storeTransfer->branchTo->name}}" data-store_expire_date="{{$storeTransfer->expire_date}}"
-                                                data-store_description="{{$storeTransfer->description}}" 
-                                                data-store_name="{{$storeTransfer->product->short_name}}" >
-                                            View Details
-                                        </a>
-                                    <!-- <a href="{{route('storetransfers.edit',$storeTransfer->id)}}"
-                                        class="text-success editbtn"><i class="mdi mdi-pencil font-size-18"></i></a> -->
-                                </div>
+                                <a href="{{ url('store-transfer-view').'/'.$transfer->id }}" style="border-radius: 44px;" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
+                                View Details </a>                                
                             </td>
                         </tr>
                         @endforeach

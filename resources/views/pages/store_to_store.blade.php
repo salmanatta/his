@@ -12,7 +12,7 @@
               <div class="col-md-10">
                 <div class="mb-3">
                   <label for="formrow-inputState" class="col-md-2 col-form-label">Transfer Date </label>
-                  <input type="date" name="expire_date" value="<?php echo date('Y-m-d') ?>" class="form-control" required="">
+                  <input type="date" name="trans_date" value="<?php echo date('Y-m-d') ?>" class="form-control" required="">
                 </div>
               </div>
               <div class="col-md-10">

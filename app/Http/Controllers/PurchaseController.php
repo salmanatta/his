@@ -206,7 +206,7 @@ class PurchaseController extends Controller
         $to=$request->to_date;
          $from_date=date('Y-m-d', strtotime($from));
          $to_date=date('Y-m-d', strtotime($to));
-        $new = PurchaseInvoice::whereBetween('date',[ $from_date,$to_date])->with('supplier','branch','user')->where('dropt','1')->get();
+        $new = PurchaseInvoice::whereBetween('date',[$from_date,$to_date])->with('supplier','branch','user')->where('dropt','1')->get();
     // dd($new );
         return response()->json($new);
     }

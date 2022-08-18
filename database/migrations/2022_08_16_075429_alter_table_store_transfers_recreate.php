@@ -18,6 +18,8 @@ class AlterTableStoreTransfersRecreate extends Migration
             $table->id();
             $table->integer('trans_id')->nullable();
             $table->date('trans_date')->nullable();
+            $table->string('trans_status')->nullable();
+            $table->integer('trans_changed_by')->nullable();
             $table->integer('to_branch_id')->nullable();
             $table->integer('from_branch_id')->nullable();
             $table->string('remarks')->nullable();

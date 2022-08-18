@@ -61,49 +61,47 @@ class StoreController extends Controller
         $request->validate(
             [
                 'to_branch_id'  => 'required',
-                'product_id'    =>'required|exists:products,id',
-                // 'customer_id'=>'required|exists:suppliers,id',
-                // 'branch_id'=>'required|exists:branches,id', 
+                'product_id'    =>'required|exists:products,id',                
             ],
             [
                 'to_branch_id.required' => 'Please select Branch to Transfer.',
-                'product_id.required'   => 'Atleast One Product Must be Selected.',
-                // 'branch_id.required' => 'Please select any Branch, Thank You.',
+                'product_id.required'   => 'Atleast One Product Must be Selected.',                
             ]
         ); 
-        dd($request);            
-        // $rows=$request->input('product_id');
-        // $to_branch_id=$request->input('to_branch_id');
-        // $from_branch_id=$request->input('from_branch_id');
-        // $expire_date=$request->input('expire_date');
-        // $description=$request->input('description');
-        // foreach($rows as $key=>$row) 
-        // {
-        //             $product_id = $request->input('product_id')[$key];
-        //             $price      = $request->input('price')[$key];
-        //             $quantity   = $request->input('quantity')[$key];
-        //     $storeTransfer=StoreTransfer::create([
-        //             'product_id' =>$product_id,
-        //             'price' =>$price,
-        //              'quantity' =>$quantity,
-        //             'to_branch_id' =>$to_branch_id,
-        //             'from_branch_id' =>$from_branch_id,
-        //             'description'=>$description,
-        //             'expire_date' =>$expire_date
-        //      ]);
-        //     $store_transfer_id=$storeTransfer->id;
-        //     StoreTransferDetail::create([
-        //             'store_transfer_id' =>$store_transfer_id,
-        //             'product_id' =>$product_id,
-        //             'price' =>$price,
-        //              'quantity' =>$quantity,
-        //             'to_branch_id' =>$to_branch_id,
-        //             'from_branch_id' =>$from_branch_id,
-        //             'description'=>$description,
-        //             'expire_date' =>$expire_date
-        //      ]);
-        // }
-         return back()->with('success', 'Data Added Successfully!');
+        //  dd($request);    
+        $transID = StoreTransfer::create(
+            [
+                'trans_id'          => 0,
+                'trans_date'        => $request->trans_date,
+                'trans_status'      => 'Pending',
+                'to_branch_id'      => $request->to_branch_id,
+                'from_branch_id'    => auth()->user()->branch_id,
+                'remarks'           => $request->description,
+                'created_by'        => auth()->user()->id,
+            ]
+        );
+        $rows=$request->product_id;
+        foreach($rows as $key=>$row)
+        {
+            StoreTransferDetail::create(
+                [
+                    'trans_id'      => $transID->id,
+                    'product_id'    => $request->product_id[$key],
+                    'qty'           => $request->transferQty[$key],
+                    'price'         => $request->purchase_price[$key],
+                    'line_total'    => $request->total_rate[$key],
+                    'batch_id'      => $request->table_batch_id[$key],
+                    'created_by'    => auth()->user()->id,
+                ]
+                );
+                $stock = Stock::where('batch_id', $request->table_batch_id[$key])
+                                ->where('product_id', $request->product_id[$key])
+                                ->where('branch_id',auth()->user()->branch_id)                                
+                                ->first();
+                $stock->quantity -= $request->transferQty[$key];
+                $stock->save();
+        }
+        return back()->with('success', 'Data Added Successfully!');
     }
     public function transferProductUpdate(Request $request,$id){
         $customerDocumentReg=StoreTransfer::where('id',$id)->delete();
@@ -141,8 +139,9 @@ class StoreController extends Controller
          return redirect()->route('storetoStoreList')->with('success', 'Data Updated Successfully!');
     }
     public function storetoStoreList(){
-        $data['storeTransfers']=StoreTransfer::with('product','store','branchFrom','branchTo')->get();
-         return view('pages.store_to_store_list',$data);
+        $transfers  = StoreTransfer::where('to_branch_id',auth()->user()->branch_id)->get();
+        // dd($transfers);
+         return view('pages.store_to_store_list',compact('transfers'));
     }
     public function storetoStoreReport(){
         // dd('okk');
@@ -232,5 +231,15 @@ class StoreController extends Controller
     {
          Store::find($id)->delete();
         return redirect()->route('stores.index')->with('success','Data Deleted Successfully');   
-     }
+    }
+    public function storeTransferView($id)
+    {
+        $transfer       = StoreTransfer::where('id',$id)->first();
+        $transferDetail = StoreTransferDetail::with('product')
+                                            ->where('trans_id',$id)
+                                            ->get();        
+        return view('pages.storeTransferView',compact('transfer','transferDetail'));
+
+    }
+
 }

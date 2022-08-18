@@ -192,12 +192,14 @@ class SaleInvoiceController extends Controller
                 {
                     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
                                   ->where('product_id', $product_id)
+                                  ->where('branch_id',auth()->user()->branch_id)
                                   ->first();
                     $stock->quantity -= $quanity;
                     $stock->save();
                 }else{
                     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
                                   ->where('product_id', $product_id)
+                                  ->where('branch_id',auth()->user()->branch_id)
                                   ->first();
                     $stock->quantity += $quanity;
                     $stock->save();

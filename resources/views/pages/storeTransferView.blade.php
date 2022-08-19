@@ -83,7 +83,7 @@
                                             <td>{{$item->product->name}}</td>
                                             <td>{{$item->price}}</td>
                                             <td>{{$item->qty}}</td>                                                                                        
-                                            <td class="text-end">{{$item->line_total}}</td>
+                                            <td>{{$item->line_total}}</td>
                                             <?php $counter++ ?>
                                         </tr> 
                                         @endforeach                                       
@@ -91,7 +91,7 @@
                                             <td colspan="4" class="border-0 text-end">
                                                 <strong>Total</strong>
                                             </td>
-                                            <td class="border-0 text-end">
+                                            <td class="border-0">
                                                 <h4 class="m-0">{{$transfer->sumLineTotal}}</h4>
                                             </td>
                                         </tr>                                        

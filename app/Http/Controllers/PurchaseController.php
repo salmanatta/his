@@ -107,6 +107,7 @@ class PurchaseController extends Controller
 
             $batch = Batch::where('batch_no',$request->batch)
                             ->where('date',$request->expiry_date)
+                            ->where('branch_id',auth()->user()->branch_id)
                             ->get();                                        
               if($batch->isEmpty())            
               {
@@ -115,6 +116,7 @@ class PurchaseController extends Controller
                 $tansID = Batch::create([
                     'batch_no'  => $batchName,
                     'date'      => $expriyDate,
+                    'branch_id' => auth()->user()->branch_id,
                 ]);
                 $batch_id = $tansID->id;
               }else{

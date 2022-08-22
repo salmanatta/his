@@ -68,7 +68,7 @@ class StoreController extends Controller
                 'product_id.required'   => 'Atleast One Product Must be Selected.',                
             ]
         ); 
-        //  dd($request);    
+        //   dd($request->all());    
         $transID = StoreTransfer::create(
             [
                 'trans_id'          => 0,
@@ -189,7 +189,6 @@ class StoreController extends Controller
     {
         
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -202,8 +201,6 @@ class StoreController extends Controller
         $data['branches']=Branch::all();
          return view('pages.pre_configuration.store.edit',$data);
     }
-    
-
     /**
      * Update the specified resource in storage.
      *
@@ -229,17 +226,75 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
-         Store::find($id)->delete();
+        Store::find($id)->delete();
         return redirect()->route('stores.index')->with('success','Data Deleted Successfully');   
     }
     public function storeTransferView($id)
     {
         $transfer       = StoreTransfer::where('id',$id)->first();
-        $transferDetail = StoreTransferDetail::with('product')
+        $transferDetail = StoreTransferDetail::with('product','batch')
                                             ->where('trans_id',$id)
                                             ->get();        
         return view('pages.storeTransferView',compact('transfer','transferDetail'));
-
     }
-
+    public function approveStoreTransfer($id)
+    {
+        $transMaster = StoreTransfer::find($id);
+        $transMaster->trans_status = 'Completed';
+        $transMaster->trans_changed_by = auth()->user()->id;
+        $transMaster->save();
+        $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
+        foreach($transDetail as $row)
+        {
+            $batch = Batch::find($row->batch_id)->first();
+            $checkBatch = Batch::where('batch_no',$batch->batch_no)
+                                ->where('date',$batch->date)
+                                ->where('branch_id',$transMaster->to_branch_id)
+                                ->get();                            
+              if($checkBatch->isEmpty())            
+              {                
+                $tansID = Batch::create([
+                    'batch_no'  => $batch->batch_no,
+                    'date'      => $batch->date,
+                    'branch_id' => $transMaster->to_branch_id,
+                ]);                
+                $batch_id = $tansID->id;
+                Stock::create([
+                    'product_id' =>$row->product_id,
+                    'quantity'   =>$row->quanity,
+                    'price'      =>$row->price,
+                    'batch_id'   =>$batch_id,
+                    'branch_id'  =>auth()->user()->branch_id,
+                ]);
+              }else{     
+                $checkBatch = $checkBatch->first();
+                $batch_id = $checkBatch->id;                
+              }
+            $stock = Stock::where('batch_id',$batch_id)
+                                ->where('product_id', $row->product_id)
+                                ->where('branch_id',auth()->user()->branch_id)                                
+                                ->first();
+            $stock->quantity -= $row->qty;
+            $stock->save();
+        }        
+        return back()->with('info', 'Data Updated Successfully!');
+    }
+    public function rejectStoreTransfer($id)
+    {
+        $transMaster = StoreTransfer::find($id);        
+        $transMaster->trans_status = 'Rejected';
+        $transMaster->trans_changed_by = auth()->user()->id;
+        $transMaster->save();
+        $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
+        foreach($transDetail as $row)
+        {
+            $stock = Stock::where('batch_id', $row->batch_id)
+                                ->where('product_id', $row->product_id)
+                                ->where('branch_id',$transMaster->from_branch_id)                                
+                                ->first();
+                $stock->quantity += $row->qty;
+                $stock->save();
+        }
+        return back()->with('info', 'Data Updated Successfully!');
+    }
 }

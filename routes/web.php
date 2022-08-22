@@ -150,7 +150,13 @@ Route::get('getBatcheWiseProduct', 'App\Http\Controllers\SaleInvoiceController@g
 /*----------   Store Transfer  Resource Route  ----------*/
 Route::get('storetostore', 'App\Http\Controllers\StoreController@storeToStore')->name('storeToStore')->middleware("auth");
 Route::get('storetoStoreList', 'App\Http\Controllers\StoreController@storetoStoreList')->name('storetoStoreList')->middleware("auth");
-Route::get("store-transfer-view/{id}",[StoreController::class,"storeTransferView"])->middleware('auth');
+
+Route::group(['middleware' => ['auth', 'web']], function() {        
+    Route::get("store-transfer-view/{id}",[StoreController::class,"storeTransferView"]);
+    Route::get('approve-store-transfer/{id}',[StoreController::class,'approveStoreTransfer']);
+    Route::get('reject-store-transfer/{id}',[StoreController::class,'rejectStoreTransfer']);
+  });
+
 
 Route::get("get_all_prod",[StoreController::class,"getAllProducts"]);
 Route::get("get_prod",[StoreController::class,"getProducts"]);

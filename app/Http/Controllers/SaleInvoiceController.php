@@ -84,6 +84,7 @@ class SaleInvoiceController extends Controller
             $product = Product::where('name', 'like', '%' . $request->q . '%')
                 ->join('stocks', 'products.id', '=', 'stocks.product_id')
                 ->where('stocks.quantity', '>', '0')
+                ->where('stocks.branch_id','=',auth()->user()->branch_id)
                 ->select('products.*', 'stocks.product_id')
                 ->groupBy('name')
                 ->get();

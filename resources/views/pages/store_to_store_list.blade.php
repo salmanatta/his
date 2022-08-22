@@ -17,6 +17,8 @@
                             <th class="align-middle">Total Qty</th>
                             <th class="align-middle">Net Amount</th>                            
                             <th class="align-middle">Action</th>
+                            <th class="align-middle">Status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -33,8 +35,16 @@
                             <td>{{ $transfer->sumLineTotal }}</td>
                             <td>
                                 <a href="{{ url('store-transfer-view').'/'.$transfer->id }}" style="border-radius: 44px;" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
-                                View Details </a>                                
+                                View Details </a>                             
                             </td>
+                            @if($transfer->trans_status != 'Pending')
+                            <td style="text-align:center;">{{ $transfer->trans_status }}</td>
+                            @else
+                            <td style="font-size: 25px; text-align:center;">
+                                <a  href="{{ url('approve-store-transfer/'.$transfer->id) }}" class="bx bx-check" ></a>
+                                <a style="color: red;" href="{{ url('reject-store-transfer/'.$transfer->id) }}" class="bx bx-x" ></a>
+                            </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

@@ -16,5 +16,9 @@ class StoreTransferDetail extends Model
     {
       return $this->belongsTo(Product::class,'product_id','id');
     }
+    public function batch()
+    {
+      return $this->belongsTo(Batch::class,'batch_id','id');
+    }
 }
   

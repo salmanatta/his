@@ -70,6 +70,8 @@
                                             <!-- {{-- <th style="width: 70px;">No.</th> --}} -->
                                             <th>#</th>
                                             <th>Product</th>
+                                            <th>Batch</th>
+                                            <th>Expiry Date</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
                                             <th>Total Amount</th>                                                                                        
@@ -81,6 +83,8 @@
                                         <tr>                                        
                                             <td>{{$counter}}</td>
                                             <td>{{$item->product->name}}</td>
+                                            <td>{{$item->batch->batch_no}}</td>
+                                            <td>{{$item->batch->date}}</td>
                                             <td>{{$item->price}}</td>
                                             <td>{{$item->qty}}</td>                                                                                        
                                             <td>{{$item->line_total}}</td>
@@ -88,7 +92,7 @@
                                         </tr> 
                                         @endforeach                                       
                                         <tr>
-                                            <td colspan="4" class="border-0 text-end">
+                                            <td colspan="6" class="border-0 text-end">
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="border-0">

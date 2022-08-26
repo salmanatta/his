@@ -21,6 +21,11 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        return $this->middleware('auth');
+        
+    }
     public function index()
     {
         

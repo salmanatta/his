@@ -15,7 +15,7 @@ class SaleInvoiceController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */  
     public function index()
     {
         //
@@ -255,5 +255,8 @@ class SaleInvoiceController extends Controller
     public function destroy(SaleInvoice $saleInvoice)
     {
         //
+    }
+    public function testRole(){
+        return 'salman';
     }
 }

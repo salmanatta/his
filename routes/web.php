@@ -36,8 +36,16 @@ use Illuminate\Support\Facades\DB;
 | contains the "web" middleware group. Now create something great!
 |
  */
-
 Auth::routes();
+
+Route::group(['middleware' => ['auth','HasPermission']],function (){
+    Route::get("/sale/invoiceReturn",[SaleInvoiceController::class,"invoiceReturn"]);
+    Route::get("test-role",[SaleInvoiceController::class,"testRole"]);
+    Route::get('/home', [SaleInvoiceController::class, 'index']);
+});
+
+
+
 
 // Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 Route::get('/', function () {
@@ -93,8 +101,8 @@ Route::resource('users', 'App\Http\Controllers\pre_configuration\UserController'
 Route::resource('cities', 'App\Http\Controllers\pre_configuration\CityController')->middleware('auth');
 Route::resource('groups', 'App\Http\Controllers\pre_configuration\GroupController')->middleware('auth');
 Route::resource('products', 'App\Http\Controllers\pre_configuration\ProductController')->middleware('auth');
-Route::GET("/get-all-products",[ProductController::class,"getAllProducts"])->middleware('auth');
-Route::GET("get_purchase-product",[PurchaseController::class,"getProducts"])->middleware('auth');
+Route::get("/get-all-products",[ProductController::class,"getAllProducts"])->middleware('auth');
+Route::get("get_purchase-product",[PurchaseController::class,"getProducts"])->middleware('auth');
 Route::resource('regions', 'App\Http\Controllers\pre_configuration\RegionController')->middleware('auth');
 
 Route::get('all_regions_report', 'App\Http\Controllers\pre_configuration\RegionController@all_regions_report')->middleware('auth');
@@ -103,12 +111,12 @@ Route::resource('regions', 'App\Http\Controllers\pre_configuration\RegionControl
 Route::resource('employees', 'App\Http\Controllers\pre_configuration\EmployeeController')->middleware('auth');
 Route::resource('customers', 'App\Http\Controllers\CustomerController')->middleware('auth');
 Route::resource('suppliers', 'App\Http\Controllers\SupplierController')->middleware('auth');
-Route::GET("/get-all-suppliers",[SupplierController::class,"getAllSupliers"])->middleware('auth');
+Route::get("/get-all-suppliers",[SupplierController::class,"getAllSupliers"])->middleware('auth');
 Route::resource('designations', 'App\Http\Controllers\DesignationController')->middleware('auth');
 Route::resource('license_types', 'App\Http\Controllers\LicenseTypeController')->middleware('auth');
 Route::resource('licenses', 'App\Http\Controllers\CustomerLicenseController')->middleware('auth');
 Route::resource('branches', 'App\Http\Controllers\pre_configuration\BranchController')->middleware('auth');
-Route::GET("get-all-branches",[BranchController::class,"getAllBranches"])->middleware('auth');
+Route::get("get-all-branches",[BranchController::class,"getAllBranches"])->middleware('auth');
 Route::resource('companies', 'App\Http\Controllers\CompanyController')->middleware('auth');
 Route::resource('customer_categories', 'App\Http\Controllers\pre_configuration\CustomerCategoryController')->middleware('auth');
 Route::resource('product_categories', 'App\Http\Controllers\pre_configuration\ProductCategoryController')->middleware('auth');
@@ -122,11 +130,11 @@ Route::resource('product_bonuses', 'App\Http\Controllers\ProducBonusController')
 Route::resource('product_discounts', 'App\Http\Controllers\ProducDiscountController')->middleware('auth');
 Route::resource('expenses','App\Http\Controllers\ExpenseController'); //done
 Route::resource('expense_categories','App\Http\Controllers\ExpenseCategoryController'); //done 
-Route::GET('/logs', [LogController::class, "render"])->middleware('auth');
-Route::GET('/get-all-logs', [LogController::class, "getAllLogs"])->middleware('auth');
-Route::GET('/get-all-users', [UserController::class, "getAllUsers"])->middleware('auth');
-Route::GET('/attached-permissins/{role_id}', [PermissionController::class, "attachedPermissions"])->middleware('auth');
-Route::GET('/roles/attached/permissions', [RoleController::class, "rolesAttachedPermission"])->middleware('auth');
+Route::get('/logs', [LogController::class, "render"])->middleware('auth');
+Route::get('/get-all-logs', [LogController::class, "getAllLogs"])->middleware('auth');
+Route::get('/get-all-users', [UserController::class, "getAllUsers"])->middleware('auth');
+Route::get('/attached-permissins/{role_id}', [PermissionController::class, "attachedPermissions"])->middleware('auth');
+Route::get('/roles/attached/permissions', [RoleController::class, "rolesAttachedPermission"])->middleware('auth');
 /*----------  End cities  Resource Route  ----------*/
 
 // ======================use for define Rules Product Bonus and Discount======
@@ -138,8 +146,8 @@ Route::post('generalDiscount', 'App\Http\Controllers\GeneralController@generalDi
 // ======================End use for define Rules Product Bonus and Discount======
 // ===================== Product Sale Side======
 Route::resource('sale_invoices', 'App\Http\Controllers\SaleInvoiceController')->middleware('auth');
-Route::GET("/sale/invoice",[SaleInvoiceController::class,"render"])->middleware("auth");
-Route::GET("/sale/invoiceReturn",[SaleInvoiceController::class,"invoiceReturn"])->middleware("auth");
+Route::get("/sale/invoice",[SaleInvoiceController::class,"render"])->middleware("auth");
+//Route::get("/sale/invoiceReturn",[SaleInvoiceController::class,"invoiceReturn"])->middleware("auth");
 Route::get("get-all-sale-products",[SaleInvoiceController::class,"allSaleProducts"]);
 Route::get("get-stock/{id}",[SaleInvoiceController::class,"getStock"]);
 Route::get("common_customer",[CustomerController::class,"commonCustomer"]);
@@ -157,6 +165,11 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get('reject-store-transfer/{id}',[StoreController::class,'rejectStoreTransfer']);
   });
 
+// Route::group(['middleware' => ['role:superadmin']],function (){
+//     Route::get("test-role",[SaleInvoiceController::class,"testRole"]);
+
+// });
+
 
 Route::get("get_all_prod",[StoreController::class,"getAllProducts"]);
 Route::get("get_prod",[StoreController::class,"getProducts"]);
@@ -170,7 +183,7 @@ Route::put('transferProductUpdate/{id}', 'App\Http\Controllers\StoreController@t
 
 // ===================== Product Purchase Side======
 Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
-Route::GET("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
+Route::get("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
 Route::get("/purchase/return",[PurchaseController::class,"pruchaseReturn"])->middleware("auth");
 Route::post("/purchase/return",[PurchaseController::class,"pruchaseReturnInsert"])->name("purchase-return")->middleware("auth");
 
@@ -180,16 +193,18 @@ Route::post("/purchase/return",[PurchaseController::class,"pruchaseReturnInsert"
 // Route::GET("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
 
 // ==================Purchase Reports =================
-Route::GET("purchaseReport",[PurchaseController::class,"purchaseReport"])->name('purchaseReport')->middleware("auth");
-Route::GET("unstokepurchaseReport",[PurchaseController::class,"unstokePurchaseReport"])->name('unstokepurchaseReport')->middleware("auth");
+Route::get("purchaseReport",[PurchaseController::class,"purchaseReport"])->name('purchaseReport')->middleware("auth");
+Route::get("unstokepurchaseReport",[PurchaseController::class,"unstokePurchaseReport"])->name('unstokepurchaseReport')->middleware("auth");
 
-Route::GET("searchPurchaseReport",[PurchaseController::class,"searchPurchaseReport"])->name('searchPurchaseReport')->middleware("auth");
-Route::GET("searchUnstokePurchaseReport",[PurchaseController::class,"searchUnstokePufrchaseReport"])->name('searchUnstokePurchaseReport')->middleware("auth");
+Route::get("searchPurchaseReport",[PurchaseController::class,"searchPurchaseReport"])->name('searchPurchaseReport')->middleware("auth");
+Route::get("searchUnstokePurchaseReport",[PurchaseController::class,"searchUnstokePufrchaseReport"])->name('searchUnstokePurchaseReport')->middleware("auth");
 Route::get('purchase_details/{id}',[PurchaseController::class,"purchaseDetail"])->name('purchase_details')->middleware("auth");
 Route::get('unstokepurchase_details/{id}',[PurchaseController::class,"unstokePurchaseDetail"])->name('unstokepurchase_details')->middleware("auth");
 Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoStoreReport')->name('storetoStoreReport');//product transfer
 //for stock report
 Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('stock_detail')->middleware("auth");
+
+Route::get('getProductBatch',[StockController::class,"getProductBatch"])->name('getProductBatch');
 
 
 Route::get('stock-report',[PurchaseController::class,"currentStockReport"])->name('item_report');

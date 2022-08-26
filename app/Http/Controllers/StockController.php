@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\group\Group;
 use App\Models\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
@@ -14,9 +16,20 @@ class StockController extends Controller
      */
     public function index()
     {
-        $data['stocks']=Stock::all();
-        // dd($data['stocks']);
-        return view('pages.reports.stock.stock_detail',$data);
+        // $data['stocks']=Stock::where('branch_id',auth()->user()->branch_id)
+        //                 ->sum('quantity')
+        //                 ->groupBy('product_id')->get();
+        $stocks = DB::table('stocks')->join('products','stocks.product_id','=','products.id')
+                ->selectRaw('sum(quantity) as qty,sum(price) as price,count(batch_id) as batch, products.name,stocks.batch_id,stocks.product_id')->where('stocks.quantity','>','0')
+                ->groupBy('stocks.product_id')
+                ->get(); 
+        return view('pages.reports.stock.stock_detail',compact('stocks'));
+    }
+    public function getProductBatch(Request $request)
+    {
+        $product_id = $request->product_id;
+        $stocks = Stock::with('batch')->where('product_id',$product_id)->where('quantity','>','0')->get();        
+        return response()->json( $stocks);
     }
 
     /**

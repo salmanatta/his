@@ -18,7 +18,6 @@
                             <th class="align-middle">Net Amount</th>                            
                             <th class="align-middle">Action</th>
                             <th class="align-middle">Status</th>
-
                         </tr>
                     </thead>
                     <tbody>

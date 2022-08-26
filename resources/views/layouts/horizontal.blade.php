@@ -412,6 +412,17 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Expense</span>
+                            <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
+
+                            <a href="{{route('expense_categories.index')}}" class="dropdown-item" key="t-default">Expense Categories</a>
+                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>                            
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Users</span>
                             <div class="arrow-down"></div>
                         </a>
@@ -438,7 +449,7 @@
                                     <a href="{{url('all_regions_report')}}" class="dropdown-item" key="t-form-elements">All Regions</a>
                                 </div>
                             </div>
-                            <div class="dropdown">
+                            {{-- <div class="dropdown">
                                 <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form" role="button">
                                     <span key="t-forms">Purchase Reports</span>
                                     <div class="arrow-down"></div>
@@ -446,20 +457,20 @@
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
                                     <a href="{{url('unstokepurchaseReport')}}" class="dropdown-item" key="t-form-elements">Drop Purchase</a>
                                 </div>
-                            </div>
+                            </div> --}}
                             <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
-                            <a href="{{url('storetoStoreReport')}}" class="dropdown-item" key="t-saas">Transfer Product Reports</a>
-                            <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Stock Reports</a>
-                            <a href="{{url('stock-report')}}" class="dropdown-item" key="t-saas">Item Reports</a>
+                            {{-- <a href="{{url('storetoStoreReport')}}" class="dropdown-item" key="t-saas">Transfer Product Reports</a> --}}
+                            <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Current Stock Reports</a>
+                            <a href="{{url('stock-report')}}" class="dropdown-item" key="t-saas">Item Ledger</a>
                         </div>
                     </li>
 
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
                             <i class="bx bx-collection me-2"></i><span key="t-components">Orders</span>
                             <div class="arrow-down"></div>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-components">
+                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                             <div class="dropdown">
                                 <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form" role="button">
                                     <span key="t-forms">Pending Order</span>
@@ -469,20 +480,10 @@
                                     <a href="form-elements" class="dropdown-item" key="t-form-elements">Order Complete</a>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </div> 
+                    </li> --}}
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
-                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Create Expense</span>
-                            <div class="arrow-down"></div>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-
-                            <a href="{{route('expense_categories.index')}}" class="dropdown-item" key="t-default">Expense Categories</a>
-                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>                            
-                        </div>
-                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Setting</span>

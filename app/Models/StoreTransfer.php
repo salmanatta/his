@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\products\Product;
 use App\Models\branch\Branch;
+use App\Models\StoreTransferDetail;
 class StoreTransfer extends Model
 {
     use HasFactory;

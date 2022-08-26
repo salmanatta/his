@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\StoreTransferDetail;
 use App\Models\StoreTransfer;
+use App\Models\StoreTransferDetail;
 use App\Models\Store;
 use App\Models\Batch;
 use App\Models\Stock;

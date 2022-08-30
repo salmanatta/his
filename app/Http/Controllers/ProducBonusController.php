@@ -35,14 +35,32 @@ class ProducBonusController extends Controller
      */
     public function store(Request $request)
     {
-       $data=ProductBonus::create($request->all());
-       $data=ProductBonus::all()->toArray();
-      //  echo "<pre>";
-      // print_r($data);
-      // die();
-       return response()->json($data);
+        $this->validate($request,[            
+            'bonus'=>'required',
+            'quantity'=>'required',
+            'start_date'=>'required', 
+            'end_date'=>'required', 
+        ],
+        [   
+            'bonus.required'      =>    'Please select any Product, Thank You.',
+            'quantity.required'   =>    'Please select any Supplier, Thank You.',
+            'start_date.required' =>    'Please select any Branch, Thank You.',
+            'end_date.required'   =>    'Please select any Branch, Thank You.',
+       ]);   
+    //    dd($request->all());
+       $productBonus = ProductBonus::create($request->all());           
+       return back()->with('success',"Data Added Successfully!");
+
+
+    //    $data=ProductBonus::all()->toArray();      
+    //    return response()->json($data);
 
        
+    }
+    public function getBonus()
+    {
+       $data=ProductBonus::all()->toArray();      
+       return response()->json($data);
     }
 
     /**

@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CustomerController; 
 use App\Http\Controllers\Auth\RegisterController;
- use App\Http\Controllers\BatchController; 
- use App\Http\Controllers\StockController;
+ use App\Http\Controllers\BatchController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\ProducBonusController;
+use App\Http\Controllers\StockController;
 // use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SaleInvoiceController;      
 use App\Http\Controllers\PurchaseController; 
@@ -127,6 +129,10 @@ Route::resource('permissions', 'App\Http\Controllers\pre_configuration\Permissio
 Route::resource('companies', 'App\Http\Controllers\CompanyController')->middleware('auth');
 Route::resource('product_groups', 'App\Http\Controllers\ProductGroupController')->middleware('auth');
 Route::resource('product_bonuses', 'App\Http\Controllers\ProducBonusController')->middleware('auth');
+
+Route::get('getBonus',[ProducBonusController::class,'getBonus'])->name('getBonus');
+
+
 Route::resource('product_discounts', 'App\Http\Controllers\ProducDiscountController')->middleware('auth');
 Route::resource('expenses','App\Http\Controllers\ExpenseController'); //done
 Route::resource('expense_categories','App\Http\Controllers\ExpenseCategoryController'); //done 
@@ -141,7 +147,10 @@ Route::get('/roles/attached/permissions', [RoleController::class, "rolesAttached
 Route::get('apply-rule', 'App\Http\Controllers\GeneralController@applyRule')->name('applyRule');
 Route::post('applyStore', 'App\Http\Controllers\GeneralController@applyStore')->name('applyStore');
 Route::get('general', 'App\Http\Controllers\GeneralController@defineRule')->name('defineRule');
+
 Route::post('generalBonus', 'App\Http\Controllers\GeneralController@generalBonus')->name('generalBonus');
+Route::post('create-genernal-bonus',[GeneralController::class,'storeBonus'])->name('create-genernal-bonus')->middleware('auth');
+
 Route::post('generalDiscount', 'App\Http\Controllers\GeneralController@generalDiscount')->name('generalDiscount');
 // ======================End use for define Rules Product Bonus and Discount======
 // ===================== Product Sale Side======

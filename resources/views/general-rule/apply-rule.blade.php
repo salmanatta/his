@@ -8,7 +8,7 @@
 	<div class="col-xl-12">
 		<div class="card">
 			<div class="card-body">
-				<h4 class="card-title mb-4">Customer Personal Info </h4><hr>
+				<h4 class="card-title mb-4">Apply Bonus & Discount on Product</h4><hr>
 
 				<form  class="" method="post" id="addFormId" action="#" enctype="multipart/form-data">
 					@csrf
@@ -16,10 +16,10 @@
 						<div class="col-lg-6">
 							<div class="mb-3">
 								<label for="formrow-inputState"  class="form-label">Bonus</label>
-								<select id="bonus_id"   name="bonus_id" class="form-select select2 bonus_id">
+								<select id="bonus_id"  name="bonus_id" class="form-select select2 bonus_id">
 									<option selected disabled="" value="">Choose Bonus</option>
 									@foreach($bonuses as $Bonus)
-									<option value="{{$Bonus->id}}" data-bonus="{{$Bonus->bonus}}" data-b_start_date="{{$Bonus->start_date}}" data-b_end_date="{{$Bonus->end_date}}" data-quantity="{{$Bonus->quantity}}">{{$Bonus->bonus}}-{{$Bonus->quantity}} | From: {{$Bonus->start_date}} To: {{$Bonus->end_date}}</option>
+									<option value="{{$Bonus->id}}" data-bonus="{{$Bonus->bonus}}" data-b_start_date="{{$Bonus->start_date}}" data-b_end_date="{{$Bonus->end_date}}" data-quantity="{{$Bonus->quantity}}">Bonus -> {{$Bonus->bonus}} | Quantity -> {{$Bonus->quantity}} | From: {{$Bonus->start_date}} To: {{$Bonus->end_date}}</option>
 									@endforeach
 								</select>
 							</div>
@@ -37,7 +37,6 @@
 						</div>
 					</div>  
 					<div class="row">
-
 						<div class="col-lg-12">
 							<div class="mb-3">  
 							<label for="formrow-inputState"  class="form-label"> Product</label>

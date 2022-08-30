@@ -8,26 +8,49 @@ use App\Models\products\Product;
 use App\Models\GeneralDiscount;
 use App\Models\ProductDiscount;
 use App\Models\ProductBonus;
-
+use Carbon\Carbon;
 class GeneralController extends Controller
 {
    
 public function defineRule()
     {
-    	// dd('okk');
-    	$data['bonuses']=GeneralBonus::all();
-    	$data['discounts']=GeneralDiscount::all();
+    	// dd(auth()->user());
+    	$data['bonuses']=GeneralBonus::where('branch_id',auth()->user()->branch_id)->get();      
+    	$data['discounts']=GeneralDiscount::where('branch_id',auth()->user()->branch_id)->get();      
     	return view('general-rule.define-rule',$data);
     }
-
-public function generalBonus(Request $request)
+    public function storeBonus(Request $request)
     {
-     $data=GeneralBonus::create($request->all());
-       $data=GeneralBonus::all()->toArray();
+      $this->validate($request, [
+        'bonus'=>'required',
+        'quantity'=>'required',
+        'start_date'=>'required', 
+        'end_date'=>'required', 
+    ],
+    [   
+        'bonus.required'      =>    'Please enter Bonus.',
+        'quantity.required'   =>    'Please enter Quantity.',
+        'start_date.required' =>    'Please select Start Date.',
+        'end_date.required'   =>    'Please select End Date.',
+   ]);  
+      $generalBonus = new GeneralBonus;
+      $generalBonus->bonus      = $request->bonus;
+      $generalBonus->quantity   = $request->quantity;
+      $generalBonus->start_date = $request->start_date;
+      $generalBonus->end_date   = $request->end_date;
+      $generalBonus->branch_id  = auth()->user()->branch_id;
+      $generalBonus->save();      
+      return back()->with('success',"Data Added Successfully!");
+    }
+
+    public function generalBonus(Request $request)
+    {      
       
-      
+      $data=GeneralBonus::create($request->all());
+      // return back()->with('success',"Data Added Successfully!");
+      $data=GeneralBonus::all()->toArray();        
        return response()->json($data);
-}
+ }
 public function generalDiscount(Request $request)
     {
      $data=GeneralDiscount::create($request->all());
@@ -40,9 +63,9 @@ public function generalDiscount(Request $request)
 
 public function applyRule()
     {
-    	$data['bonuses']=GeneralBonus::all();
-    	$data['products']=Product::all();
-    	$data['discounts']=GeneralDiscount::all();
+    	$data['bonuses']    = GeneralBonus::where('branch_id',auth()->user()->branch_id)->whereDate('end_date', '>=', Carbon::now())->get();
+    	$data['products']   = Product::all();
+    	$data['discounts']  = GeneralDiscount::where('branch_id',auth()->user()->branch_id)->get();
      return view('general-rule.apply-rule',$data);
     }
 public function applyStore(Request $request)

@@ -8,6 +8,7 @@ use App\Models\products\Product;
 use App\Models\GeneralDiscount;
 use App\Models\ProductDiscount;
 use App\Models\ProductBonus;
+use App\Models\Stock;
 use Carbon\Carbon;
 class GeneralController extends Controller
 {
@@ -15,8 +16,8 @@ class GeneralController extends Controller
 public function defineRule()
     {
     	// dd(auth()->user());
-    	$data['bonuses']=GeneralBonus::where('branch_id',auth()->user()->branch_id)->get();      
-    	$data['discounts']=GeneralDiscount::where('branch_id',auth()->user()->branch_id)->get();      
+    	$data['bonuses']    = GeneralBonus::where('branch_id',auth()->user()->branch_id)->get();      
+    	$data['discounts']  = GeneralDiscount::where('branch_id',auth()->user()->branch_id)->get();      
     	return view('general-rule.define-rule',$data);
     }
     public function storeBonus(Request $request)
@@ -53,107 +54,73 @@ public function defineRule()
  }
 public function generalDiscount(Request $request)
     {
-     $data=GeneralDiscount::create($request->all());
-       $data=GeneralDiscount::all()->toArray();
-      //  echo "<pre>";
-      // print_r($data);
-      // die();
-       return response()->json($data);
+      $generalDiscount = new GeneralDiscount();
+      $generalDiscount->discount    = $request->discount;
+      $generalDiscount->start_date  = $request->start_date;
+      $generalDiscount->end_date    = $request->end_date;
+      $generalDiscount->branch_id   = auth()->user()->branch_id;
+      $generalDiscount->save();     
+      $data=GeneralDiscount::all()->toArray();      
+      return response()->json($data);
 }
 
 public function applyRule()
     {
-    	$data['bonuses']    = GeneralBonus::where('branch_id',auth()->user()->branch_id)->whereDate('end_date', '>=', Carbon::now())->get();
-    	$data['products']   = Product::all();
-    	$data['discounts']  = GeneralDiscount::where('branch_id',auth()->user()->branch_id)->get();
-     return view('general-rule.apply-rule',$data);
+    	// $data['bonuses']    = GeneralBonus::where('branch_id',auth()->user()->branch_id)->whereDate('end_date', '>=', Carbon::now())->get();
+      $bonuses    = GeneralBonus::getGeneralBonus()->get();
+    	$discounts  = GeneralDiscount::getGeneralDiscount()->get();
+      $products   = Stock::with('product')->where('branch_id',auth()->user()->branch_id)->groupBy('product_id')->get();
+     return view('general-rule.apply-rule',compact('bonuses','discounts','products'));
     }
-public function applyStore(Request $request)
+  public function applyStore(Request $request)
+  {    
+    $rows=$request->input('product_id');        
+    foreach($rows as $key=>$row) 
     {
-    	  //  echo "<pre>";
-       // print_r($request->all());
-       // die();
-        $product_ids = $request->input('product_id');
-        // $generalBonus=GeneralBonus::where('id',$request->bonus_id)->get()->makeHidden(['created_at','updated_at','id'])->toArray();
-        $generalBonus=GeneralBonus::where('id',$request->bonus_id)->first(['bonus','quantity','start_date','end_date']);
-     //      echo "<pre>";
-     // print_r($generalBonus);
-     //    die();
-
-        $generalDiscount=GeneralDiscount::where('id',$request->discount_id)->first(['discount','start_date','end_date']);
-
-
-       for ($i = 0; $i < count($product_ids); $i++) 
-        {
-            // for bonus
-            $product_id   = $request->input('product_id')[$i];
-            // $bonus        = $generalBonus->bonus[$i];
-            // $quantity     = $generalBonus->quantity[$i];
-            // $b_start_date = $generalBonus->start_date[$i];
-            // $b_end_date   = $generalBonus->end_date[$i];
-            // for disc
-            // $discount        = $generalDiscount->discount[$i];
-            // $d_start_date = $generalDiscount->start_date[$i];
-            // $d_end_date   = $generalDiscount->end_date[$i];
-
-         
-                    if (!empty($generalBonus))
-                     {
-                       // $data= ProducBonus::where('id',$request->bonus_id)->updateOrCreate();
-                      $data=ProductBonus::create([
-                        'product_id'=>$product_id,
-                        'bonus'     =>$generalBonus->bonus,
-                        'quantity'  =>$generalBonus->quantity,
-                        'start_date'=>$generalBonus->start_date,
-                        'end_date'  =>$generalBonus->end_date,
-                        'isActive'  =>1,
-                      ]);
-
-                    }
-                     if (!empty($generalDiscount))
-                      {
-                        $data= ProductDiscount::create([
-                        'product_id'=>$product_id,
-                        'discount'     =>$generalDiscount->discount,
-                        'start_date'     =>$generalDiscount->start_date,
-                        'end_date'     =>$generalDiscount->end_date,
-                        'isActive'     =>1,
-                      ]);
-                     } 
-                        }
-
-      // $data= ProducBonus::where('id',$request->bonus_id)->updateOrCreate([
-      //   'product_id'     => $product_id,
-      //       'bonus'      => $bonus,
-      //       'quantity'   => $quantity,
-      //       'start_date' => $start_date,
-      //       'end_date'   => $end_date,
-      //   ]);
-      //  $data= ProducDiscount::where('id',$request->discount_id)->updateOrCreate([
-      //   'product_id' => $product_id,
-      //       'discount'   => $discount,
-      //       'start_date' => $start_date,
-      //       'end_date'   => $end_date,
-      //   ]);
-         
-
-    	
-           //  $data = ProducBonus::create([
-           //  'product_id' => $product_id,
-           //  'bonus'      => $bonus,
-           //  'quantity'   => $quantity,
-           //  'start_date' => $start_date,
-           //  'end_date'   => $end_date,
-           //    ]);
-           // $data = ProducDiscount::create([
-           //  'product_id' => $product_id,
-           //  'discount'   => $discount,
-           //  'start_date' => $start_date,
-           //  'end_date'   => $end_date,
-           //   ]);
-              
-         return response()->json($data);;
+      if(!empty($request->bonus_id)){
+        ProductBonus::create([
+          'bouns_id'      => $request->bonus_id,
+          'product_id'    => $request->product_id[$key],
+          'branch_id'     => auth()->user()->branch_id,
+          'active_flag'   => 1,  
+        ]);
+      }
+      if(!empty($request->discount_id)){
+        ProductDiscount::create([
+          'discount_id'   => $request->discount_id,
+          'product_id'    => $request->product_id[$key],
+          'branch_id'     => auth()->user()->branch_id,
+          'active_flag'   => 1,  
+        ]);      
+      }
     }
+      $data['bonuses']   = GeneralBonus::getGeneralBonus()->get();
+      $data['discounts'] = GeneralDiscount::getGeneralDiscount()->get();
+      $data['products']  = Stock::with('product')->where('branch_id',auth()->user()->branch_id)->groupBy('product_id')->get();
+      return response()->json($data);
+  }
+  public function showGeneralBonus()
+  {
+    $data['bonuses']   = GeneralBonus::getGeneralBonus()->get();
+    return response()->json($data);
+  }
+  public function insertProductBonus(Request $request)
+  {
+    if(!empty($request->bonus_id)){    
+      ProductBonus::create([
+        'bouns_id'      => $request->bonus_id,
+        'product_id'    => $request->bonusProduct,
+        'branch_id'     => auth()->user()->branch_id,
+        'active_flag'   => 1,  
+      ]);
+    }
+    
+    $productBonus = ProductBonus::with('bonuses')->where('product_id',$request->bonusProduct)->where('branch_id',auth()->user()->branch_id)->get();
+    return $productBonus;
+
+  }
+
+
 
    
 }

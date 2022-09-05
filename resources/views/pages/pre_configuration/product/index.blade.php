@@ -332,7 +332,7 @@
                                     <a type="button" class="btn btn-primary btn-sm detail_view_button"><i
                                             class="mdi mdi-eye font-size-18"></i>
                                     </a>
-                                    <a href="{{route('products.edit',$product->id)}}" class="text-success"><i
+                                    <a href="{{url('getProduct/'.$product->id)}}" class="text-success"><i
                                             class="mdi mdi-pencil font-size-18"></i></a>
                                     <!-- <a  href="{{route('products.destroy',$product->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->

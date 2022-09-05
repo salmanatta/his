@@ -105,7 +105,7 @@ class ProductController extends Controller
         $data=$request->except('product_id');
         // dd($data);
         $create_product=Product::create($data);
-        $product_id=$create_product->id;
+        $product_id = $create_product->id;
         return redirect()->route('getProduct', ['id' => $product_id])->with('success', 'Product Added Successfully!');
         // return redirect()->route('products.index')->with('success', 'Product Added Successfully!');
         // return view('pages.pre_configuration.product.details',$data);
@@ -120,7 +120,8 @@ class ProductController extends Controller
     {
         $data['product'] = Product::where('id',$id)->first();
         $data['discounts'] = ProductDiscount::where('product_id',$id)->get();
-        $data['bonus'] = ProductBonus::where('product_id',$id)->get();
+        $data['bonus'] = ProductBonus::with('bonuses')->where('product_id',$id)->where('branch_id',auth()->user()->branch_id)->get(); 
+        //ProductBonus::where('product_id',$id)->where('branch_id',auth()->user()->branch_id)->get();        
         $data['productTypes']=ProductType::all();
         $data['productcategories']=ProductCategory::all();
         $data['groups']=ProductGroup::all();

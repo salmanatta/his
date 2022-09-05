@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use App\Models\employee\Employee;
 use App\Models\Designation;
 use App\Models\city\City;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+
 class EmployeeController extends Controller
 {
     /**
@@ -14,7 +18,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $data['employees']=Employee::all();
+        $data['employees'] = Employee::all();
     return view('pages.pre_configuration.employee.index',$data);
     }
 
@@ -38,7 +42,38 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        Employee::create($request->all());
+        // Employee::create($request->all());
+        $employee = new Employee();
+        $employee->first_name       = $request->first_name;
+        $employee->middle_name      = $request->middle_name;
+        $employee->last_name        = $request->last_name;
+        $employee->address          = $request->address;
+        $employee->phone_off        = $request->phone_off;
+        $employee->phone_res        = $request->phone_res;
+        $employee->fax              = $request->fax;
+        $employee->email            = $request->email;
+        $employee->city_id          = $request->city_id;
+        $employee->postal_code      = $request->postal_code;
+        $employee->cnic_no          = $request->cnic_no;
+        $employee->emg_name         = $request->emg_name;
+        $employee->emg_phone        = $request->emg_phone;
+        $employee->hire_date        = $request->hire_date;
+        $employee->leave_date       = $request->leave_date;
+        $employee->basic_salery     = $request->basic_salery;
+        $employee->isAtive          = 1;
+        $employee->last_modification_date  = $request->last_modification_date;
+        $employee->designation_id   = $request->designation_id;
+        $employee->branch_id        = auth()->user()->branch_id;
+        $employee->save();
+        if($request->createUser == 1){
+            $user = new User();
+            $user->name                 = $request->first_name." ".$request->last_name;
+            $user->email                = $request->email;
+            $user->email_verified_at    = Carbon::now();
+            $user->password             = Hash::make("password");
+            $user->branch_id            = auth()->user()->branch_id;
+            $user->save();
+        }
         return redirect()->route('employees.index')->with('success','Data Added Successfully!');
     }
 

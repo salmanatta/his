@@ -28,6 +28,7 @@ use App\Http\Controllers\ProductMaxSalQuantityController;
 // use App\Http\Controllers\PurchaseInvoice;
 // use App\Http\Controllers\SupplierController; 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -152,6 +153,11 @@ Route::post('generalBonus', 'App\Http\Controllers\GeneralController@generalBonus
 Route::post('create-genernal-bonus',[GeneralController::class,'storeBonus'])->name('create-genernal-bonus')->middleware('auth');
 
 Route::post('generalDiscount', 'App\Http\Controllers\GeneralController@generalDiscount')->name('generalDiscount');
+
+Route::get('showGeneralBonus',[GeneralController::class,"showGeneralBonus"])->middleware('auth');
+Route::post('insertProductBonus',[GeneralController::class,'insertProductBonus'])->middleware('auth');
+
+
 // ======================End use for define Rules Product Bonus and Discount======
 // ===================== Product Sale Side======
 Route::resource('sale_invoices', 'App\Http\Controllers\SaleInvoiceController')->middleware('auth');
@@ -180,8 +186,8 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 // });
 
 
-Route::get("get_all_prod",[StoreController::class,"getAllProducts"]);
-Route::get("get_prod",[StoreController::class,"getProducts"]);
+Route::get("get_all_prod",[StoreController::class,"getAllProducts"])->middleware("auth");;
+Route::get("get_prod",[StoreController::class,"getProducts"])->middleware("auth");
 Route::get('getStock', 'App\Http\Controllers\StoreController@getStock')->name('getStock');
 Route::get('productFind', 'App\Http\Controllers\StoreController@productFind')->name('productFind');
 Route::get('productGet', 'App\Http\Controllers\StoreController@productGet')->name('productGet');

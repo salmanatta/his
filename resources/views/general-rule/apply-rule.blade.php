@@ -30,7 +30,7 @@
 								<select id="discount_id"   name="discount_id" class="form-select select2  discount_id">
 									<option selected disabled="" value="">Choose Discount</option>
 									@foreach($discounts as $value)
-									<option value="{{$value->id}}" data-discount="{{$value->discount}}" data-d_start_date="{{$value->start_date}}" data-d_end_date="{{$value->end_date}}">{{$value->discount}}% | From: {{$value->start_date}} To: {{$value->end_date}}</option>
+									<option value="{{$value->id}}" data-discount="{{$value->discount}}" data-d_start_date="{{$value->start_date}}" data-d_end_date="{{$value->end_date}}">Discount -> {{$value->discount}}% | From: {{$value->start_date}} To: {{$value->end_date}}</option>
 									@endforeach
 								</select>
 							</div>
@@ -41,10 +41,9 @@
 							<div class="mb-3">  
 							<label for="formrow-inputState"  class="form-label"> Product</label>
 							<select id="product_id " name="product_id[]" class="select2 form-control" multiple>  
-								<option 
-								 disabled="" value="">Choose Multiple Product</option>
+								<option disabled="" value="">Choose Multiple Product</option>
 								@foreach($products as $product)
-								<option value="{{$product->id}}">{{$product->name}}</option>
+								<option value="{{$product->id}}">{{$product->product->name}}</option>
 								@endforeach  
 							</select>  
 						</div>  
@@ -93,10 +92,20 @@ var token = $("meta[name='csrf-token']").attr("content");
 success:function(data){
     console.log(data);
     alert('Action Completed successfully');
-    $('#product_id').empty().append('<option>New Option</option>');
-    $('#discount_id').empty().append('<option>New Option</option>');
-    $('#bonus_id').empty().append('<option>New Option</option>');
-       
+	$('#bonus_id').empty();
+	$('#discount_id').empty();
+	$('#product_id').val('');
+	var html="<option selected value=''>Choose Bonus</option>";	
+	for (var i = 0; i < data.bonuses.length; i++) {
+		html +='<option value="'+data.bonuses[i].id+'" data-bonus="'+ data.bonuses[i].bonus +'" data-b_start_date="'+data.bonuses[i].start_date+'" data-b_end_date="'+data.bonuses[i].end_date+'" data-quantity="'+data.bonuses[i].quantity+'">Bonus -> '+data.bonuses[i].bonus+' | Quantity -> '+data.bonuses[i].quantity+' | From: '+data.bonuses[i].start_date+' To: '+data.bonuses[i].end_date+'</option>';		
+	}
+	$('#bonus_id').append(html);	
+	var html="<option selected value=''>Choose Discount</option>";	
+	for (var i = 0; i < data.discounts.length; i++) {
+		html += '<option value="'+data.discounts[i].id+'" data-discount="'+data.discounts[i].discount+'" data-d_start_date="'+ data.discounts[i].start_date +'" data-d_end_date="'+ data.discounts[i].end_date +'">Discount -> '+ data.discounts[i].discount +'% | From: ' + data.discounts[i].start_date +' To: '+ data.discounts[i].end_date +'</option>'		
+	}
+	$('#discount_id').append(html);
+    // $('#product_id').empty().append('<option>New Option</option>');
     },                   
 });
 }); 

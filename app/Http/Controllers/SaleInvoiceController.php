@@ -22,6 +22,9 @@ class SaleInvoiceController extends Controller
     }
     public function render()
     {
+        // To get max id branch wise 
+        // $maxID = SaleInvoice::where('branch_id',auth()->user()->branch_id)->max('invoice_no');
+        // dd($maxID);
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';        
         return view("pages/sale/invoice", compact('invoice_no','transType'));
@@ -153,9 +156,7 @@ class SaleInvoiceController extends Controller
                 'customer_id.required' => 'Please select any Customer, Thank You.',
                 // 'branch_id.required' => 'Please select any Branch, Thank You.',
             ]
-        );
-
-        // $user_id = auth()->user()->id;
+        );        
         $order_data = $request->only(['invoice_no', 'customer_id', 'invoice_date','description', 'total','trans_type']);
         $order_data['user_id'] =    auth()->user()->id;
         $order_data['branch_id'] =  auth()->user()->branch_id;

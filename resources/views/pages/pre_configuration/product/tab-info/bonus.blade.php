@@ -30,8 +30,7 @@
                                 <td>{{ $productBonus->bonuses->start_date }}</td>
                                 <td>{{ $productBonus->bonuses->end_date }}</td>
                             </tr>
-                            <?php $counter++; ?>
-                            
+                            <?php $counter++; ?>                            
                             @endforeach
                         </tbody>
                     </table>

@@ -3,34 +3,32 @@
         <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
             Discount
         </button>
-    </h2>
+    </h2>    
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
         <div class="accordion-body">
             <div class="text-muted">
-                <button type="button" class="btn btn-info btn-sm " data-bs-toggle="modal" id="product_discount" data-bs-target=".discount_model"> + Add </button>
+                <button type="button" class="btn btn-info btn-sm " data-bs-toggle="modal" id="showdiscount" data-bs-target=".discount_model"> + Add </button>
                 <div class="table-responsive col-lg-12">
                     <table class="table table-editable table-nowrap align-middle table-edits" id="Example">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Start Date</th>
-                                <th>Stop Date</th>
                                 <th>Discount</th>
+                                <th>Start Date</th>
+                                <th>Stop Date</th>                                
                             </tr>
                         </thead>
-                        <tbody id="append_here">
-                            <?php $di = 1; ?>
-                            @if(isset($discounts))
-                            @foreach($discounts as $disc)
-                            <tr data-id="1">
-                                <td data-field="id" style="width: 80px">{{$di}}</td>
-                                <td data-field="name">{{$disc->start_date}}</td>
-                                <td data-field="age">{{$disc->end_date}}</td>
-                                <td data-field="gender">{{$disc->discount}}</td>
+                        <tbody id="discount_append_here">
+                        <?php $counter = 1; ?>
+                            @foreach($discounts as $discount)
+                            <tr>
+                                <td>{{ $counter }}</td>
+                                <td>{{ $discount->generalDiscount->discount }}</td>                                
+                                <td>{{ $discount->generalDiscount->start_date }}</td>
+                                <td>{{ $discount->generalDiscount->end_date }}</td>
                             </tr>
-                            <?php $di++; ?>
+                            <?php $counter++; ?>                            
                             @endforeach
-                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -50,31 +48,22 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="repeater" id="discModelId" enctype="multipart/form-data">
+                                <form class="repeater" id="discount_form" enctype="multipart/form-data">
                                     @csrf
-                                    <input type="hidden" class="product_id" name="product_id" value="@if(isset($product->id)){{$product->id}} @endif">
-                                    <input type="hidden" class="discount_type" name="discount_type" value="Product">
-                                    <div data-repeater-list="group-a">
-                                        <div data-repeater-item="" class="row">
-                                            <div class="mb-3 col-lg-3">
-                                                <label for="name">Start Date</label>
-                                                <input type="date" value="{{date('Y-m-d')}}" id="name" name="start_date" class="form-control">
-                                            </div>
-                                            <div class="mb-3 col-lg-3">
-                                                <label for="email">Stop Date</label>
-                                                <input type="date" value="{{date('Y-m-d')}}" name="end_date" id="end_date" class="form-control">
-                                            </div>
-                                            <div class="mb-3 col-lg-3">
-                                                <label for="subject">Discount</label>
-                                                <input type="text" name="discount" id="discount" class="form-control">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <input type="hidden" id="discountProduct" name="discountProduct" value="{{$product->id}}">
+                                                <label for="discount_id" class="form-label">Discount</label>
+                                                <select id="discount_id" name="discount_id" class="form-select">
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 align-self-center">
-                                                <div class="d-grid">
-                                                    <input data-repeater-delete="" type="button" id="add_disc" class="btn btn-primary" value="Add">
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-end">
+                                            <!-- <button type="submit" id="product_info" class="btn btn-success me-1">Save</button> -->
+                                            <input data-repeater-delete="" type="button" class="btn btn-success add_discount me-1 " data-bs-dismiss="modal" value="Add">
                                         </div>
                                     </div>
                                 </form>

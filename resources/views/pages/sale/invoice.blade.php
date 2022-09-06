@@ -16,7 +16,6 @@
                                 @else
                                 <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
                                 @endif
-
                             </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
@@ -67,7 +66,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -112,7 +110,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="row">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-success me-1">Save</button>
@@ -120,13 +118,13 @@
                         </div>
                     </div>
 
-            </form>
+                </form>
+            </div>
+            <!-- end card body -->
         </div>
-        <!-- end card body -->
+        <!-- end card -->
     </div>
-    <!-- end card -->
-</div>
-<!-- end col -->
+    <!-- end col -->
 </div>
 
 <!-- Modal -->
@@ -175,7 +173,7 @@
                 };
             },
             processResults: function(data, params) {
-                console.log(data);
+                // console.log(data);
                 return {
                     results: data.items,
                 };
@@ -209,9 +207,7 @@
             },
             allowClear: true,
             placeholder: placeholder || "custom",
-            minimumInputLength: 2,
-            // templateResult: formatRepo,
-            // templateSelection: formatRepoSelection
+            minimumInputLength: 2,            
         })
     }
 
@@ -225,19 +221,11 @@
     }
     custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
     $("._products_select").on('change', function(data) {
-        var id = $(this).val();
-        // console.log(id);
-        // var count=0;
-        // var total=0;
-        // function productSearch(data) {
+        var id = $(this).val();        
         $.ajax({
             type: 'GET',
-            url: '{{url("get-stock")}}/' + id,
-            // data: {
-            //     id: id
-            //       },
-            success: function(data) {
-                //  console.log(data);
+            url: '{{url("get-stock")}}/' + id,            
+            success: function(data) {                
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
 
@@ -335,9 +323,7 @@
             $("input[name='total_qty']").val(total_qty);
             $("input[name='item']").val(product_count);
             product_count++;
-        });
-        // }
-        // function myFunction(){
+        });        
         var qty_new = $('.qty_sale').find('input').val();
         var s_qty = parseFloat($('.all_qty').val());
         var line = parseFloat($('.after_discount').val());
@@ -348,18 +334,12 @@
             $("._tfootTotal").text(line);
         }
     }
-
-
     // @@@@@@@@@@@@@@@@@@@@@@   batch  @@@@@@@@@@@@@@@@
     $(document).on('click', '.edit_modal', function() {
         var row_id = $(this).closest('.table_append_rows').attr('id');
         $('input[name="edit_row_id"]').val(row_id);
-
-        //    console.log(row_id);
-        // return false;
         var product_id = $(this).data('product_id');
         var product_id_modal = $(this).data('product_id');
-
         $.ajax({
             type: 'get',
             url: "{{ route('getBatches')}}",
@@ -367,8 +347,7 @@
                 'product_id': product_id
             },
             datatype: 'json',
-            success: function(data) {
-                console.log(data);
+            success: function(data) {                
                 var tr = $(this).parent().parent();
                 var op = "";
                 $('#product_modal').val(product_id_modal); //this is used to get against this product batch
@@ -380,60 +359,25 @@
                 $('input[name="edit_row_id"]').val(row_id);
                 $('#edit_batch').html(" ");
                 $('#edit_batch').append(op);
-
             },
         });
     });
 
 
-    // @@@@@@@@@@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@
-    // var product_count=1;
-    // var row_id=1;
-    $(document).on('click', '.update_modal', function() {
-        // var tr=$(this).closest('.table_append_rows').attr('id');
-        // console.log(tr);
+    // @@@@@@@@@@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@    
+    $(document).on('click', '.update_modal', function() {        
         var product_id = $('#product_modal').val();
         var price = $('#edit_batch :selected').data('price');
         var quantity = $('#edit_batch :selected').data('quantity');
         var batchId = $('#edit_batch :selected').val();
-
-
-
-        // var price=$('#edit_batch').data('price');
-        // var quantity=$('#edit_batch').data('quantity');
-
         var batch_id_modal = $("#edit_batch :selected").text();
-
-
-        // var batch_no_edit= $("#edit_batch :selected").text();
-        // var row_id=$(this).closest('.table_append_rows').attr('id');
-        //  $('input[name="edit_row_id"]').val(row_id);
-        // var row_id_for_editing=$(this).closest('tr').attr('id');
-
-        // var row_id_for_editing= $('input[name="edit_row_id"]').val();
         var row_id_for_editing = $('input[name="edit_row_id"]').val();
-        // console.log(row_id_for_editing);
-        // console.log(quantity);
-        // console.log(price);
-
-        // $.ajax({
-        //   type:'get',
-        //   url: "{{ route('getBatcheWiseProduct')}}",
-        //   data:{'product_id':product_id,'batch_id_modal':batch_id_modal},
-        //   datatype:'json',
-        //   success:function(data){
-        //           console.log(data);
-
         $('#' + row_id_for_editing).find('.all_qty').val(quantity);
         $('#' + row_id_for_editing).find('#batch_no_id').val(batch_id_modal);
         $('#' + row_id_for_editing).find('.price').val(price);
         $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
-        // $('#'+row_id_for_editing).find('#purchase_discount').find('input').val(data.product.purchase_discount);
-
         $(".bs-example-modal-lg").modal('hide');
         do_calculation();
-        //   },
-        // });
     });
 </script>
 

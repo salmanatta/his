@@ -104,6 +104,11 @@ public function applyRule()
     $data['bonuses']   = GeneralBonus::getGeneralBonus()->get();
     return response()->json($data);
   }
+  public function showGeneralDiscount()
+  {
+    $data['discount']   = GeneralDiscount::getGeneralDiscount()->get();    
+    return response()->json($data);
+  }
   public function insertProductBonus(Request $request)
   {
     if(!empty($request->bonus_id)){    
@@ -113,14 +118,22 @@ public function applyRule()
         'branch_id'     => auth()->user()->branch_id,
         'active_flag'   => 1,  
       ]);
-    }
-    
+    }    
     $productBonus = ProductBonus::with('bonuses')->where('product_id',$request->bonusProduct)->where('branch_id',auth()->user()->branch_id)->get();
     return $productBonus;
-
   }
+  public function insertProductDiscount(Request $request)
+  {
+    if(!empty($request->discount_id)){    
+      ProductDiscount::create([
+        'discount_id'     => $request->discount_id,
+        'product_id'      => $request->discountProduct,
+        'branch_id'       => auth()->user()->branch_id,
+        'active_flag'     => 1,  
+      ]);
+    }
+    $productDiscount = ProductDiscount::with('generalDiscount')->where('product_id',$request->discountProduct)->where('branch_id',auth()->user()->branch_id)->get();
+    return $productDiscount;
 
-
-
-   
+  }   
 }

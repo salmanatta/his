@@ -18,11 +18,18 @@
                                 @endif
                             </div>
                             <div class="row">
-                                <div class="col-12 d-flex justify-content-center">
-                                    <p>
-                                        <span>Sale Invoice No # {{$invoice_no ?? ''}}
-                                            <input type="hidden" value="{{$invoice_no}}" name="invoice_no">
-                                        </span>
+                                <div class="col-12 d-flex justify-content-center">                                
+                                    <h3>
+                                        <b>
+                                            <label class="form-label" for="invStatus" style="color:red">Un-Post</label>
+                                        </b>
+                                    </h3>
+                                    <!-- <p>
+                                    <span>Un-Post -->
+                                        <!-- <span>Sale Invoice No # {{$invoice_no ?? ''}}
+                                            <input type="hidden" value="{{$invoice_no}}" name="invoice_no"> -->
+                                        <!-- </span> -->
+                                
                                     </p>
                                 </div>
                             </div>
@@ -52,8 +59,9 @@
                                         </div>
                                         <div class="col-4"></div>
                                         <div class="col-4">
-                                            <div class="col-12 mb-3">
+                                            <div class="col-12 mb-3">                                                
                                                 <label class="form-label" for="Customer">Customer Name</label>
+
                                                 <select class="select2 form-control _customers_select" name="customer_id">
                                                 </select>
                                                 @error('customer_id')
@@ -241,7 +249,7 @@
     </button>
 </td>
 <td class="qty">
-<input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.quantity + `" step="any" required/>
+<input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" required/>
 </td>
 <td class="qty_sale">
 <input type="number" class="form-control qty_sale" id="qty_sale" min="1" onkeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
@@ -353,7 +361,7 @@
                 $('#product_modal').val(product_id_modal); //this is used to get against this product batch
                 $.each(data, function(k, val) {
                     if (val.batch.id != null && val.batch.id != "") {
-                        op += "<option value='" + val.batch.id + "' data-price=" + val.price + "  data-quantity=" + val.quantity + ">" + val.batch.batch_no + " " + " | Quantity -> " + val.quantity + " " + " | Expiry Date -> " + val.batch.date + "</option>";
+                        op += "<option value='" + val.batch.id + "' data-price=" + val.price + "  data-quantity=" + val.currentQty + ">" + val.batch.batch_no + " " + " | Quantity -> " + val.currentQty + " " + " | Expiry Date -> " + val.batch.date + "</option>";
                     }
                 });
                 $('input[name="edit_row_id"]').val(row_id);

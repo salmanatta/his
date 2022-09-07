@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\branch\Branch;
 use App\Models\User;
 use App\Models\sales\Customer;
+use Illuminate\Database\Eloquent\Scope;
+
 class SaleInvoice extends Model
 {
     use HasFactory;
@@ -43,5 +45,9 @@ class SaleInvoice extends Model
       public function getSumSalesTaxAttribute()
       {
         return $this->saleDetail()->sum('sales_tax');
+      }
+      public function scopeMaxId($query,$branch)
+      {
+        return $query->where('branch_id',$branch)->max('invoice_no');
       }
 }

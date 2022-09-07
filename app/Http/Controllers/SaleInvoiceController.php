@@ -24,7 +24,7 @@ class SaleInvoiceController extends Controller
     {
         // To get max id branch wise 
         // $maxID = SaleInvoice::where('branch_id',auth()->user()->branch_id)->max('invoice_no');
-        // dd($maxID);
+        // dd($maxID);        
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';        
         return view("pages/sale/invoice", compact('invoice_no','transType'));
@@ -34,13 +34,11 @@ class SaleInvoiceController extends Controller
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE RETURN';        
         return view("pages/sale/invoice", compact('invoice_no','transType'));
-
     }
-
     public function getStock(Request $request, $id)
     {
-        $productArr = Stock::where('product_id', $id)->with('product', 'batch')->where('stocks.quantity', '>', '0')->first();
-        $batchArr = Stock::where('product_id', $id)->with('batch')->get()->toArray();
+        $productArr = Stock::where('product_id', $id)->with('product', 'batch')->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')->first();
+        $batchArr   = Stock::where('product_id', $id)->with('batch')->get()->toArray();
         return response()->json(['productArr' => $productArr, 'batchArr' => $batchArr]);
 
         // return response()->json([$data,$data1]);
@@ -49,7 +47,7 @@ class SaleInvoiceController extends Controller
     {
         $data = Stock::with('batch')
                         ->where('product_id', $request->product_id)
-                        ->where('quantity', '>', '0')
+                        ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
                         ->get();
         return ($data);
         return response()->json($data);
@@ -86,11 +84,12 @@ class SaleInvoiceController extends Controller
         if (request()->has('q')) {
             $product = Product::where('name', 'like', '%' . $request->q . '%')
                 ->join('stocks', 'products.id', '=', 'stocks.product_id')
-                ->where('stocks.quantity', '>', '0')
+                ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
                 ->where('stocks.branch_id','=',auth()->user()->branch_id)
-                ->select('products.*', 'stocks.product_id')
-                ->groupBy('name')
+                ->select('products.*')          
+                ->groupBy('name','stocks.product_id')
                 ->get();
+                // return $product;
             // $product = Stock::whereHas('product' , function($q) use ($request) {
             //             return $q->where('name', 'like', '%' . $request->q . '%');
             //         })->where('quantity', '>', '0')->get();
@@ -122,8 +121,6 @@ class SaleInvoiceController extends Controller
         $sale_details = SaleInvoiceDetail::where('sale_invoice_id', $id)->get();
         return view('pages.reports.sale.sale_details', compact('sale', 'sale_details'));
     }
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -157,18 +154,19 @@ class SaleInvoiceController extends Controller
                 // 'branch_id.required' => 'Please select any Branch, Thank You.',
             ]
         );        
-        $order_data = $request->only(['invoice_no', 'customer_id', 'invoice_date','description', 'total','trans_type']);
-        $order_data['user_id'] =    auth()->user()->id;
-        $order_data['branch_id'] =  auth()->user()->branch_id;
+        $order_data = $request->only([ 'customer_id', 'invoice_date','description', 'total','trans_type']);
+        $maxId = SaleInvoice::maxId(auth()->user()->branch_id);
+        $maxId = $maxId + 1; 
+        $order_data['invoice_no'] =  $maxId;
+        $order_data['user_id']    =  auth()->user()->id;
+        $order_data['branch_id']  =  auth()->user()->branch_id;
+        $order_data['inv_status'] =  'Un-Post';
         $order = SaleInvoice::create($order_data);
         if ($order) {
             $sale_invoice_detail_id = $order->id;
             $rows = $request->input('product_id');
             $branch_id = $request->input('branch_id');
-            // dd($request->all());   $request->quanity  
-            // dd($request->input('bouns'));
             foreach ($rows as $key => $row) {
-
                 $purchase_price = $request->input('purchase_price')[$key];
                 $after_discount = $request->input('after_discount')[$key];
                 $purchase_discount = $request->input('purchase_discount')[$key];
@@ -196,20 +194,18 @@ class SaleInvoiceController extends Controller
                                   ->where('product_id', $product_id)
                                   ->where('branch_id',auth()->user()->branch_id)
                                   ->first();
-                    $stock->quantity -= $quanity;
+                    $stock->reserve_qty += $quanity;
                     $stock->save();
                 }else{
                     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
                                   ->where('product_id', $product_id)
                                   ->where('branch_id',auth()->user()->branch_id)
                                   ->first();
-                    $stock->quantity += $quanity;
+                    $stock->reserve_qty -= $quanity;
                     $stock->save();
-                }
-                
+                }                
             }
         }
-
         return back()->with('success', "Data Added Successfully!");
     }
     /**

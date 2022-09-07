@@ -11,6 +11,7 @@ class Stock extends Model
 {
     use HasFactory;
       protected $guarded = [];
+      protected $appends = ['currentQty'];
  
     public function product()
     {
@@ -23,6 +24,10 @@ class Stock extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class);
+    }
+    public function getCurrentQtyAttribute()
+    {
+        return $this->quantity - $this->reserve_qty;
     }
     
 }

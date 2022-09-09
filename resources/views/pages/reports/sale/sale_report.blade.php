@@ -51,7 +51,8 @@
                                         <th scope="col">Discount</th>
                                         <th scope="col">Sale Tax</th>
                                         <th scope="col">Net Amount</th>
-                                        <th scope="col" class="d-print-none">Action</th>
+                                        <th scope="col" class="d-print-none" style="text-align: center;">Edit</th>
+                                        <th scope="col" class="d-print-none" style="text-align: center;">View</th>
                                     </tr>
                                 </thead>
                                 <tbody id="append_here">
@@ -64,17 +65,21 @@
                                             <td>{{ $data->user->name }}</td>
                                             <td>{{ $data->customer->name }}</td>
                                             <td>{{ $data->branch->name }}</td>
-                                            <td>{{ $data->sumLineTotal + $data->sumDiscountAmount - $data->sumSalesTax }}
-                                            </td>
+                                            <td>{{ $data->sumLineTotal + $data->sumDiscountAmount - $data->sumSalesTax }}</td>
                                             <td>{{ $data->sumDiscountAmount }}</td>
                                             <td>{{ $data->sumSalesTax }}</td>
                                             <td>{{ $data->sumLineTotal }}</td>
-                                            <td>
+                                            <td style="text-align: center;">
                                                 <a href="{{ url('sale_details') . '/' . $data->id }}"
                                                     style="border-radius: 44px;"
-                                                    class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
-                                                    View Details </a>
-                                            </td>
+                                                    class="mdi mdi-eye font-size-18 waves-effect waves-light d-print-none">
+                                                </a>
+                                            </td>                                                 
+                                            <td style="text-align: center;">
+                                            <a href="{{ url('view-sale-invoice') . '/' . $data->id }}" class="text-danger">
+                                                    <i class="mdi mdi-pencil font-size-18 waves-effect waves-light" style="border-radius: 44px;"></i>
+                                                </a>
+                                            </td>                         
                                         </tr>
                                         @php
                                             $counter++;

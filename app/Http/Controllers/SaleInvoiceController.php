@@ -8,6 +8,7 @@ use App\Models\SaleInvoiceDetail;
 use App\Models\products\Product;
 use App\Models\Stock;
 use App\Models\Batch;
+use App\Models\ProductBonus;
 use Carbon\Carbon;
 class SaleInvoiceController extends Controller
 {
@@ -96,7 +97,10 @@ class SaleInvoiceController extends Controller
             
 
             $product = $product->map(function ($item, $key) {
-                return ['id' => $item['id'], 'text' => $item['name'] . ' - ' . $item['product_code']];
+                return ['id' => $item['id'], 
+                        'text' => $item['name'] . ' - ' . $item['product_code']
+                    ];                   
+                        
             });
             return response()->json(['items' => $product]);
         }
@@ -120,6 +124,10 @@ class SaleInvoiceController extends Controller
         $sale = SaleInvoice::where('id', $id)->with('customer', 'branch', 'user')->first();
         $sale_details = SaleInvoiceDetail::where('sale_invoice_id', $id)->get();
         return view('pages.reports.sale.sale_details', compact('sale', 'sale_details'));
+    }
+    public function viewSaleInvoice($id)
+    {
+        dd($id);
     }
     /**
      * Show the form for creating a new resource.
@@ -256,4 +264,18 @@ class SaleInvoiceController extends Controller
     public function testRole(){
         return 'salman';
     }
+    public function getProductBonus(Request $request)
+    {
+        
+        $bonus = ProductBonus::join('general_bonuses','general_bonuses.id','=','product_bonuses.bouns_id')->where('product_id',$request->product)
+                                ->where('general_bonuses.branch_id',auth()->user()->branch_id)
+                                ->groupBy('product_id')
+                                ->having('quantity','<=',$request->qty)
+                                ->orderBy('end_date','desc')
+                                ->first();
+                                //  return $bonus;
+        // return $bonus->bonuses->bonus;
+          return response()->json($bonus);
+    }
 }
+

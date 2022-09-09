@@ -11,15 +11,15 @@
                             href="{{route('customers.create')}}"><i class="mdi mdi-plus me-1"></i> Add Customer</a>
                     </div>
                 </div><!-- end col-->
-                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                <table id="datatable-buttons" class="table align-middle table-nowrap table-hover dataTable no-footer">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 20px;" class="align-middle">
+                            <!-- <th style="width: 20px;" class="align-middle">
                                 <div class="form-check font-size-16">
                                     <input class="form-check-input" type="checkbox" id="checkAll">
                                     <label class="form-check-label" for="checkAll"></label>
                                 </div>
-                            </th>
+                            </th>                             -->
                             <th class="align-middle"> ID</th>
                             <th class="align-middle">Customer Name</th>
                             <th class="align-middle">Address</th>
@@ -33,12 +33,12 @@
                     <tbody>
                         @foreach($customers as $customer)
                         <tr>
-                            <td>
+                            <!-- <td>
                                 <div class="form-check font-size-16">
                                     <input class="form-check-input" type="checkbox" id="orderidcheck01">
                                     <label class="form-check-label" for="orderidcheck01"></label>
                                 </div>
-                            </td>
+                            </td> -->
                             <td><a href="javascript: void(0);" class="text-body fw-bold">{{$customer->id}}</a> </td>
                             <td>{{$customer->name}}</td>
                             <td>{{$customer->address}}</td>

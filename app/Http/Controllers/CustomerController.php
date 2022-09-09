@@ -20,14 +20,17 @@ class CustomerController extends Controller
      */
     public function index()
     {
-       $data['customers']=Customer::all();
+       $data['customers']=Customer::where('branch_id',auth()->user()->branch_id)->get();
     return view('pages.customer.index',$data);
     }
     public function commonCustomer(Request $request){
         if (request()->has('q')) {
             $customer = Customer::where('name','like','%'.$request->q.'%')->get();
             $customer = $customer->map(function($item,$key){
-                return ['id' => $item['id'],'text' => $item['name'].' - '.$item['customer_code']];
+                return ['id' => $item['id'],
+                        'text' => $item['name'].' - '.$item['customer_code'],
+                        'filer' => $item['isfiler'],
+                    ];
             });
             return response()->json(['items' => $customer]);
         }

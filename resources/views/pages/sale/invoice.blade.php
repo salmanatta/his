@@ -18,7 +18,7 @@
                                 @endif
                             </div>
                             <div class="row">
-                                <div class="col-12 d-flex justify-content-center">                                
+                                <div class="col-12 d-flex justify-content-center">
                                     <h3>
                                         <b>
                                             <label class="form-label" for="invStatus" style="color:red">Un-Post</label>
@@ -26,10 +26,10 @@
                                     </h3>
                                     <!-- <p>
                                     <span>Un-Post -->
-                                        <!-- <span>Sale Invoice No # {{$invoice_no ?? ''}}
+                                    <!-- <span>Sale Invoice No # {{$invoice_no ?? ''}}
                                             <input type="hidden" value="{{$invoice_no}}" name="invoice_no"> -->
-                                        <!-- </span> -->
-                                
+                                    <!-- </span> -->
+
                                     </p>
                                 </div>
                             </div>
@@ -59,9 +59,9 @@
                                         </div>
                                         <div class="col-4"></div>
                                         <div class="col-4">
-                                            <div class="col-12 mb-3">                                                
+                                            <div class="col-12 mb-3">
                                                 <label class="form-label" for="Customer">Customer Name</label>
-
+                                                <input type="hidden" name="filer" value="" id="filer">
                                                 <select class="select2 form-control _customers_select" name="customer_id">
                                                 </select>
                                                 @error('customer_id')
@@ -84,24 +84,28 @@
                                 <table class="table mb-0 order-list _saleTable">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Products</th>
-                                            <th>Batch</th>
-                                            <th>Stock Quanity</th>
-                                            <th>Quanity</th>
-                                            <th>Price</th>
-                                            <th>Bonus</th>
-                                            <th>Discount</th>
-                                            <th>After Discount</th>
-                                            <th>Sales Tax</th>
-                                            <th>Line Total</th>
-                                            <th>Action</th>
+                                            <th scope="row">#</th>
+                                            <th scope="row">Products</th>
+                                            <th scope="row">Batch</th>
+                                            <th scope="row">Stock Quanity</th>
+                                            <th scope="row">Quanity</th>
+                                            <th scope="row">Price</th>
+                                            <th scope="row">Bonus</th>
+                                            <th scope="row">Discount</th>
+                                            <th scope="row">After Discount</th>
+                                            <th scope="row">Sales Tax</th>
+                                            <th scope="row">Advance Tax</th>
+                                            <th scope="row">Advance Tax value</th>
+                                            <th scope="row">Line Total</th>
+                                            <th scope="row">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -164,11 +168,24 @@
     </div>
 </div>
 <!-- end row -->
-
-
 @endsection
 @push('script')
 <script>
+    //     function getBonus (product,qty){
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: '{{url("getProductBonus")}}',
+    //         data: {
+    //             'product': product,
+    //             'qty' : qty
+    //         },
+    //         success: function(data) {
+    //             // console.log(data.bonus);
+    //             data.bonus;
+    //         }
+    //     });
+    // };
+    var ttt = 0;
     // ======================for customer ===============
     $("._customers_select").select2({
         ajax: {
@@ -181,7 +198,7 @@
                 };
             },
             processResults: function(data, params) {
-                // console.log(data);
+                $('#filer').val(data.items[0].filer);
                 return {
                     results: data.items,
                 };
@@ -215,7 +232,7 @@
             },
             allowClear: true,
             placeholder: placeholder || "custom",
-            minimumInputLength: 2,            
+            minimumInputLength: 2,
         })
     }
 
@@ -229,56 +246,64 @@
     }
     custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
     $("._products_select").on('change', function(data) {
-        var id = $(this).val();        
+        var id = $(this).val();
         $.ajax({
             type: 'GET',
-            url: '{{url("get-stock")}}/' + id,            
-            success: function(data) {                
+            url: '{{url("get-stock")}}/' + id,
+            success: function(data) {
+                var isfiler = $("#filer").val() == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
-
-<td class="product_count">` + product_count + `</td>
-<td class="name">
+<td class="product_count" width='2%'>` + product_count + `</td>
+<td class="name" width='8%'>
     <input type="hidden" name="id[]" value="` + data.productArr.id + `"/>
      <input type="hidden" id="product_id" name="product_id[]" value="` + data.productArr.product_id + `"/>
      <input type="hidden" id="product_name" name="product_name[]" value="` + data.productArr.product.name + `"/>` + data.productArr.product.name + `
 </td>
-<td class="batch_no_id">
+<td class="batch_no_id" width='7%'>
     <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
         <i class="dripicons-document-edit"></i>
     </button>
 </td>
-<td class="qty">
-<input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" required/>
+<td class="qty" width='7%'>
+<input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
 </td>
-<td class="qty_sale">
+<td class="qty_sale" width='7%'>
 <input type="number" class="form-control qty_sale" id="qty_sale" min="1" onkeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
 </td>
-<td class="purchase_price">
+<td class="purchase_price" width='7%'>
 <input type="number" class="form-control purchase_price price" id="price" onkeyup="do_calculation()" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
 <input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
 </td>
-<td class="bouns">
-<input type="number" class="form-control bouns" onkeyup="do_calculation()" value="0" id="bouns" name="bouns[]" step="any"/>
+<td class="bouns" width='7%'>
+<input type="number" class="form-control bouns" value="0" id="bouns" name="bouns[]" step="any"/>
 </td>
-<td class="purchase_discount">
+<td class="purchase_discount" width='7%'>
 <input type="number" class="form-control purchase_discount" id="purchase_discount" onkeyup="do_calculation()" value="` + data.productArr.product.purchase_discount + `"  name="purchase_discount[]" step="any"/>
 </td>
-<td class="after_discount">
+<td class="after_discount" width='7%'>
 <input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" readonly/>
 </td>
-<td class="sales_tax">
+<td class="sales_tax" width='7%'>
 <input type="number" class="form-control sales_tax" onkeyup="do_calculation()" value="` + data.productArr.product.sale_tax_value + `" id="sales_tax" name="sales_tax[]" step="any" required/>
 </td>
-<td class="line_total">
+
+<td class="adv_tax" width='7%'> 
+    <input type="number" class="form-control adv_tax" onkeyup="do_calculation()" value="` + isfiler + `"  id="adv_tax" name="adv_tax[]" step="any" required/>     
+</td>
+
+<td class="adv_tax_value" width='7%'>
+<input type="number" class="form-control adv_tax_value" onkeyup="do_calculation()" value="` + data.productArr.product.sale_tax_value + `" id="adv_tax_value" name="adv_tax_value[]" step="any" required/>
+</td>
+
+<td class="line_total" width='7%'>
 <input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
 <input type="hidden" class="hidden_total" name="total" value="0">
 <input type="hidden" class="sub_total" name="sub_total" value="0">
 <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
-</tr>`;
-                // <input type="hidden" class="hidden_unit_tax"        name="unit_tax[]" value="0">
+</tr>`;                
                 table_body.append(new_row); // append new row to table body
                 product_count++;
                 row_id++;
@@ -293,6 +318,8 @@
         do_calculation();
     });
 
+
+
     function do_calculation() {
         // Declare variable for grand calculation
         var line_total = 0;
@@ -302,7 +329,7 @@
         var product_count = 1;
         var grand_subtotal = 0;
         var total_rate = 0;
-
+        var productBonus = 0;
 
         $('.table_append_rows').each(function() {
             $(this).find('.product_count').text(product_count);
@@ -322,16 +349,32 @@
             if (isNaN(sales_tax)) {
                 sales_tax = 0;
             }
+
             var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
             $(this).find('.sub_total').val(row_sub_total);
             $(this).find('.line_total').val(row_sub_total);
+            var brow = $(this);
             grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
             $("._tfootTotal").text(grand_subtotal);
             $(".hidden_total").val(grand_subtotal);
             $("input[name='total_qty']").val(total_qty);
             $("input[name='item']").val(product_count);
             product_count++;
-        });        
+            
+            $.ajax({
+                type: 'GET',
+                url: '{{url("getProductBonus")}}',
+                data: {
+                    'product': $(this).find('#product_id').val(),
+                    'qty': qty
+                },
+                success: function(data) {
+                    //   console.log(data);                
+                    brow.find('#bouns').val(data.bonus);
+                    //  console.log(ttt);
+                }
+            });
+        });
         var qty_new = $('.qty_sale').find('input').val();
         var s_qty = parseFloat($('.all_qty').val());
         var line = parseFloat($('.after_discount').val());
@@ -355,7 +398,7 @@
                 'product_id': product_id
             },
             datatype: 'json',
-            success: function(data) {                
+            success: function(data) {
                 var tr = $(this).parent().parent();
                 var op = "";
                 $('#product_modal').val(product_id_modal); //this is used to get against this product batch
@@ -371,9 +414,8 @@
         });
     });
 
-
     // @@@@@@@@@@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@    
-    $(document).on('click', '.update_modal', function() {        
+    $(document).on('click', '.update_modal', function() {
         var product_id = $('#product_modal').val();
         var price = $('#edit_batch :selected').data('price');
         var quantity = $('#edit_batch :selected').data('quantity');

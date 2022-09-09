@@ -170,6 +170,7 @@ Route::get("get-stock/{id}",[SaleInvoiceController::class,"getStock"]);
 Route::get("common_customer",[CustomerController::class,"commonCustomer"])->middleware('auth');
 Route::get('getBatches', 'App\Http\Controllers\SaleInvoiceController@getBatches')->name('getBatches');
 Route::get('getBatcheWiseProduct', 'App\Http\Controllers\SaleInvoiceController@getBatcheWiseProduct')->name('getBatcheWiseProduct');
+Route::get('getProductBonus',[SaleInvoiceController::class,'getProductBonus'])->middleware('auth');
 
 // ===================== Product Sale Side======
 /*----------   Store Transfer  Resource Route  ----------*/
@@ -231,6 +232,8 @@ Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchas
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");
 Route::GET("searchSaleReport",[SaleInvoiceController::class,"searchSaleReport"])->name('searchSaleReport')->middleware("auth");
 Route::get('sale_details/{id}',[SaleInvoiceController::class,"saleDetail"])->name('sale_details')->middleware("auth");
+
+Route::get('view-sale-invoice',[SaleInvoiceController::class,"viewSaleInvoice"])->middleware('auth');
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

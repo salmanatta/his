@@ -233,7 +233,7 @@ Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('
 Route::GET("searchSaleReport",[SaleInvoiceController::class,"searchSaleReport"])->name('searchSaleReport')->middleware("auth");
 Route::get('sale_details/{id}',[SaleInvoiceController::class,"saleDetail"])->name('sale_details')->middleware("auth");
 
-Route::get('view-sale-invoice',[SaleInvoiceController::class,"viewSaleInvoice"])->middleware('auth');
+Route::get('viewSaleInvoice/{id}',[SaleInvoiceController::class,"viewSaleInvoice"])->name('viewSaleInvoice')->middleware('auth');
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

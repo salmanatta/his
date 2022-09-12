@@ -11,25 +11,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="d-flex justify-content-between">
-                                @if($transType == 'SALE')
-                                <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                            @if(isset($sale))
+                                @if($sale->trans_type == 'SALE' )
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
                                 @else
-                                <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
                                 @endif
+                            @else
+                                @if($transType == 'SALE')
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                                @else
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
+                                @endif
+                            @endif
                             </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
                                     <h3>
                                         <b>
-                                            <label class="form-label" for="invStatus" style="color:red">Un-Post</label>
+                                            <label class="form-label" for="invStatus" style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
                                         </b>
                                     </h3>
-                                    <!-- <p>
-                                    <span>Un-Post -->
-                                    <!-- <span>Sale Invoice No # {{$invoice_no ?? ''}}
-                                            <input type="hidden" value="{{$invoice_no}}" name="invoice_no"> -->
-                                    <!-- </span> -->
-
                                     </p>
                                 </div>
                             </div>
@@ -45,7 +47,7 @@
                                                             <input type="date" name="invoice_date" value="<?php echo date('Y-m-d'); ?>" id="datepickercustom" class="form-control _date">
                                                         </span>
                                                     </p>
-                                                    <input type="hidden" name="trans_type" value="{{ $transType }}">
+                                                    <input type="hidden" name="trans_type" value="{{ isset($sale) ? $sale->trans_type : $transType }}">
                                                 </div>
                                             </div>
                                             <div class="col-12 mb-3">
@@ -61,16 +63,21 @@
                                         <div class="col-4">
                                             <div class="col-12 mb-3">
                                                 <label class="form-label" for="Customer">Customer Name</label>
-                                                <input type="hidden" name="filer" value="" id="filer">
-                                                <select class="select2 form-control _customers_select" name="customer_id">
-                                                </select>
-                                                @error('customer_id')
-                                                <span class="text-danger">{{$message}}</span>
-                                                @enderror
+                                                <input type="hidden" name="filer" value="{{ isset($customer) ? $customer->isfiler : ''  }}" id="filer">
+                                                @if(isset($customer))
+                                                    <input type="text" class="form-control" name="" value="{{ isset($customer) ? $customer->name : '' }}" disabled>
+                                                @else
+                                                    <select class="select2 form-control _customers_select" name="customer_id"  selected="{{ isset($customer) ? 'selected' : '' }}">
+                                                    </select>
+                                                    @error('customer_id')
+                                                    <span class="text-danger">{{$message}}</span>
+                                                    @enderror
+                                                @endif
+                                                
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label class="form-label" for="description">Description</label>
-                                                <textarea placeholder="description" name="description" rows="4" class="form-control _description"></textarea>
+                                                <textarea placeholder="description" name="description" rows="4" class="form-control _description">{{ isset($sale) ? $sale->description : old(description) }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -89,13 +96,13 @@
                                             <th scope="row">Batch</th>
                                             <th scope="row">Stock Quanity</th>
                                             <th scope="row">Quanity</th>
-                                            <th scope="row">Price</th>
                                             <th scope="row">Bonus</th>
-                                            <th scope="row">Discount</th>
-                                            <th scope="row">After Discount</th>
+                                            <th scope="row">Price</th>                                            
                                             <th scope="row">Sales Tax</th>
                                             <th scope="row">Advance Tax</th>
                                             <th scope="row">Advance Tax value</th>
+                                            <th scope="row">Discount %</th>
+                                            <th scope="row">Discount Amount</th>                                            
                                             <th scope="row">Line Total</th>
                                             <th scope="row">Action</th>
                                         </tr>
@@ -252,8 +259,8 @@
             url: '{{url("get-stock")}}/' + id,
             success: function(data) {
                 var isfiler = $("#filer").val() == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
-                var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
-                var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
+                var table_body = $("table.order-list tbody"); // assign table body to variable used in different area                  
+                var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_`+ row_id +`">
 <td class="product_count" width='2%'>` + product_count + `</td>
 <td class="name" width='8%'>
     <input type="hidden" name="id[]" value="` + data.productArr.id + `"/>
@@ -269,122 +276,165 @@
 <input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
 </td>
 <td class="qty_sale" width='7%'>
-<input type="number" class="form-control qty_sale" id="qty_sale" min="1" onkeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
-</td>
-<td class="purchase_price" width='7%'>
-<input type="number" class="form-control purchase_price price" id="price" onkeyup="do_calculation()" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
-<input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
+<input type="number" class="form-control qty_sale" id="qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
 </td>
 <td class="bouns" width='7%'>
 <input type="number" class="form-control bouns" value="0" id="bouns" name="bouns[]" step="any"/>
 </td>
-<td class="purchase_discount" width='7%'>
-<input type="number" class="form-control purchase_discount" id="purchase_discount" onkeyup="do_calculation()" value="` + data.productArr.product.purchase_discount + `"  name="purchase_discount[]" step="any"/>
-</td>
-<td class="after_discount" width='7%'>
-<input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" readonly/>
+<td class="purchase_price" width='7%'>
+<input type="number" class="form-control purchase_price price" id="price"  value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
+<input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
 </td>
 <td class="sales_tax" width='7%'>
-<input type="number" class="form-control sales_tax" onkeyup="do_calculation()" value="` + data.productArr.product.sale_tax_value + `" id="sales_tax" name="sales_tax[]" step="any" required/>
+<input type="number" class="form-control sales_tax" value="` + data.productArr.product.sale_tax_value + `" id="sales_tax" name="sales_tax[]" step="any" required/>
 </td>
-
 <td class="adv_tax" width='7%'> 
-    <input type="number" class="form-control adv_tax" onkeyup="do_calculation()" value="` + isfiler + `"  id="adv_tax" name="adv_tax[]" step="any" required/>     
+    <input type="number" class="form-control adv_tax"  value="` + isfiler + `"  id="adv_tax" name="adv_tax[]" step="any" required/>     
 </td>
-
 <td class="adv_tax_value" width='7%'>
-<input type="number" class="form-control adv_tax_value" onkeyup="do_calculation()" value="` + data.productArr.product.sale_tax_value + `" id="adv_tax_value" name="adv_tax_value[]" step="any" required/>
+<input type="number" class="form-control adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" id="adv_tax_value" name="adv_tax_value[]" step="any" required/>
+</td>
+<td class="purchase_discount" width='7%'>
+<input type="number" class="form-control purchase_discount" id="purchase_discount" value="` + data.productArr.product.purchase_discount + `"  name="purchase_discount[]" step="any"/>
+</td>
+<td class="after_discount" width='7%'>
+<input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" />
 </td>
 
 <td class="line_total" width='7%'>
 <input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
-<input type="hidden" class="hidden_total" name="total" value="0">
+<input type="hidden" class="hidden_total" id="invTotal" name="total" value="0">
 <input type="hidden" class="sub_total" name="sub_total" value="0">
 <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
 </tr>`;                
                 table_body.append(new_row); // append new row to table body
+                calc("table_append_rows_"+row_id);
                 product_count++;
-                row_id++;
-                do_calculation();
+                row_id++;               
                 empty_select2("._products_select"); // empty the product selection after row appending
                 custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
             }
         });
     });
     $(document).on('click', '.delete_row', function() {
+        delete_record($(this).closest('tr').attr('id'));
         $(this).closest('tr').remove();
-        do_calculation();
+        
     });
+    function delete_record(id)
+    {
+        var tempLineTotal = $("#"+id).find('#line_total').val();
+        var gTotal = $("._tfootTotal").text();
+        var ggTotal = (parseFloat(gTotal) - parseFloat(tempLineTotal)).toFixed(2);
+        $("._tfootTotal").text(ggTotal);
+        $(".hidden_total").val(grandTotal);
 
-
-
-    function do_calculation() {
-        // Declare variable for grand calculation
-        var line_total = 0;
-        var sub_total = 0;
-        var grand_discount = 0;
-        var total_qty = 0;
-        var product_count = 1;
-        var grand_subtotal = 0;
-        var total_rate = 0;
-        var productBonus = 0;
-
-        $('.table_append_rows').each(function() {
-            $(this).find('.product_count').text(product_count);
-            var qty = $(this).find('.qty_sale').find('input').val();
-            total_qty += parseInt(qty);
-            var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val());
-            var sale_qty = parseInt($(this).find('#qty_sale').val());
-            $(this).find('.hidden_purchase_price').val(purchase_price);
-            total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
-            $(this).find('#total_rate').val(total_rate);
-            purchase_discount = $(this).find('.purchase_discount').find('input').val();
-            var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
-            $(this).find('.after_discount').val(price_after_discount);
-            var all_qty = parseFloat($(this).find('.qty_sale').val());
-            grand_discount += (purchase_discount * all_qty);
-            var sales_tax = parseFloat($(this).find('#sales_tax').val());
-            if (isNaN(sales_tax)) {
-                sales_tax = 0;
-            }
-
-            var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
-            $(this).find('.sub_total').val(row_sub_total);
-            $(this).find('.line_total').val(row_sub_total);
-            var brow = $(this);
-            grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
-            $("._tfootTotal").text(grand_subtotal);
-            $(".hidden_total").val(grand_subtotal);
-            $("input[name='total_qty']").val(total_qty);
-            $("input[name='item']").val(product_count);
-            product_count++;
-            
-            $.ajax({
-                type: 'GET',
-                url: '{{url("getProductBonus")}}',
-                data: {
-                    'product': $(this).find('#product_id').val(),
-                    'qty': qty
-                },
-                success: function(data) {
-                    //   console.log(data);                
-                    brow.find('#bouns').val(data.bonus);
-                    //  console.log(ttt);
-                }
-            });
-        });
-        var qty_new = $('.qty_sale').find('input').val();
-        var s_qty = parseFloat($('.all_qty').val());
-        var line = parseFloat($('.after_discount').val());
-        if (qty_new > s_qty) {
-            alert("Quantity Must be less then Stock Quantity!");
-            $('.qty_sale').find('input').val(1);
-            $('.line_total').find('input').val(line);
-            $("._tfootTotal").text(line);
-        }
     }
+    var grandTotal = 0;
+    function calc(id){        
+        // console.log(id);
+        var tempLineTotal = $("#"+id).find('#line_total').val();        
+        var qty = $("#"+id).find("#qty_sale").val();
+        var salePrice = $("#"+id).find("#price").val();
+        total_rate = parseFloat(salePrice * qty).toFixed(2);        
+        $("#"+id).find('#total_rate').val(total_rate);        
+        var saleTax = $("#"+id).find("#sales_tax").val();        
+        var lineTotal = (parseFloat(total_rate) + parseFloat(saleTax || 0)).toFixed(2);
+        var advTax = parseFloat($("#"+id).find("#adv_tax").val());
+        var advTaxValue = parseFloat((lineTotal * advTax || 0) / 100).toFixed(2);
+        $("#"+id).find('#adv_tax_value').val(advTaxValue);
+        lineTotal =  (parseFloat(lineTotal) + parseFloat(advTaxValue)).toFixed(2);
+        var purchase_discount = $("#"+id).find("#purchase_discount").val();   
+        var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
+        $("#"+id).find('#after_discount').val(price_after_discount);
+        lineTotal =  (parseFloat(lineTotal) - parseFloat(price_after_discount)).toFixed(2);
+        $("#"+id).find('#line_total').val(lineTotal);
+         grandTotal = (parseFloat(grandTotal) + parseFloat(lineTotal) -  parseFloat(tempLineTotal|| 0)).toFixed(2);
+        $("._tfootTotal").text(grandTotal);      
+        $(".hidden_total").val(grandTotal);
+        
+
+        $.ajax({
+        type: 'GET',
+        url: '{{url("getProductBonus")}}',
+        data: {
+            'product': $("#"+id).find("#product_id").val(),
+            'qty': qty
+        },
+        success: function(data) {                
+            $("#"+id).find('#bouns').val(data.bonus);
+        }
+        });
+    }
+   
+
+    // function do_calculation() {
+    //     // Declare variable for grand calculation
+    //     var line_total = 0;
+    //     var sub_total = 0;
+    //     var grand_discount = 0;
+    //     var total_qty = 0;
+    //     var product_count = 1;
+    //     var grand_subtotal = 0;
+    //     var total_rate = 0;
+    //     var productBonus = 0;
+
+    //     $('.table_append_rows').each(function() {
+    //         $(this).find('.product_count').text(product_count);
+    //         var qty = $(this).find('.qty_sale').find('input').val();
+    //         total_qty += parseInt(qty);
+    //         var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val());
+    //         var sale_qty = parseInt($(this).find('#qty_sale').val());
+    //         $(this).find('.hidden_purchase_price').val(purchase_price);
+    //         total_rate = parseFloat(purchase_price * sale_qty).toFixed(2);
+    //         $(this).find('#total_rate').val(total_rate);
+    //         purchase_discount = $(this).find('.purchase_discount').find('input').val();
+    //         var price_after_discount = parseFloat((total_rate * purchase_discount) / 100).toFixed(2);
+    //         $(this).find('.after_discount').val(price_after_discount);
+    //         var all_qty = parseFloat($(this).find('.qty_sale').val());
+    //         grand_discount += (purchase_discount * all_qty);
+    //         var sales_tax = parseFloat($(this).find('#sales_tax').val());
+    //         if (isNaN(sales_tax)) {
+    //             sales_tax = 0;
+    //         }
+
+    //         var row_sub_total = parseFloat(total_rate - price_after_discount + sales_tax).toFixed(2);
+    //         $(this).find('.sub_total').val(row_sub_total);
+    //         $(this).find('.line_total').val(row_sub_total);
+    //         var brow = $(this);
+    //         grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
+    //         $("._tfootTotal").text(grand_subtotal);
+    //         $(".hidden_total").val(grand_subtotal);
+    //         $("input[name='total_qty']").val(total_qty);
+    //         $("input[name='item']").val(product_count);
+    //         product_count++;
+            
+    //         $.ajax({
+    //             type: 'GET',
+    //             url: '{{url("getProductBonus")}}',
+    //             data: {
+    //                 'product': $(this).find('#product_id').val(),
+    //                 'qty': qty
+    //             },
+    //             success: function(data) {
+    //                 //   console.log(data);                
+    //                 brow.find('#bouns').val(data.bonus);
+    //                 //  console.log(ttt);
+    //             }
+    //         });
+    //     });
+    //     var qty_new = $('.qty_sale').find('input').val();
+    //     var s_qty = parseFloat($('.all_qty').val());
+    //     var line = parseFloat($('.after_discount').val());
+    //     if (qty_new > s_qty) {
+    //         alert("Quantity Must be less then Stock Quantity!");
+    //         $('.qty_sale').find('input').val(1);
+    //         $('.line_total').find('input').val(line);
+    //         $("._tfootTotal").text(line);
+    //     }
+    // }
     // @@@@@@@@@@@@@@@@@@@@@@   batch  @@@@@@@@@@@@@@@@
     $(document).on('click', '.edit_modal', function() {
         var row_id = $(this).closest('.table_append_rows').attr('id');

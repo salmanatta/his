@@ -9,6 +9,7 @@ use App\Models\products\Product;
 use App\Models\Stock;
 use App\Models\Batch;
 use App\Models\ProductBonus;
+use App\Models\sales\Customer;
 use Carbon\Carbon;
 class SaleInvoiceController extends Controller
 {
@@ -127,7 +128,11 @@ class SaleInvoiceController extends Controller
     }
     public function viewSaleInvoice($id)
     {
-        dd($id);
+        $sale = SaleInvoice::find($id);
+        $customer = Customer::find($sale->customer_id);
+        $saleDetail = SaleInvoiceDetail::where('sale_invoice_id',$sale->id)->get();
+        return view("pages/sale/invoice", compact('sale','customer','saleDetail'));
+        
     }
     /**
      * Show the form for creating a new resource.

@@ -76,7 +76,7 @@
                                                 </a>
                                             </td>                                                 
                                             <td style="text-align: center;">
-                                            <a href="{{ url('view-sale-invoice') . '/' . $data->id }}" class="text-danger">
+                                            <a href="{{ url('viewSaleInvoice/'.$data->id) }}" class="text-danger">
                                                     <i class="mdi mdi-pencil font-size-18 waves-effect waves-light" style="border-radius: 44px;"></i>
                                                 </a>
                                             </td>                         

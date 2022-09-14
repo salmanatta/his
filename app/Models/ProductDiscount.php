@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\products\Product;
+use App\Models\GeneralDiscount;
+
 class ProductDiscount extends Model
 {
     use HasFactory;
@@ -18,4 +22,5 @@ class ProductDiscount extends Model
     {
         return $this->belongsTo(GeneralDiscount::class,'discount_id','id');
     }
+
 }

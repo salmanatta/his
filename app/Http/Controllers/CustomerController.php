@@ -25,7 +25,7 @@ class CustomerController extends Controller
     }
     public function commonCustomer(Request $request){
         if (request()->has('q')) {
-            $customer = Customer::where('name','like','%'.$request->q.'%')->get();
+            $customer = Customer::where('name','like','%'.$request->q.'%')->where('branch_id',auth()->user()->branch_id)->get();
             $customer = $customer->map(function($item,$key){
                 return ['id' => $item['id'],
                         'text' => $item['name'].' - '.$item['customer_code'],
@@ -63,8 +63,24 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-          // dd($request->all());
-         $createCustomer=Customer::create($request->except('cnic','exemption','ntn','sntn','filer','certificate','_token','raw_row','license_name','exp_date','license_type_id','form_type','document','status','city_id','region_id'));
+        //  dd($request->all());        
+        $createCustomer=Customer::create([
+            'name'              => $request->name,
+            'customer_code'     => $request->customer_code,
+            'customer_old_code' => $request->customer_old_code,
+            'address'           => $request->address,
+            'phone_off'         => $request->phone_off,
+            'phone_res'         => $request->phone_res,
+            'fax'               => $request->fax,
+            'email'             => $request->email,
+            'postal_code'       => $request->postal_code,
+            'cnic_no'           => $request->cnic_no,            
+            'group_id'          => $request->group_id,
+            'city_id'           => $request->city_id,
+            'region_id'         => $request->region_id,            
+            'isfiler'           => $request->isfiler,
+            'branch_id'           => $request->branch_id,
+        ]);
         $customer_id=$createCustomer->id;
         $rows=$request->input('cnic');
         $rows_to=$request->input('license_name');

@@ -14,6 +14,7 @@
                             <div class="mb-3">
                                 <label for="formrow-inputCity" class="form-label"> Old ID</label>
                                 <input type="text" name="customer_old_code" class="form-control" id="validationCustom01">
+                                <input type="hidden" name="branch_id" class="form-control" id="branch_id" value="{{ auth()->user()->branch_id }}">
                             </div>
                         </div>
                         <div class="col-lg-1">
@@ -30,8 +31,8 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="mb-3">
-                                <label for="formrow-inputZip" class="form-label">CNIC No</label>
-                                <input type="text" class="form-control" id="validationCustom02" name="cnic_no">
+                                <label for="cnic_no" class="form-label">CNIC No</label>
+                                <input type="text" class="form-control" id="cnic_no" name="cnic_no">
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -74,7 +75,7 @@
                         <div class="col-lg-2">
                             <div class="mb-3">
                                 <label for="formrow-inputState" class="form-label">City </label>
-                                <select id="" name="city_id" class="form-select select2">
+                                <select id="city_id" name="city_id" class="form-select select2">
                                     <option selected disabled="" value="">Choose City</option>
                                     @foreach($cities as $city)
                                     <option value="{{$city->id}}">{{$city->name}}</option>
@@ -102,8 +103,8 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="mb-3">
-                                <label for="formrow-" class="form-label">Region</label>
-                                <select id="" name="region_id" class="form-select select2">
+                                <label for="region_id-" class="form-label">Region</label>
+                                <select id="region_id" name="region_id" class="form-select select2">
                                     <option selected disabled="" value="">Choose Region</option>
                                     @foreach($regions as $region)
                                     <option value="{{$region->id}}">{{$region->name}} | {{$region->region_code}}</option>
@@ -113,9 +114,18 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4 ">
-                                <label for="formrow-inputZip" class="form-label">Allow In All Region </label><br>&nbsp;&nbsp;
+                                <label for="isfiler-" class="form-label">Filer</label>
+                                <select id="isfiler" name="isfiler" class="form-select select2">
+                                    <option selected value="">-- Select -- </option>
+                                    <option  value="1">Filer </option>
+                                    <option  value="0">Non-Filer</option>
+                                    <option  value="99">Exempted </option>
+                                    
+                                </select>
+
+                                <!-- <label for="formrow-inputZip" class="form-label">Allow In All Region </label><br>&nbsp;&nbsp;
                                 <input type="radio" id="validationCustom02" value="1" name="flag" required>&nbsp;Yes&nbsp;&nbsp;
-                                <input type="radio" id="validationCustom02" value="0" name="flag" required>&nbsp;No
+                                <input type="radio" id="validationCustom02" value="0" name="flag" required>&nbsp;No -->
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,7 @@ use App\Models\products\Product;
 use App\Models\Stock;
 use App\Models\Batch;
 use App\Models\ProductBonus;
+use App\Models\ProductDiscount; 
 use App\Models\sales\Customer;
 use Carbon\Carbon;
 class SaleInvoiceController extends Controller
@@ -130,7 +131,8 @@ class SaleInvoiceController extends Controller
     {
         $sale = SaleInvoice::find($id);
         $customer = Customer::find($sale->customer_id);
-        $saleDetail = SaleInvoiceDetail::where('sale_invoice_id',$sale->id)->get();
+        $saleDetail = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id',$sale->id)->get();        
+        // dd($saleDetail);
         return view("pages/sale/invoice", compact('sale','customer','saleDetail'));
         
     }
@@ -200,6 +202,8 @@ class SaleInvoiceController extends Controller
                     'line_total'     => $line_total,
                     'sales_tax'      => $request->input('sales_tax')[$key],
                     'batch_id'       => $request->input('table_batch_id')[$key],
+                    'adv_tax'       => $request->adv_tax[$key],
+                    'adv_tax_value' => $request->adv_tax_value[$key],
                 ]);
                 if($request->trans_type == 'SALE')
                 {
@@ -270,17 +274,30 @@ class SaleInvoiceController extends Controller
         return 'salman';
     }
     public function getProductBonus(Request $request)
-    {
-        
+    {        
         $bonus = ProductBonus::join('general_bonuses','general_bonuses.id','=','product_bonuses.bouns_id')->where('product_id',$request->product)
                                 ->where('general_bonuses.branch_id',auth()->user()->branch_id)
                                 ->groupBy('product_id')
                                 ->having('quantity','<=',$request->qty)
                                 ->orderBy('end_date','desc')
-                                ->first();
-                                //  return $bonus;
-        // return $bonus->bonuses->bonus;
+                                ->first();                                
           return response()->json($bonus);
+    }
+    public function getProductDiscount(Request $request)
+    {
+        $discount = ProductDiscount::with(['generalDiscount' => function($q) {
+            $q->whereDate('end_date','>',Carbon::now())->orderBy('end_date','desc');
+        }])
+                    ->where('product_id',$request->product)
+                    ->where('branch_id',auth()->user()->branch_id)
+                    ->first();
+        return response()->json($discount);
+        // if(!empty($discount)){
+        //     return $discount->generalDiscount->discount;            
+        // }else{
+        //     return 0;
+        // }
+        
     }
 }
 

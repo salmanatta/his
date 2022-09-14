@@ -24,6 +24,8 @@ use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseInvoice;
 use App\Http\Controllers\ProductMaxSalQuantityController;
+// use App\Http\Controllers\SaleInvoiceController;
+
 // use App\Http\Controllers\PurchaseController; 
 // use App\Http\Controllers\PurchaseInvoice;
 // use App\Http\Controllers\SupplierController; 
@@ -171,6 +173,8 @@ Route::get("common_customer",[CustomerController::class,"commonCustomer"])->midd
 Route::get('getBatches', 'App\Http\Controllers\SaleInvoiceController@getBatches')->name('getBatches');
 Route::get('getBatcheWiseProduct', 'App\Http\Controllers\SaleInvoiceController@getBatcheWiseProduct')->name('getBatcheWiseProduct');
 Route::get('getProductBonus',[SaleInvoiceController::class,'getProductBonus'])->middleware('auth');
+
+Route::get('getProductDiscount',[SaleInvoiceController::class,'getProductDiscount'])->middleware('auth');
 
 // ===================== Product Sale Side======
 /*----------   Store Transfer  Resource Route  ----------*/

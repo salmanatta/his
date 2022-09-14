@@ -6,138 +6,208 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
+                @if(isset($sale))
                 <form method="post" action="{{route('sale_invoices.store')}}">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex justify-content-between">
-                            @if(isset($sale))
-                                @if($sale->trans_type == 'SALE' )
+                    @method('PATCH')
+                    @else
+                    <form method="post" action="{{route('sale_invoices.store')}}">
+                        @endif
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex justify-content-between">
+                                    @if(isset($sale))
+                                    @if($sale->trans_type == 'SALE' )
                                     <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
-                                @else
+                                    @else
                                     <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
-                                @endif
-                            @else
-                                @if($transType == 'SALE')
+                                    @endif
+                                    @else
+                                    @if($transType == 'SALE')
                                     <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
-                                @else
+                                    @else
                                     <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
-                                @endif
-                            @endif
-                            </div>
-                            <div class="row">
-                                <div class="col-12 d-flex justify-content-center">
-                                    <h3>
-                                        <b>
-                                            <label class="form-label" for="invStatus" style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
-                                        </b>
-                                    </h3>
-                                    </p>
+                                    @endif
+                                    @endif
                                 </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="col-md-12 mb-3">
-                                                <div class="_invoice_header">
-                                                    <p class="">
-                                                        <span>
-                                                            <label class="form-label" for="Customer">Invoice Date</label>
-                                                            <input type="date" name="invoice_date" value="<?php echo date('Y-m-d'); ?>" id="datepickercustom" class="form-control _date">
-                                                        </span>
-                                                    </p>
-                                                    <input type="hidden" name="trans_type" value="{{ isset($sale) ? $sale->trans_type : $transType }}">
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <h3>
+                                            <b>
+                                                <label class="form-label" for="invStatus" style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
+                                            </b>
+                                        </h3>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="_invoice_header">
+                                                        <p class="">
+                                                            <span>
+                                                                <label class="form-label" for="Customer">Invoice Date</label>
+                                                                <input type="date" name="invoice_date" value="{{ isset($sale)? $sale->invoice_date : date('Y-m-d') }}" id="datepickercustom1" class="form-control _date">
+                                                            </span>
+                                                        </p>
+                                                        <input type="hidden" name="trans_type" value="{{ isset($sale) ? $sale->trans_type : $transType }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="description">Product</label>
+                                                    <select class="select2 form-control _products_select" id="_products_select" name="product_id">
+                                                    </select>
+                                                    @error('product_id')
+                                                    <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label" for="description">Product</label>
-                                                <select class="select2 form-control _products_select" id="_products_select" name="product_id">
-                                                </select>
-                                                @error('product_id')
-                                                <span class="text-danger">{{$message}}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-4"></div>
-                                        <div class="col-4">
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label" for="Customer">Customer Name</label>
-                                                <input type="hidden" name="filer" value="{{ isset($customer) ? $customer->isfiler : ''  }}" id="filer">
-                                                @if(isset($customer))
+                                            <div class="col-4"></div>
+                                            <div class="col-4">
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="Customer">Customer Name</label>
+                                                    <input type="hidden" name="filer" value="{{ isset($customer) ? $customer->isfiler : ''  }}" id="filer">
+                                                    @if(isset($customer))
                                                     <input type="text" class="form-control" name="" value="{{ isset($customer) ? $customer->name : '' }}" disabled>
-                                                @else
-                                                    <select class="select2 form-control _customers_select" name="customer_id"  selected="{{ isset($customer) ? 'selected' : '' }}">
+                                                    @else
+                                                    <select class="select2 form-control _customers_select" name="customer_id" selected="{{ isset($customer) ? 'selected' : '' }}">
                                                     </select>
                                                     @error('customer_id')
                                                     <span class="text-danger">{{$message}}</span>
                                                     @enderror
-                                                @endif
-                                                
-                                            </div>
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label" for="description">Description</label>
-                                                <textarea placeholder="description" name="description" rows="4" class="form-control _description">{{ isset($sale) ? $sale->description : old(description) }}</textarea>
+                                                    @endif
+
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label" for="description">Description</label>
+                                                    <textarea placeholder="description" name="description" rows="4" class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table mb-0 order-list _saleTable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="row">#</th>
-                                            <th scope="row">Products</th>
-                                            <th scope="row">Batch</th>
-                                            <th scope="row">Stock Quanity</th>
-                                            <th scope="row">Quanity</th>
-                                            <th scope="row">Bonus</th>
-                                            <th scope="row">Price</th>                                            
-                                            <th scope="row">Sales Tax</th>
-                                            <th scope="row">Advance Tax</th>
-                                            <th scope="row">Advance Tax value</th>
-                                            <th scope="row">Discount %</th>
-                                            <th scope="row">Discount Amount</th>                                            
-                                            <th scope="row">Line Total</th>
-                                            <th scope="row">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td style="width:10%;text-align:right">Grand Total</td>
-                                            <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table mb-0 order-list _saleTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="row">#</th>
+                                                <th scope="row">Products</th>
+                                                <th scope="row">Batch</th>
+                                                <th scope="row">Stock Quanity</th>
+                                                <th scope="row">Quanity</th>
+                                                <th scope="row">Bonus</th>
+                                                <th scope="row">Price</th>
+                                                <th scope="row">Sales Tax</th>
+                                                <th scope="row">Advance Tax</th>
+                                                <th scope="row">Advance Tax value</th>
+                                                <th scope="row">Check</th>
+                                                <th scope="row">Discount %</th>
+                                                <th scope="row">Discount Amount</th>
+                                                <th scope="row">Line Total</th>
+                                                <th scope="row">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <?php $granttotal = 0; ?>
+                                        <tbody>
+                                            @if(isset($saleDetail))
+                                            <?php $counter = 1;
+                                            $row_id = 1;
+                                            ?>
+                                            @foreach($saleDetail as $saleD)
+                                            <tr onkeyup="calc(id.valueOf())" class="table_append_rows" id="table_append_rows_{{$row_id}}">
+                                                <td>{{ $counter }}</td>
+                                                <td>{{ $saleD->product->name }}
+                                                    <input type="hidden" class="product_id" name="product_id[]" value="{{ $saleD->product_id }}" />
+                                                </td>
+                                                <td width='7%'>
+                                                    <button type="button" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="{{ $saleD->product_id }}"> {{ $saleD->batch->batch_no }}
+                                                        <i class="dripicons-document-edit"></i>
+                                                    </button>
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control all_qty" min="1" value="" step="any" disabled />
+                                                </td>
+                                                <td class="qty" width='7%'>
+                                                    <input type="number" class="form-control qty_sale" min="1" name="quanity[]" value="{{ $saleD->qty }}" step="any" required />
+                                                </td>
+                                                <td class="bouns" width='7%'>
+                                                    <input type="number" class="form-control bouns" value="{{ $saleD->bonus }}" name="bouns[]" step="any" />
+                                                </td>
+                                                <td class="purchase_price" width='7%'>
+                                                    <input type="number" class="form-control purchase_price price" value="{{ $saleD->price }}" name="purchase_price[]" step="any" required />
+                                                    <input type="hidden" class="total_rate" name=total_rate[] value="{{  $saleD->price * $saleD->qty }}" />
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control sales_tax" value="{{ $saleD->sales_tax }}" name="sales_tax[]" step="any" required />
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control adv_tax" value="{{ $saleD->adv_tax }}" name="adv_tax[]" step="any" required />
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control adv_tax_value" value="{{ $saleD->adv_tax_value }}" name="adv_tax_value[]" step="any" required />
+                                                </td>
+                                                <td width='3%'>
+                                                    <input class="form-control form-check-input discount-check" type="checkbox" name="discount_check[]">
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control discount" value="{{ $saleD->discount }}" name="purchase_discount[]" step="any" />
+                                                </td>
+                                                <td width='7%'>
+                                                    <input type="number" class="form-control after_discount" value="{{ $saleD->after_discount }}" name="after_discount[]" step="any" />
+                                                </td>
+                                                <td>{{ $saleD->line_total }}</td>
+                                                <td>
+                                                    <button type="button" class="delete_row btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                    <input type="hidden" class="hidden_total" name="total" value="0">
+                                                    <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="{{ $saleD->batch_id }}">
+
+                                                </td>
+                                            </tr>
+                                            <?php $counter++;
+                                            $row_id++;
+                                            $granttotal += $saleD->line_total;
+                                            ?>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="width:10%;text-align:right">Grand Total</td>
+                                                <td style="width:8%;text-align:right" class="_tfootTotal"> {{ $granttotal }}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success me-1">Save</button>
-                            <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                        <div class="row">
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-success me-1">Save</button>
+                                <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                            </div>
                         </div>
-                    </div>
 
-                </form>
+                    </form>
             </div>
             <!-- end card body -->
         </div>
@@ -193,6 +263,7 @@
     //     });
     // };
     var ttt = 0;
+    // $('#datepickercustom').val(new Date().toDateInputValue());
     // ======================for customer ===============
     $("._customers_select").select2({
         ajax: {
@@ -258,117 +329,178 @@
             type: 'GET',
             url: '{{url("get-stock")}}/' + id,
             success: function(data) {
-                var isfiler = $("#filer").val() == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
+                var isfiler = $("#filer").val();
+                if (isfiler == 1) {
+                    isfiler = data.productArr.product.adv_tax_filer;
+                } else if (isfiler == 0) {
+                    isfiler = data.productArr.product.adv_tax_non_filer;
+                } else {
+                    isfiler = 0;
+                }
+
+                // == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area                  
-                var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_`+ row_id +`">
+                var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_` + row_id + `">
 <td class="product_count" width='2%'>` + product_count + `</td>
 <td class="name" width='8%'>
     <input type="hidden" name="id[]" value="` + data.productArr.id + `"/>
-     <input type="hidden" id="product_id" name="product_id[]" value="` + data.productArr.product_id + `"/>
-     <input type="hidden" id="product_name" name="product_name[]" value="` + data.productArr.product.name + `"/>` + data.productArr.product.name + `
+     <input type="hidden" class="product_id" name="product_id[]" value="` + data.productArr.product_id + `"/>
+     <input type="hidden" name="product_name[]" value="` + data.productArr.product.name + `"/>` + data.productArr.product.name + `
 </td>
-<td class="batch_no_id" width='7%'>
-    <button type="button" id="batch_no_id" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
+<td width='7%'>
+    <button type="button" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
         <i class="dripicons-document-edit"></i>
     </button>
 </td>
-<td class="qty" width='7%'>
-<input type="number" class="form-control all_qty" id="all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
+<td width='7%'>
+<input type="number" class="form-control all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
 </td>
-<td class="qty_sale" width='7%'>
-<input type="number" class="form-control qty_sale" id="qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
+<td class="quanity" width='7%'>
+<input type="number" class="form-control qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
 </td>
-<td class="bouns" width='7%'>
-<input type="number" class="form-control bouns" value="0" id="bouns" name="bouns[]" step="any"/>
+<td width='7%'>
+<input type="number" class="form-control bouns" value="0" name="bouns[]" step="any"/>
 </td>
 <td class="purchase_price" width='7%'>
-<input type="number" class="form-control purchase_price price" id="price"  value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
-<input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
+<input type="number" class="form-control purchase_price price" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
+<input type="hidden" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
 </td>
-<td class="sales_tax" width='7%'>
-<input type="number" class="form-control sales_tax" value="` + data.productArr.product.sale_tax_value + `" id="sales_tax" name="sales_tax[]" step="any" required/>
+<td width='7%'>
+<input type="number" class="form-control sales_tax" value="` + data.productArr.product.sale_tax_value + `" name="sales_tax[]" step="any" />
 </td>
-<td class="adv_tax" width='7%'> 
-    <input type="number" class="form-control adv_tax"  value="` + isfiler + `"  id="adv_tax" name="adv_tax[]" step="any" required/>     
+<td width='7%'> 
+    <input type="number" class="form-control adv_tax"  value="` + isfiler + `"  name="adv_tax[]" step="any" />     
 </td>
-<td class="adv_tax_value" width='7%'>
-<input type="number" class="form-control adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" id="adv_tax_value" name="adv_tax_value[]" step="any" required/>
+<td width='7%'>
+<input type="number" class="form-control adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" name="adv_tax_value[]" step="any" />
 </td>
-<td class="purchase_discount" width='7%'>
-<input type="number" class="form-control purchase_discount" id="purchase_discount" value="` + data.productArr.product.purchase_discount + `"  name="purchase_discount[]" step="any"/>
+<td width='3%'>
+<input type="checkbox" class="form-control form-check-input discount-check" name="discount_check[]">
 </td>
-<td class="after_discount" width='7%'>
-<input type="number" class="form-control after_discount" id="after_discount" value="0"  name="after_discount[]" step="any" />
+<td width='7%'>
+<input type="number" class="form-control discount" value="0"  name="purchase_discount[]" step="any" disabled />
+</td>
+<td width='7%'>
+<input type="number" class="form-control after_discount" value="0"  name="after_discount[]" step="any" disabled/>
 </td>
 
-<td class="line_total" width='7%'>
-<input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
+<td width='7%'>
+<input type="number" class="form-control line_total" value="0" name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
-<input type="hidden" class="hidden_total" id="invTotal" name="total" value="0">
-<input type="hidden" class="sub_total" name="sub_total" value="0">
+<input type="hidden" class="hidden_total" name="total" value="0">
 <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
-</tr>`;                
+</tr>`;
                 table_body.append(new_row); // append new row to table body
-                calc("table_append_rows_"+row_id);
+                calc("table_append_rows_" + row_id);                
                 product_count++;
-                row_id++;               
+                row_id++;
                 empty_select2("._products_select"); // empty the product selection after row appending
                 custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
             }
         });
-    });
+
+    });    
     $(document).on('click', '.delete_row', function() {
         delete_record($(this).closest('tr').attr('id'));
         $(this).closest('tr').remove();
-        
+
     });
-    function delete_record(id)
-    {
-        var tempLineTotal = $("#"+id).find('#line_total').val();
+
+    function delete_record(id) {
+        var tempLineTotal = $("#" + id).find('.line_total').val();
         var gTotal = $("._tfootTotal").text();
         var ggTotal = (parseFloat(gTotal) - parseFloat(tempLineTotal)).toFixed(2);
         $("._tfootTotal").text(ggTotal);
         $(".hidden_total").val(grandTotal);
 
-    }
+    }    
     var grandTotal = 0;
-    function calc(id){        
+    function calc(id) {
         // console.log(id);
-        var tempLineTotal = $("#"+id).find('#line_total').val();        
-        var qty = $("#"+id).find("#qty_sale").val();
-        var salePrice = $("#"+id).find("#price").val();
-        total_rate = parseFloat(salePrice * qty).toFixed(2);        
-        $("#"+id).find('#total_rate').val(total_rate);        
-        var saleTax = $("#"+id).find("#sales_tax").val();        
+        var tempLineTotal = $("#" + id).find('.line_total').val();
+        var qty = $("#" + id).find(".qty_sale").val();
+        var salePrice = $("#" + id).find(".price").val();
+        total_rate = parseFloat(salePrice * qty).toFixed(2);
+        $("#" + id).find('.total_rate').val(total_rate);
+        var saleTax = $("#" + id).find(".sales_tax").val();
         var lineTotal = (parseFloat(total_rate) + parseFloat(saleTax || 0)).toFixed(2);
-        var advTax = parseFloat($("#"+id).find("#adv_tax").val());
+        var advTax = parseFloat($("#" + id).find(".adv_tax").val());
         var advTaxValue = parseFloat((lineTotal * advTax || 0) / 100).toFixed(2);
-        $("#"+id).find('#adv_tax_value').val(advTaxValue);
-        lineTotal =  (parseFloat(lineTotal) + parseFloat(advTaxValue)).toFixed(2);
-        var purchase_discount = $("#"+id).find("#purchase_discount").val();   
-        var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
-        $("#"+id).find('#after_discount').val(price_after_discount);
-        lineTotal =  (parseFloat(lineTotal) - parseFloat(price_after_discount)).toFixed(2);
-        $("#"+id).find('#line_total').val(lineTotal);
-         grandTotal = (parseFloat(grandTotal) + parseFloat(lineTotal) -  parseFloat(tempLineTotal|| 0)).toFixed(2);
-        $("._tfootTotal").text(grandTotal);      
-        $(".hidden_total").val(grandTotal);
+        $("#" + id).find('.adv_tax_value').val(advTaxValue);
+        lineTotal = (parseFloat(lineTotal) + parseFloat(advTaxValue)).toFixed(2);
+
         
+        var purchase_discount;
+        var price_after_discount;
+        $("#" + id).find('.discount-check').click(function(){
+            if($(this).is(":checked")){
+                $("#" + id).find('.discount').removeAttr("disabled");
+                console.log("Checkbox is checked.");                
+            }
+            else if($(this).is(":not(:checked)")){
+                $("#" + id).find('.discount').attr("disabled","false");
+                    $.ajax({
+                type: 'GET',
+                url: '{{url("getProductDiscount")}}',
+                data: {
+                    'product': $("#" + id).find(".product_id").val(),
+                    'qty': qty
+                },
+                success: function(data) {
+                    // purchase_discount = data.general_discount.discount;
+                    $("#" + id).find('.discount').val(data.general_discount.discount);
+                }
+                });          
+                purchase_discount = $("#" + id).find(".discount").val();
+                price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
+                $("#" + id).find('.after_discount').val(price_after_discount);
+
+            }
+        });
+        // if ($("#" + id).find('.discount-check').is(':checked') == false) {
+        //     console.log('calling for diccount');
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: '{{url("getProductDiscount")}}',
+        //         data: {
+        //             'product': $("#" + id).find(".product_id").val(),
+        //             'qty': qty
+        //         },
+        //         success: function(data) {
+        //             // purchase_discount = data.general_discount.discount;
+        //             $("#" + id).find('.discount').val(data.general_discount.discount);
+        //         }
+        //     });
+        // } else {
+        //     $("#" + id).find('.discount').attr("disabled","false");
+        // }
+
+
+        // var purchase_discount = $("#" + id).find(".discount").val();
+        // var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
+        // $("#" + id).find('.after_discount').val(price_after_discount);
+        lineTotal = (parseFloat(lineTotal) - parseFloat(price_after_discount)).toFixed(2);
+        $("#" + id).find('.line_total').val(lineTotal);
+        grandTotal = (parseFloat(grandTotal) + parseFloat(lineTotal) - parseFloat(tempLineTotal || 0)).toFixed(2);
+        $("._tfootTotal").text(grandTotal);
+        $(".hidden_total").val(grandTotal);
+
 
         $.ajax({
-        type: 'GET',
-        url: '{{url("getProductBonus")}}',
-        data: {
-            'product': $("#"+id).find("#product_id").val(),
-            'qty': qty
-        },
-        success: function(data) {                
-            $("#"+id).find('#bouns').val(data.bonus);
-        }
+            type: 'GET',
+            url: '{{url("getProductBonus")}}',
+            data: {
+                'product': $("#" + id).find(".product_id").val(),
+                'qty': qty
+            },
+            success: function(data) {
+                $("#" + id).find('.bouns').val(data.bonus);
+            }
         });
+
     }
-   
+
 
     // function do_calculation() {
     //     // Declare variable for grand calculation
@@ -410,7 +542,7 @@
     //         $("input[name='total_qty']").val(total_qty);
     //         $("input[name='item']").val(product_count);
     //         product_count++;
-            
+
     //         $.ajax({
     //             type: 'GET',
     //             url: '{{url("getProductBonus")}}',
@@ -473,7 +605,7 @@
         var batch_id_modal = $("#edit_batch :selected").text();
         var row_id_for_editing = $('input[name="edit_row_id"]').val();
         $('#' + row_id_for_editing).find('.all_qty').val(quantity);
-        $('#' + row_id_for_editing).find('#batch_no_id').val(batch_id_modal);
+        $('#' + row_id_for_editing).find('.batch_no_id').val(batch_id_modal);
         $('#' + row_id_for_editing).find('.price').val(price);
         $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
         $(".bs-example-modal-lg").modal('hide');

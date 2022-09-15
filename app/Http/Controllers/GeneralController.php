@@ -64,12 +64,14 @@ class GeneralController extends Controller
   }
   public function generalDiscount(Request $request)
   {
+    if($request->discount != '' && $request->start_date != '' && $request->end_date != ''){
     $generalDiscount = new GeneralDiscount();
     $generalDiscount->discount    = $request->discount;
     $generalDiscount->start_date  = $request->start_date;
     $generalDiscount->end_date    = $request->end_date;
     $generalDiscount->branch_id   = auth()->user()->branch_id;
     $generalDiscount->save();
+    }
     $data = GeneralDiscount::all()->toArray();
     return response()->json($data);
   }

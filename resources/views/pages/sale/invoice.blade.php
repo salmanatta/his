@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-body">
                 @if(isset($sale))
-                <form method="post" action="{{route('sale_invoices.store')}}">
+                <form method="post" action="{{route('sale_invoices.update',$sale->id)}}">
                     @method('PATCH')
                     @else
                     <form method="post" action="{{route('sale_invoices.store')}}">
@@ -118,7 +118,7 @@
                                             @if(isset($saleDetail))
                                             <?php $counter = 1;
                                             $row_id = 1;
-                                            ?>
+                                            ?>                                            
                                             @foreach($saleDetail as $saleD)
                                             <tr onkeyup="calc(id.valueOf())" class="table_append_rows" id="table_append_rows_{{$row_id}}">
                                                 <td>{{ $counter }}</td>
@@ -136,10 +136,10 @@
                                                 <td class="qty" width='7%'>
                                                     <input type="number" class="form-control qty_sale" min="1" name="quanity[]" value="{{ $saleD->qty }}" step="any" required />
                                                 </td>
-                                                <td class="bouns" width='7%'>
+                                                <td width='7%'>
                                                     <input type="number" class="form-control bouns" value="{{ $saleD->bonus }}" name="bouns[]" step="any" />
                                                 </td>
-                                                <td class="purchase_price" width='7%'>
+                                                <td width='7%'>
                                                     <input type="number" class="form-control purchase_price price" value="{{ $saleD->price }}" name="purchase_price[]" step="any" required />
                                                     <input type="hidden" class="total_rate" name=total_rate[] value="{{  $saleD->price * $saleD->qty }}" />
                                                 </td>
@@ -156,19 +156,21 @@
                                                     <input class="form-control form-check-input discount-check" type="checkbox" name="discount_check[]">
                                                 </td>
                                                 <td width='7%'>
-                                                    <input type="number" class="form-control discount" value="{{ $saleD->discount }}" name="purchase_discount[]" step="any" />
+                                                    <input type="number" class="form-control discount" value="{{ $saleD->discount }}" name="purchase_discount[]" step="any" readonly />
                                                 </td>
                                                 <td width='7%'>
-                                                    <input type="number" class="form-control after_discount" value="{{ $saleD->after_discount }}" name="after_discount[]" step="any" />
+                                                    <input type="number" class="form-control after_discount" value="{{ $saleD->after_discount }}" name="after_discount[]" step="any" readonly />
                                                 </td>
-                                                <td>{{ $saleD->line_total }}</td>
+                                                <td>
+                                                    <input type="number" class="form-control line_total" value="{{ $saleD->line_total }}" name="line_total[]" step="any" readonly/>                                                    
+                                                </td>
                                                 <td>
                                                     <button type="button" class="delete_row btn btn-sm btn-danger">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                     <input type="hidden" class="hidden_total" name="total" value="0">
                                                     <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="{{ $saleD->batch_id }}">
-
+                                                    <input type="hidden" name="id[]" value="{{ $saleD->id }}">
                                                 </td>
                                             </tr>
                                             <?php $counter++;
@@ -202,8 +204,14 @@
                         </div>
                         <div class="row">
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success me-1">Save</button>
-                                <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                                @if(isset(($sale)))
+                                    <button type="submit" class="btn btn-primary me-1" name="update">Update</button>    
+                                    <button type="submit" class="btn btn-warning me-1" name="update-post">Update & Post</button>    
+                                    <a class="btn btn-danger mx-0" href="{{ url('purchaseSale') }}">Exit</a>
+                                @else
+                                    <button type="submit" class="btn btn-success me-1">Save</button>
+                                    <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                                @endif
                             </div>
                         </div>
 
@@ -337,10 +345,10 @@
                 } else {
                     isfiler = 0;
                 }
-
+                
                 // == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
                 var table_body = $("table.order-list tbody"); // assign table body to variable used in different area                  
-                var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_` + row_id + `">
+                var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_` + row_id  + `">
 <td class="product_count" width='2%'>` + product_count + `</td>
 <td class="name" width='8%'>
     <input type="hidden" name="id[]" value="` + data.productArr.id + `"/>
@@ -355,13 +363,13 @@
 <td width='7%'>
 <input type="number" class="form-control all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
 </td>
-<td class="quanity" width='7%'>
+<td width='7%'>
 <input type="number" class="form-control qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
 </td>
 <td width='7%'>
 <input type="number" class="form-control bouns" value="0" name="bouns[]" step="any"/>
 </td>
-<td class="purchase_price" width='7%'>
+<td width='7%'>
 <input type="number" class="form-control purchase_price price" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
 <input type="hidden" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
 </td>
@@ -378,18 +386,18 @@
 <input type="checkbox" class="form-control form-check-input discount-check" name="discount_check[]">
 </td>
 <td width='7%'>
-<input type="number" class="form-control discount" value="0"  name="purchase_discount[]" step="any" disabled />
+<input type="number" class="form-control discount" value="0" name="purchase_discount[]" step="any" readonly />
 </td>
 <td width='7%'>
-<input type="number" class="form-control after_discount" value="0"  name="after_discount[]" step="any" disabled/>
+<input type="number" class="form-control after_discount" value="0" name="after_discount[]" step="any" readonly/>
 </td>
-
 <td width='7%'>
 <input type="number" class="form-control line_total" value="0" name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
 <input type="hidden" class="hidden_total" name="total" value="0">
 <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
+<input type="hidden" name="id[]" value="">
 </tr>`;
                 table_body.append(new_row); // append new row to table body
                 calc("table_append_rows_" + row_id);                
@@ -429,35 +437,32 @@
         var advTaxValue = parseFloat((lineTotal * advTax || 0) / 100).toFixed(2);
         $("#" + id).find('.adv_tax_value').val(advTaxValue);
         lineTotal = (parseFloat(lineTotal) + parseFloat(advTaxValue)).toFixed(2);
-
         
-        var purchase_discount;
-        var price_after_discount;
-        $("#" + id).find('.discount-check').click(function(){
-            if($(this).is(":checked")){
-                $("#" + id).find('.discount').removeAttr("disabled");
-                console.log("Checkbox is checked.");                
-            }
-            else if($(this).is(":not(:checked)")){
-                $("#" + id).find('.discount').attr("disabled","false");
-                    $.ajax({
-                type: 'GET',
-                url: '{{url("getProductDiscount")}}',
-                data: {
-                    'product': $("#" + id).find(".product_id").val(),
-                    'qty': qty
-                },
-                success: function(data) {
-                    // purchase_discount = data.general_discount.discount;
-                    $("#" + id).find('.discount').val(data.general_discount.discount);
-                }
-                });          
-                purchase_discount = $("#" + id).find(".discount").val();
-                price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
-                $("#" + id).find('.after_discount').val(price_after_discount);
+        // $("#" + id).find('.discount-check').click(function(){
+        //     if($(this).is(":checked")){
+        //         $("#" + id).find('.discount').removeAttr("disabled");
+        //         console.log("Checkbox is checked.");                
+        //     }
+        //     else if($(this).is(":not(:checked)")){
+        //         $("#" + id).find('.discount').attr("disabled","false");
+        //             $.ajax({
+        //         type: 'GET',
+        //         url: '{{url("getProductDiscount")}}',
+        //         data: {
+        //             'product': $("#" + id).find(".product_id").val(),
+        //             'qty': qty
+        //         },
+        //         success: function(data) {
+        //             // purchase_discount = data.general_discount.discount;
+        //             $("#" + id).find('.discount').val(data.general_discount.discount);
+        //         }
+        //         });          
+        //         purchase_discount = $("#" + id).find(".discount").val();
+        //         price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
+        //         $("#" + id).find('.after_discount').val(price_after_discount);
 
-            }
-        });
+        //     }
+        // });
         // if ($("#" + id).find('.discount-check').is(':checked') == false) {
         //     console.log('calling for diccount');
         //     $.ajax({
@@ -475,11 +480,22 @@
         // } else {
         //     $("#" + id).find('.discount').attr("disabled","false");
         // }
+        $.ajax({
+                type: 'GET',
+                url: '{{url("getProductDiscount")}}',
+                data: {
+                    'product': $("#" + id).find(".product_id").val(),
+                    'qty': qty
+                },
+                success: function(data) {
+                    // purchase_discount = data.general_discount.discount;
+                    $("#" + id).find('.discount').val(data.general_discount.discount);
+                }
+                });     
 
-
-        // var purchase_discount = $("#" + id).find(".discount").val();
-        // var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
-        // $("#" + id).find('.after_discount').val(price_after_discount);
+        var purchase_discount = $("#" + id).find(".discount").val();
+        var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
+        $("#" + id).find('.after_discount').val(price_after_discount);
         lineTotal = (parseFloat(lineTotal) - parseFloat(price_after_discount)).toFixed(2);
         $("#" + id).find('.line_total').val(lineTotal);
         grandTotal = (parseFloat(grandTotal) + parseFloat(lineTotal) - parseFloat(tempLineTotal || 0)).toFixed(2);

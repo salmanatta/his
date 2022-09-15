@@ -49,7 +49,7 @@
                                 <div class="col-sm-4">
                                     <address>
                                         <strong>Order Date:</strong><br>
-                                        {{ !is_null($sale) ? $sale->invoice_date : '' }}
+                                        {{ !is_null($sale) ? date('d-m-Y', strtotime($sale->invoice_date)) : '' }} 
                                     </address>
                                 </div>
                                 <div class="col-sm-6">
@@ -66,29 +66,40 @@
                                 <table class="table table-nowrap" border="1px">
                                     <thead>
                                         <tr style="background-color:#e4e6eb;">
-                                            {{-- <th style="width: 70px;">No.</th> --}}
+                                            <th>#</th>                                        
                                             <th>Product</th>
-                                            <th>Price</th>
+                                            <th>Batch No</th>
+                                            <th>Expiry Date</th>
                                             <th>Quantity</th>
                                             <th>Bonus</th>
+                                            <th>Price</th>
+                                            <th>Sales Tax</th>
+                                            <th>Advance Tax</th>
+                                            <th>Advance Tax Amount</th>
                                             <th>Discount %</th>
-                                            <th>Discount Amount</th>
-                                            <th>Sales Tax</th>                                            
+                                            <th>Discount Amount</th>                                            
                                             <th class="text-end">Net Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php $counter = 1 @endphp
                                         @foreach ($sale_details as $item)
                                             <tr>
+                                                <td>{{ $counter }}</td>
                                                 <td>{{ $item->item }}</td>
-                                                <td>{{ $item->price }}</td>
+                                                <td>{{ $item->batch->batch_no }}</td>
+                                                <td>{{ date('d-m-Y', strtotime($item->batch->date)) }}</td>
                                                 <td>{{ $item->qty }}</td>
-                                                <td>{{ $item->bonus }}</td>                                                
-                                                <td>{{ $item->discount }}</td>
-                                                <td>{{ $item->after_discount }}</td>
+                                                <td>{{ $item->bonus }}</td>
+                                                <td>{{ $item->price }}</td>
                                                 <td>{{ $item->sales_tax }}</td>
+                                                <td>{{ $item->adv_tax }}</td>
+                                                <td>{{ $item->adv_tax_value }}</td>                                                
+                                                <td>{{ $item->discount }}</td>
+                                                <td>{{ $item->after_discount }}</td>                                                
                                                 <td class="text-end">{{ $item->line_total }}</td>
                                             </tr>
+                                            @php $counter++ @endphp
                                         @endforeach
                                         @php
                                             $subTotal = 0;
@@ -103,7 +114,7 @@
                                             @endphp
                                         @endforeach
                                         <tr>
-                                            <td colspan="7" class="border-0 text-end">
+                                            <td colspan="12" class="border-0 text-end">
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="border-0 text-end">

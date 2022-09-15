@@ -13,7 +13,7 @@ class SaleInvoice extends Model
 {
     use HasFactory;
      protected $guarded = [];
-     protected $appends = ['sumLineTotal','sumDiscountAmount','sumSalesTax'];
+     protected $appends = ['sumLineTotal','sumDiscountAmount','sumSalesTax','sumAdvTax','sumAdvTaxValue'];
 
      public function setDateAttribute($date) {//get method same the set method
         $this->attributes['invoice_date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
@@ -46,6 +46,16 @@ class SaleInvoice extends Model
       {
         return $this->saleDetail()->sum('sales_tax');
       }
+
+      public function getSumAdvTaxAttribute()
+      {
+        return $this->saleDetail()->sum('adv_tax');
+      }
+      public function getSumAdvTaxValueAttribute()
+      {
+        return $this->saleDetail()->sum('adv_tax_value');
+      }
+
       public function scopeMaxId($query,$branch)
       {
         return $query->where('branch_id',$branch)->max('invoice_no');

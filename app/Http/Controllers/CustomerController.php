@@ -179,18 +179,14 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-          $data['license_types']=LicenseType::all();
-        $data['regions']=Region::all();
-        // $data['cities']=City::all();
-        $data['groups']=Group::all();
-        $data['customer']=Customer::find($id);
-
-        $data['customerLicenses']=CustomerLicense::where('customer_id',$id)->get();
-        $data['customerDocumentRegs']=CustomerDocumentReg::where('customer_id',$id)->get();
-        // dd($data);
-        $data['employees']=Employee::all();
-         $data['cities']=City::all();
-
+        $data['license_types'] = LicenseType::all();
+        $data['regions'] = Region::all();        
+        $data['groups'] = Group::all();
+        $data['customer'] = Customer::find($id);
+        $data['customerLicenses'] = CustomerLicense::where('customer_id',$id)->get();
+        $data['customerDocumentRegs'] = CustomerDocumentReg::where('customer_id',$id)->get();        
+        $data['employees']  = Employee::all();
+        $data['cities']    = City::all();
         return view('pages.customer.edit',$data);
     }
 

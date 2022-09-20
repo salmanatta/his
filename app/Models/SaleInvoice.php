@@ -55,9 +55,9 @@ class SaleInvoice extends Model
       {
         return $this->saleDetail()->sum('adv_tax_value');
       }
-
-      public function scopeMaxId($query,$branch)
+      public function scopeMaxId($query,$branch,$transType)
       {
-        return $query->where('branch_id',$branch)->max('invoice_no');
+        $this->invoice_no ?? 0;
+        return $query->where('branch_id',$branch)->where('trans_type',$transType)->max('invoice_no')+1;
       }
 }

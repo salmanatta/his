@@ -56,12 +56,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mb-3">
+                                                @if(!isset($customer))
                                                     <label class="form-label" for="description">Product</label>
                                                     <select class="select2 form-control _products_select" id="_products_select" name="product_id">
                                                     </select>
                                                     @error('product_id')
                                                     <span class="text-danger">{{$message}}</span>
                                                     @enderror
+                                                @endif
                                                 </div>
                                             </div>
                                             <div class="col-4"></div>
@@ -110,7 +112,7 @@
                                                 <th scope="row">Discount %</th>
                                                 <th scope="row">Discount Amount</th>
                                                 <th scope="row">Line Total</th>
-                                                <th scope="row">Action</th>
+                                                <!-- <th scope="row">Action</th> -->
                                             </tr>
                                         </thead>
                                         <?php $granttotal = 0; ?>
@@ -163,15 +165,15 @@
                                                 </td>
                                                 <td>
                                                     <input type="number" class="form-control line_total" value="{{ $saleD->line_total }}" name="line_total[]" step="any" readonly/>                                                    
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="delete_row btn btn-sm btn-danger">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
                                                     <input type="hidden" class="hidden_total" name="total" value="0">
                                                     <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="{{ $saleD->batch_id }}">
                                                     <input type="hidden" name="id[]" value="{{ $saleD->id }}">
                                                 </td>
+                                                <!-- <td>
+                                                    <button type="button" class="delete_row btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td> -->
                                             </tr>
                                             <?php $counter++;
                                             $row_id++;

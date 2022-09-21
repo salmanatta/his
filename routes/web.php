@@ -208,6 +208,7 @@ Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')-
 Route::get("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
 Route::get("/purchase/return",[PurchaseController::class,"pruchaseReturn"])->middleware("auth");
 Route::post("/purchase/return",[PurchaseController::class,"pruchaseReturnInsert"])->name("purchase-return")->middleware("auth");
+Route::get("view-purchase-invoice/{id}",[PurchaseController::class,"viewPurchaseInvoice"])->middleware("auth");
 
 // ===================== Product Purchase Side======
 

@@ -81,10 +81,11 @@ class PurchaseController extends Controller
             'product_id.required'=> 'Please select any Product, Thank You.',
             'suplier_id.required'=> 'Please select any Supplier, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
-       ]);           
+       ]);
+
         $order=PurchaseInvoice::create(
             [
-                'invoice_no'    =>$request->invoice_no,
+                'invoice_no'    =>PurchaseInvoice::maxId(auth()->user()->branch_id,$request->trans_type),
                 'suplier_id'    =>$request->suplier_id,
                 'invoice_date'  =>Carbon::createFromFormat('m/d/Y', $request->invoiceDate)->format('Y-m-d'),
                 'branch_id'     =>$request->branch_id,
@@ -299,6 +300,15 @@ class PurchaseController extends Controller
             ]);
         }
         return back()->with('success',"Invoice Status Updated Successfully!");
+    }
+    public function viewPurchaseInvoice($id)
+    {
+        $purchaseM = PurchaseInvoice::find($id);
+        $purchaseD = PurchaseInvoiceDetail::with('product','batch')->where('purchase_invoice_detail_id',$id)->get();
+        
+        return view("pages/supplier/invoice/purchase",compact('purchaseM','purchaseD'));
+        
+
 
     }
 }

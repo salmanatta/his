@@ -72,7 +72,7 @@
                             <td style="text-align:center;">{{ $data->inv_status }}</td>
                             @else
                             <td style="text-align:center;">
-                                <a href="{{ url('updatePurchaseStatus/'.$data->id) }}" class="fas fa-check" ></a>
+                                <a href="{{ url('view-purchase-invoice/'.$data->id) }}" class="fas fa-check" ></a>
                             </td>
                             @endif
                             <td>

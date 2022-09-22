@@ -72,7 +72,7 @@
                                                     <label class="form-label" for="Customer">Customer Name</label>
                                                     <input type="hidden" name="filer" value="{{ isset($customer) ? $customer->isfiler : ''  }}" id="filer">
                                                     @if(isset($customer))
-                                                    <input type="text" class="form-control" name="" value="{{ isset($customer) ? $customer->name : '' }}" disabled>
+                                                    <input type="text" class="form-control" name="" value="{{ isset($customer) ? $customer->name : '' }}" readonly>
                                                     @else
                                                     <select class="select2 form-control _customers_select" name="customer_id" selected="{{ isset($customer) ? 'selected' : '' }}">
                                                     </select>

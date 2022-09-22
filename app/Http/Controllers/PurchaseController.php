@@ -45,7 +45,8 @@ class PurchaseController extends Controller
     }
     public function pruchaseReturnInsert(Request $request)
     {
-        dd($request);
+        // dd($request->all());
+        
     }
     /**
      * Show the form for creating a new resource.
@@ -260,9 +261,58 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Purchase $purchase)
+    public function update(Request $request,PurchaseInvoice $PurchaseInvoice)
     {
-        //
+        //  dd($request->all());
+        
+        $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);
+        
+        $purchaseM->description = $request->description;
+
+        if($request->has('update-post')){
+            $purchaseM->inv_status = 'Post';
+            $purchaseM->status_changed_by = auth()->user()->id;
+            $purchaseM->status_changed_on = Carbon::now();
+        }
+        $purchaseM->save();
+        $rows = $request->product_id;        
+        foreach ($rows as $key => $row) {            
+            if(!empty($request->id[$key])){            
+                $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);   
+                $purchaseDetail->qty            = $request->quanity[$key];
+                $purchaseDetail->price          = $request->purchase_price[$key];
+                $purchaseDetail->discount       = $request->purchase_discount[$key];
+                $purchaseDetail->after_discount = $request->after_discount[$key];                
+                $purchaseDetail->line_total     = $request->line_total[$key];
+                $purchaseDetail->sales_tax      = $request->sale_tax_value[$key];                
+                $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];                
+                $purchaseDetail->save();            
+
+                // if($request->trans_type == 'SALE')
+                // {
+                //     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+                //                   ->where('product_id', $request->product_id[$key])
+                //                   ->where('branch_id',auth()->user()->branch_id)
+                //                   ->first();
+                //     $stock->reserve_qty -= $request->quanity[$key];
+                //     $stock->quantity += $request->quanity[$key];
+                //     $stock->save();
+                // }else{
+                //     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+                //                   ->where('product_id', $request->product_id[$key])
+                //                   ->where('branch_id',auth()->user()->branch_id)
+                //                   ->first();
+                //     $stock->reserve_qty += $request->quanity[$key];
+                //     $stock->quantity -= $request->quanity[$key];
+                //     $stock->save();
+                // }
+            }
+        }
+        if($request->has('update-post')){
+            return redirect('purchaseReport')->with('info', "Data Updated Successfully!");
+        }else{
+            return back()->with('info', "Data Updated Successfully!");
+        }
     }
 
     /**

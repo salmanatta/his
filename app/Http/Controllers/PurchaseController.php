@@ -263,19 +263,16 @@ class PurchaseController extends Controller
      */
     public function update(Request $request,PurchaseInvoice $PurchaseInvoice)
     {
-        //  dd($request->all());
-        
-        $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);
-        
+        // dd($request->all());        
+        $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);        
         $purchaseM->description = $request->description;
-
         if($request->has('update-post')){
             $purchaseM->inv_status = 'Post';
             $purchaseM->status_changed_by = auth()->user()->id;
             $purchaseM->status_changed_on = Carbon::now();
-        }
-        $purchaseM->save();
-        $rows = $request->product_id;        
+        }        
+        $rows = $request->product_id; 
+        $inv_total = 0;       
         foreach ($rows as $key => $row) {            
             if(!empty($request->id[$key])){            
                 $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);   
@@ -287,7 +284,7 @@ class PurchaseController extends Controller
                 $purchaseDetail->sales_tax      = $request->sale_tax_value[$key];                
                 $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];                
                 $purchaseDetail->save();            
-
+                $inv_total += $request->line_total[$key];
                 // if($request->trans_type == 'SALE')
                 // {
                 //     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
@@ -308,6 +305,8 @@ class PurchaseController extends Controller
                 // }
             }
         }
+        $purchaseM->total = $inv_total;
+        $purchaseM->save();        
         if($request->has('update-post')){
             return redirect('purchaseReport')->with('info', "Data Updated Successfully!");
         }else{

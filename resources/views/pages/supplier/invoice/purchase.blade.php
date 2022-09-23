@@ -152,7 +152,8 @@
                                 </td>
                                 <td class="line_total">
                                     <input type="number" class="form-control line_total" style="text-align:right" value="{{ $purchase->line_total }}" name="line_total[]" step="any" readonly />
-                                </td>                                
+                                </td>
+                                <td></td>                              
                             </tr>
                             <?php $counter++;
                             $row_id++;
@@ -313,10 +314,13 @@
         <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
         <td class="line_total">
-        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
-        </td><input type="hidden" class="hidden_total" name="total">
-        <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
+        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/> 
+        </td>
+        <td>
+        <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>                 
         <input type="hidden" class="sub_total" name="sub_total" value="0">
+        <input type="hidden" class="hidden_total" name="total">
+        </td>        
         </tr>`;
                 table_body.append(new_row);
                 $("._products_select").val('');
@@ -342,7 +346,7 @@
         if (isNaN(freight)) {
             freight = 0;
         }
-        $('.table_append_rows').each(function() {
+        $('.table_append_rows').each(function() {            
             $(this).find('.product_count').text(product_count);
             var quanity = $(this).find('.quanity').find('input').val();
             var purchase_price = $(this).find('.purchase_price').find('input').val();

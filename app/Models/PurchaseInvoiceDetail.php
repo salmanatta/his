@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\products\Product;
+use App\Models\Batch; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

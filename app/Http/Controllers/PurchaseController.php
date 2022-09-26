@@ -32,15 +32,16 @@ class PurchaseController extends Controller
     }
     public function render()
     {
-        $invoice_no=mt_rand(0,8889);
+        // $invoice_no=mt_rand(0,8889);
         // $batches=Batch::all();
-        return view("pages/supplier/invoice/purchase",compact("invoice_no"));
+        $transType = 'PURCHASE';        
+        return view("pages/supplier/invoice/purchase",compact("transType"));
     }
     public function pruchaseReturn()
     {
-        $invoice_no=mt_rand(0,8889);
-        
-        return view("pages/supplier/invoice/purchase-return",compact("invoice_no"));
+        // $invoice_no=mt_rand(0,8889);
+        $transType = 'PURCHASE RETURN';    
+        return view("pages/supplier/invoice/purchase",compact("transType"));
 
     }
     public function pruchaseReturnInsert(Request $request)
@@ -144,27 +145,27 @@ class PurchaseController extends Controller
                         'adv_tax'        =>$request->input('adv_tax_value')[$key],
                         'batch_id'       =>$batch_id,
              ]);
-            if($request->inv_status == 'Post')
-            {
-                $stock = Stock::where('product_id',$product_id)
-                           ->where('batch_id',$batch_id)
-                           ->where('branch_id',$branch_id)
-                           ->get();
-                if($stock->isEmpty())
-                {
-                    Stock::create([
-                        'product_id' =>$product_id,
-                        'quantity'   =>$quanity*-1,
-                        'price'      =>$purchase_price,
-                        'batch_id'   =>$batch_id,
-                        'branch_id'  =>$branch_id,
-                    ]);
-                }else{
-                    $stock = $stock->first();
-                    $stock->quantity -= $quanity;
-                    $stock->save();
-                }
-            }
+            // if($request->inv_status == 'Post')
+            // {
+            //     $stock = Stock::where('product_id',$product_id)
+            //                ->where('batch_id',$batch_id)
+            //                ->where('branch_id',$branch_id)
+            //                ->get();
+            //     if($stock->isEmpty())
+            //     {
+            //         Stock::create([
+            //             'product_id' =>$product_id,
+            //             'quantity'   =>$quanity*-1,
+            //             'price'      =>$purchase_price,
+            //             'batch_id'   =>$batch_id,
+            //             'branch_id'  =>$branch_id,
+            //         ]);
+            //     }else{
+            //         $stock = $stock->first();
+            //         $stock->quantity -= $quanity;
+            //         $stock->save();
+            //     }
+            // }
         }
     }
         return back()->with('success',"Data Added Successfully!");
@@ -182,9 +183,8 @@ class PurchaseController extends Controller
             $fromDate =date('Y-m-d', strtotime($fromDate));
             $todate = Carbon::now();
             $todate =date('Y-m-d', strtotime($todate));
-        }
-        $transType = 'PURCHASE';
-        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,$transType)
+        }        
+        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,auth()->user()->branch_id)
                                         ->with('supplier','branch','user')
                                         ->get();        
         //return $purchaseData;
@@ -285,33 +285,43 @@ class PurchaseController extends Controller
                 $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];                
                 $purchaseDetail->save();            
                 $inv_total += $request->line_total[$key];
-                // if($request->trans_type == 'SALE')
-                // {
-                //     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                //                   ->where('product_id', $request->product_id[$key])
-                //                   ->where('branch_id',auth()->user()->branch_id)
-                //                   ->first();
-                //     $stock->reserve_qty -= $request->quanity[$key];
-                //     $stock->quantity += $request->quanity[$key];
-                //     $stock->save();
-                // }else{
-                //     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                //                   ->where('product_id', $request->product_id[$key])
-                //                   ->where('branch_id',auth()->user()->branch_id)
-                //                   ->first();
-                //     $stock->reserve_qty += $request->quanity[$key];
-                //     $stock->quantity -= $request->quanity[$key];
-                //     $stock->save();
-                // }
+                if($request->has('update-post')){
+                    $stock = Stock::where('product_id',$request->product_id[$key])
+                                ->where('batch_id',$request->batch_id[$key])
+                                ->where('branch_id',$request->branch_id)
+                                ->first(); 
+                    
+                    if($stock == null){                        
+                        $newStock = new Stock();
+                        $newStock-> product_id  = $request->product_id[$key];                        
+                        if($request->trans_type == 'PURCHASE'){
+                            $newStock->quantity     = $request->quanity[$key];
+                        }else{                            
+                            $newStock->quantity     = $request->quanity[$key]*-1;
+                        }
+                        $newStock->price        = $request->purchase_price[$key];
+                        $newStock->batch_id     = $request->batch_id[$key];
+                        $newStock->branch_id    = $request->branch_id;
+                        $newStock->save();
+
+                    }else{
+                        if($request->trans_type == 'PURCHASE'){
+                            $stock->quantity += $request->quanity[$key];
+                        }else{
+                            $stock->quantity  -= $request->quanity[$key];
+                        }
+                        $stock->save();
+                    }                        
+                }    
             }
-        }
+        }            
         $purchaseM->total = $inv_total;
         $purchaseM->save();        
         if($request->has('update-post')){
-            return redirect('purchaseReport')->with('info', "Data Updated Successfully!");
+           return redirect('purchaseReport')->with('info', "Data Updated Successfully!");
         }else{
             return back()->with('info', "Data Updated Successfully!");
-        }
+        }       
     }
 
     /**

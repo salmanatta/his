@@ -198,8 +198,7 @@ class SaleInvoiceController extends Controller
                     'adv_tax'        => $request->adv_tax[$key],
                     'adv_tax_value'  => $request->adv_tax_value[$key],
                 ]);
-                if($request->trans_type == 'SALE')
-                {
+                if($request->trans_type == 'SALE'){
                     $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
                                   ->where('product_id', $request->product_id[$key])
                                   ->where('branch_id',auth()->user()->branch_id)
@@ -257,8 +256,8 @@ class SaleInvoiceController extends Controller
             $saleM->inv_status = 'Post';
             $saleM->status_changed_by = auth()->user()->id;
             $saleM->status_changed_on = Carbon::now();
-        }
-        $saleM->save();
+        }        
+        $inv_total = 0;
         $rows = $request->product_id;        
         foreach ($rows as $key => $row) {            
             if(!empty($request->id[$key])){            
@@ -274,27 +273,30 @@ class SaleInvoiceController extends Controller
                 $saleDetail->adv_tax        = $request->adv_tax[$key];
                 $saleDetail->adv_tax_value  = $request->adv_tax_value[$key];
                 $saleDetail->save();            
-
-                if($request->trans_type == 'SALE')
-                {
-                    $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                                  ->where('product_id', $request->product_id[$key])
-                                  ->where('branch_id',auth()->user()->branch_id)
-                                  ->first();
-                    $stock->reserve_qty -= $request->quanity[$key];
-                    $stock->quantity += $request->quanity[$key];
-                    $stock->save();
-                }else{
-                    $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                                  ->where('product_id', $request->product_id[$key])
-                                  ->where('branch_id',auth()->user()->branch_id)
-                                  ->first();
-                    $stock->reserve_qty += $request->quanity[$key];
-                    $stock->quantity -= $request->quanity[$key];
-                    $stock->save();
+                $inv_total += $request->line_total[$key];
+                if($request->has('update-post')){
+                    if($request->trans_type == 'SALE'){
+                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+                                    ->where('product_id', $request->product_id[$key])
+                                    ->where('branch_id',auth()->user()->branch_id)
+                                    ->first();
+                        $stock->reserve_qty -= $request->quanity[$key];
+                        $stock->quantity -= $request->quanity[$key];
+                        $stock->save();
+                    }else{
+                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+                                    ->where('product_id', $request->product_id[$key])
+                                    ->where('branch_id',auth()->user()->branch_id)
+                                    ->first();
+                        $stock->reserve_qty += $request->quanity[$key];
+                        $stock->quantity -= $request->quanity[$key];
+                        $stock->save();
+                    }
                 }
             }            
         }
+        $saleM->total = $inv_total;
+        $saleM->save();
         // dd($request->id);
         if($request->has('update-post')){
             return redirect('purchaseSale')->with('info', "Data Updated Successfully!");

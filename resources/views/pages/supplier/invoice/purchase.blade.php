@@ -15,7 +15,19 @@
                         <div class="col-md-12">
                             <div class="d-flex justify-content-between">
                                 <div class="">
-                                    <h3 class="card-title mb-1">Purchase Invoice </h3>
+                                    @if(isset($purchaseM))
+                                    @if($purchaseM->trans_type == 'PURCHASE' )
+                                    <h4 class="card-title mb-4 text-center">Purchase Invoice Detail</h4>
+                                    @else
+                                    <h4 class="card-title mb-4 text-center">Purchase Invoice Return Detail</h4>
+                                    @endif
+                                    @else
+                                    @if($transType == 'PURCHASE')
+                                    <h4 class="card-title mb-4 text-center">Purchase Invoice Detail</h4>
+                                    @else
+                                    <h4 class="card-title mb-4 text-center">Purchase Invoice Return Detail</h4>
+                                    @endif
+                                    @endif                                    
                                 </div>
                             </div>
                             <div class="row">
@@ -27,7 +39,7 @@
                                 <div class="col-12 d-flex justify-content-center">
                                     <p class="font-weight-bold">
                                         <b><label class="form-label" for="InvoiceNo">Invoice No # {{isset($purchaseM) ? $purchaseM->invoice_no : ''}}</label></b>
-                                        <input type="hidden" value="PURCHASE" name="trans_type">
+                                        <input type="hidden" value="{{ isset($purchaseM) ? $purchaseM->trans_type : $transType }}" name="trans_type">
                                         <input type="hidden" value="Un-Post" name="inv_status">
                                     </p>
                                 </div>
@@ -38,7 +50,7 @@
                                         <div class="col-4">
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
-                                                <input type="text" class="form-control" value="{{ isset($purchaseM) ? $purchaseM->invoice_date : date('Y-m-d') }}" name="invoiceDate" id="fiveDays" />
+                                                <input type="text" class="form-control" value="{{ isset($purchaseM) ? $purchaseM->invoice_date : date('m/d/Y') }}" name="invoiceDate" id="fiveDays" />
                                             </div>
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="supplier">Supplier Name</label>
@@ -73,6 +85,7 @@
                                                 <label class="form-label" for="branch">Branch Name</label>
                                                 @if(isset($purchaseM))
                                                 <input type="text" class="form-control" name="" value="{{ isset($purchaseM) ? $purchaseM->branch->name : '' }}" readonly>
+                                                <input type="hidden" value="{{ isset($purchaseM) ? $purchaseM->branch->id : ''  }}" name="branch_id">
                                                 @else
                                                 <select class="select2 form-control _branch_select" name="branch_id" id="branch">
                                                 </select>
@@ -125,9 +138,10 @@
                                 </td>
                                 <td class="batch_no">
                                     <input type="text" class="form-control batch_no" style="text-align:center" value="{{ $purchase->batch->batch_no }}" name="batch[]" step="any" readonly />
+                                    <input type="hidden" value="{{ $purchase->batch->id }}" name="batch_id[]">
                                 </td>
                                 <td class="expiry_date">
-                                    <input type="date" class="form-control expiry_date" value="{{ $purchase->batch->date }}" name="expiry_date[]" step="any" required />
+                                    <input type="date" class="form-control expiry_date" value="{{ $purchase->batch->date }}" name="expiry_date[]" step="any" readonly />
                                 </td>
                                 <td class="quanity">
                                     <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="{{ $purchase->qty }}" step="any" required />
@@ -139,7 +153,7 @@
                                     <input type="number" class="form-control total_price" style="text-align:right" value="{{  $purchase->qty * $purchase->price }}" name="total_price[]" step="any" readonly />
                                 </td>
                                 <td class="purchase_discount">
-                                    <input type="number" class="form-control purchase_discount" onKeyup="do_calculation()" value="{{ $purchase->purchase_discount }}" name="purchase_discount[]" step="any" />
+                                    <input type="number" class="form-control purchase_discount" onKeyup="do_calculation()" value="{{ $purchase->discount }}" name="purchase_discount[]" step="any" />
                                 </td>
                                 <td class="after_discount">
                                     <input type="number" class="form-control after_discount" style="text-align:right" value="{{ $purchase->after_discount  }}" name="after_discount[]" step="any" readonly />

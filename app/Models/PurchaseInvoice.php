@@ -33,10 +33,10 @@ class PurchaseInvoice extends Model
     {
         return $this->belongsTo(Supplier::class,'suplier_id','id');
     }
-    public function scopeReportData($query,$fromDate,$todate,$transType)
+    public function scopeReportData($query,$fromDate,$todate,$branch)
     {
-        return $query->whereBetween('invoice_date',[ $fromDate,$todate])                    
-                     ->where('trans_type',$transType);
+        return $query->whereBetween('invoice_date',[ $fromDate,$todate])
+                    ->where('branch_id',$branch);
     }
     public function purchaseDetail()
     {

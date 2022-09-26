@@ -42,7 +42,7 @@
                             <th scope="col">Date</th>
                             <th scope="col">User Name</th>
                             <th scope="col">Supplier</th>
-                            <th scope="col">Branch</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Discount</th>
                             <th scope="col">S.Tax</th>
@@ -60,7 +60,7 @@
                             <td>{{ $data->invoice_date }}</td>
                             <td>{{ $data->user->name }}</td>
                             <td>{{ $data->supplier->name }}</td>
-                            <td>{{ $data->branch->name }}</td>
+                            <td>{{ $data->trans_type }}</td>
                             <td>{{ $data->lineTotal + $data->sumDiscountAmount - $data->sumSaleTax - $data->sumAdvancTax }}
                             </td>
                             <td>{{ $data->sumDiscountAmount }}</td>

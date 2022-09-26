@@ -7,11 +7,11 @@
         <div class="card">
             <div class="card-body">
                 @if(isset($sale))
-                <form method="post" action="{{route('sale_invoices.update',$sale->id)}}">
+                    <form method="post" action="{{route('sale_invoices.update',$sale->id)}}">
                     @method('PATCH')
-                    @else
+                @else
                     <form method="post" action="{{route('sale_invoices.store')}}">
-                        @endif
+                @endif
                         @csrf
                         <div class="row">
                             <div class="col-md-12">

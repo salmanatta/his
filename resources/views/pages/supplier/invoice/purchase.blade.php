@@ -27,7 +27,7 @@
                                     @else
                                     <h4 class="card-title mb-4 text-center">Purchase Invoice Return Detail</h4>
                                     @endif
-                                    @endif                                    
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
@@ -131,10 +131,10 @@
                             @foreach($purchaseD as $purchase)
                             <tr class="table_append_rows" id="table_append_rows_{{$row_id}}">
                                 <td>{{ $counter }}</td>
-                                <td class="name"> 
+                                <td class="name">
                                     {{ $purchase->product->name }}
                                     <input type="hidden" name="id[]" value="{{ $purchase->id }}">
-                                    <input type="hidden" name="product_id[]" value="{{ $purchase->product_id }}" />                                    
+                                    <input type="hidden" name="product_id[]" value="{{ $purchase->product_id }}" />
                                 </td>
                                 <td class="batch_no">
                                     <input type="text" class="form-control batch_no" style="text-align:center" value="{{ $purchase->batch->batch_no }}" name="batch[]" step="any" readonly />
@@ -167,7 +167,7 @@
                                 <td class="line_total">
                                     <input type="number" class="form-control line_total" style="text-align:right" value="{{ $purchase->line_total }}" name="line_total[]" step="any" readonly />
                                 </td>
-                                <td></td>                              
+                                <td></td>
                             </tr>
                             <?php $counter++;
                             $row_id++;
@@ -196,8 +196,8 @@
                     <div class="row">
                         <div class="d-flex justify-content-end">
                         @if(isset(($purchase)))
-                            <button type="submit" class="btn btn-primary me-1" name="update">Update</button>    
-                            <button type="submit" class="btn btn-warning me-1" name="update-post">Update & Post</button>    
+                            <button type="submit" class="btn btn-primary me-1" name="update">Update</button>
+                            <button type="submit" class="btn btn-warning me-1" name="update-post">Update & Post</button>
                             <a class="btn btn-danger mx-0" href="{{ url('purchaseReport') }}">Exit</a>
                         @else
                             <button type="submit" class="btn btn-success me-1">Save</button>
@@ -295,7 +295,7 @@
             },
             success: function(data) {
                 // console.log(data);
-                var table_body = $("table.order-list tbody");
+                var table_body = $("table.order-list tbody");in
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `">
         <td class="product_count">` + product_count + ` </td>
         <td class="name"> <input type="hidden" name="product_id[]" value="` + data.id + `"/>
@@ -328,13 +328,13 @@
         <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
         <td class="line_total">
-        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/> 
+        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
         </td>
         <td>
-        <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>                 
+        <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>
         <input type="hidden" class="sub_total" name="sub_total" value="0">
         <input type="hidden" class="hidden_total" name="total">
-        </td>        
+        </td>
         </tr>`;
                 table_body.append(new_row);
                 $("._products_select").val('');
@@ -360,7 +360,7 @@
         if (isNaN(freight)) {
             freight = 0;
         }
-        $('.table_append_rows').each(function() {            
+        $('.table_append_rows').each(function() {
             $(this).find('.product_count').text(product_count);
             var quanity = $(this).find('.quanity').find('input').val();
             var purchase_price = $(this).find('.purchase_price').find('input').val();

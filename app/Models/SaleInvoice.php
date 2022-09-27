@@ -26,6 +26,10 @@ class SaleInvoice extends Model
       {
           return $this->belongsTo(User::class,'user_id','id');
       }
+      public function postUser()
+      {
+          return $this->belongsTo(User::class,'status_changed_by','id');
+      }
       public function customer()
       {
           return $this->belongsTo(Customer::class,'customer_id','id');
@@ -46,7 +50,6 @@ class SaleInvoice extends Model
       {
         return $this->saleDetail()->sum('sales_tax');
       }
-
       public function getSumAdvTaxAttribute()
       {
         return $this->saleDetail()->sum('adv_tax');

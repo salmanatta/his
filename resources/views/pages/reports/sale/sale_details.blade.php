@@ -49,7 +49,7 @@
                                 <div class="col-sm-4">
                                     <address>
                                         <strong>Order Date:</strong><br>
-                                        {{ !is_null($sale) ? date('d-m-Y', strtotime($sale->invoice_date)) : '' }} 
+                                        {{ !is_null($sale) ? date('d-m-Y', strtotime($sale->invoice_date)) : '' }}
                                     </address>
                                 </div>
                                 <div class="col-sm-6">
@@ -66,7 +66,7 @@
                                 <table class="table table-nowrap" border="1px">
                                     <thead>
                                         <tr style="background-color:#e4e6eb;">
-                                            <th>#</th>                                        
+                                            <th>#</th>
                                             <th>Product</th>
                                             <th>Batch No</th>
                                             <th>Expiry Date</th>
@@ -77,7 +77,7 @@
                                             <th>Advance Tax</th>
                                             <th>Advance Tax Amount</th>
                                             <th>Discount %</th>
-                                            <th>Discount Amount</th>                                            
+                                            <th>Discount Amount</th>
                                             <th class="text-end">Net Total</th>
                                         </tr>
                                     </thead>
@@ -94,9 +94,9 @@
                                                 <td>{{ $item->price }}</td>
                                                 <td>{{ $item->sales_tax }}</td>
                                                 <td>{{ $item->adv_tax }}</td>
-                                                <td>{{ $item->adv_tax_value }}</td>                                                
+                                                <td>{{ $item->adv_tax_value }}</td>
                                                 <td>{{ $item->discount }}</td>
-                                                <td>{{ $item->after_discount }}</td>                                                
+                                                <td>{{ $item->after_discount }}</td>
                                                 <td class="text-end">{{ $item->line_total }}</td>
                                             </tr>
                                             @php $counter++ @endphp
@@ -124,6 +124,24 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div class="d-flex justify-content-around mt-4">
+                                <div class=" mx-6 d-flex justify-content-center text-center">
+                                    {{ $sale->user->name  }} <br>
+                                    ------------------------- <br>
+                                    Created By
+                                </div>
+
+                                    <div class="mx-6  d-flex justify-content-center text-center">
+                                        {{ isset($sale->postUser->name) ? $sale->postUser->name : ''  }} <br>
+                                        ------------------------- <br>
+                                        Post By
+                                    </div>
+
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>

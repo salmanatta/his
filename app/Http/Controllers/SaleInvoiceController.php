@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\employee\Employee;
 use Illuminate\Http\Request;
 use App\Models\SaleInvoice;
 use App\Models\SaleInvoiceDetail;
@@ -9,7 +10,7 @@ use App\Models\products\Product;
 use App\Models\Stock;
 use App\Models\Batch;
 use App\Models\ProductBonus;
-use App\Models\ProductDiscount; 
+use App\Models\ProductDiscount;
 use App\Models\sales\Customer;
 use Carbon\Carbon;
 class SaleInvoiceController extends Controller
@@ -18,24 +19,25 @@ class SaleInvoiceController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */  
+     */
     public function index()
     {
         //
     }
     public function render()
     {
-        // To get max id branch wise 
+        // To get max id branch wise
         // $maxID = SaleInvoice::where('branch_id',auth()->user()->branch_id)->max('invoice_no');
-        // dd($maxID);        
+        // dd($maxID);
         $invoice_no = mt_rand(0, 8889);
-        $transType = 'SALE';        
-        return view("pages/sale/invoice", compact('invoice_no','transType'));
+        $transType = 'SALE';
+        $salesman = Employee::where('designation_id','1')->get();
+        return view("pages/sale/invoice", compact('invoice_no','transType','salesman'));
     }
     public function invoiceReturn()
     {
         $invoice_no = mt_rand(0, 8889);
-        $transType = 'SALE RETURN';        
+        $transType = 'SALE RETURN';
         return view("pages/sale/invoice", compact('invoice_no','transType'));
     }
     public function getStock(Request $request, $id)
@@ -63,8 +65,8 @@ class SaleInvoiceController extends Controller
     }
 
     public function purchaseSale(Request $request)
-    {        
-        if(count($request->all()) > 0) 
+    {
+        if(count($request->all()) > 0)
         {
             $from=$request->from_date;
             $to=$request->to_date;
@@ -75,11 +77,11 @@ class SaleInvoiceController extends Controller
             $fromDate = date('Y-m-d', strtotime($fromDate));
             $todate   = Carbon::now();
             $todate   = date('Y-m-d', strtotime($todate));
-        }                
+        }
         $saleData = SaleInvoice::whereBetween('invoice_date', [$fromDate, $todate])
                             ->with('customer', 'branch', 'user')
                             ->orderBy('invoice_no','desc')
-                            ->get(); 
+                            ->get();
         // dd($saleData);
         return view('pages.reports.sale.sale_report',compact('saleData'));
     }
@@ -90,20 +92,20 @@ class SaleInvoiceController extends Controller
                 ->join('stocks', 'products.id', '=', 'stocks.product_id')
                 ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
                 ->where('stocks.branch_id','=',auth()->user()->branch_id)
-                ->select('products.*')          
+                ->select('products.*')
                 ->groupBy('name','stocks.product_id')
                 ->get();
                 // return $product;
             // $product = Stock::whereHas('product' , function($q) use ($request) {
             //             return $q->where('name', 'like', '%' . $request->q . '%');
             //         })->where('quantity', '>', '0')->get();
-            
+
 
             $product = $product->map(function ($item, $key) {
-                return ['id' => $item['id'], 
+                return ['id' => $item['id'],
                         'text' => $item['name'] . ' - ' . $item['product_code']
-                    ];                   
-                        
+                    ];
+
             });
             return response()->json(['items' => $product]);
         }
@@ -125,17 +127,17 @@ class SaleInvoiceController extends Controller
     {
 
         $sale = SaleInvoice::where('id', $id)->with('customer', 'branch', 'user')->first();
-        $sale_details = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id', $id)->get();        
+        $sale_details = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id', $id)->get();
         return view('pages.reports.sale.sale_details', compact('sale', 'sale_details'));
     }
     public function viewSaleInvoice($id)
     {
         $sale = SaleInvoice::find($id);
         $customer = Customer::find($sale->customer_id);
-        $saleDetail = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id',$sale->id)->get();        
+        $saleDetail = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id',$sale->id)->get();
         // dd($saleDetail);
         return view("pages/sale/invoice", compact('sale','customer','saleDetail'));
-        
+
     }
     /**
      * Show the form for creating a new resource.
@@ -162,17 +164,17 @@ class SaleInvoiceController extends Controller
                 // 'description' => 'string|nullable',
                 // 'product_id'=>'required|exists:products,id',
                 'customer_id'=>'required|exists:customers,id',
-                // 'branch_id'=>'required|exists:branches,id', 
+                // 'branch_id'=>'required|exists:branches,id',
             ],
             [
                 'product_id.required' => 'Please select any Product, Thank You.',
                 'customer_id.required' => 'Please select any Customer, Thank You.',
                 // 'branch_id.required' => 'Please select any Branch, Thank You.',
             ]
-        );        
+        );
         $order_data = $request->only([ 'customer_id', 'invoice_date','description', 'total','trans_type']);
         $maxId = SaleInvoice::maxId(auth()->user()->branch_id,$request->trans_type);
-        // $maxId = $maxId + 1; 
+        // $maxId = $maxId + 1;
         $order_data['invoice_no'] =  $maxId;
         $order_data['user_id']    =  auth()->user()->id;
         $order_data['branch_id']  =  auth()->user()->branch_id;
@@ -182,7 +184,7 @@ class SaleInvoiceController extends Controller
             $sale_invoice_detail_id = $order->id;
             $rows = $request->input('product_id');
             $branch_id = $request->input('branch_id');
-            foreach ($rows as $key => $row) {                
+            foreach ($rows as $key => $row) {
                 $sale = SaleInvoiceDetail::create([
                     'product_id'     =>  $request->product_id[$key],
                     'item'           => $request->product_name[$key],
@@ -212,7 +214,7 @@ class SaleInvoiceController extends Controller
                                   ->first();
                     $stock->reserve_qty -= $request->quanity[$key];
                     $stock->save();
-                }                
+                }
             }
         }
         return back()->with('success', "Data Added Successfully!");
@@ -251,17 +253,17 @@ class SaleInvoiceController extends Controller
     {
         // dd($request->all());
         $saleM = SaleInvoice::find($saleInvoice->id);
-        $saleM->description = $request->description;        
+        $saleM->description = $request->description;
         if($request->has('update-post')){
             $saleM->inv_status = 'Post';
             $saleM->status_changed_by = auth()->user()->id;
             $saleM->status_changed_on = Carbon::now();
-        }        
+        }
         $inv_total = 0;
-        $rows = $request->product_id;        
-        foreach ($rows as $key => $row) {            
-            if(!empty($request->id[$key])){            
-                $saleDetail = SaleInvoiceDetail::find($request->id[$key]);   
+        $rows = $request->product_id;
+        foreach ($rows as $key => $row) {
+            if(!empty($request->id[$key])){
+                $saleDetail = SaleInvoiceDetail::find($request->id[$key]);
                 $saleDetail->qty            = $request->quanity[$key];
                 $saleDetail->price          = $request->purchase_price[$key];
                 $saleDetail->discount       = $request->purchase_discount[$key];
@@ -272,7 +274,7 @@ class SaleInvoiceController extends Controller
                 $saleDetail->batch_id       = $request->table_batch_id[$key];
                 $saleDetail->adv_tax        = $request->adv_tax[$key];
                 $saleDetail->adv_tax_value  = $request->adv_tax_value[$key];
-                $saleDetail->save();            
+                $saleDetail->save();
                 $inv_total += $request->line_total[$key];
                 if($request->has('update-post')){
                     if($request->trans_type == 'SALE'){
@@ -293,7 +295,7 @@ class SaleInvoiceController extends Controller
                         $stock->save();
                     }
                 }
-            }            
+            }
         }
         $saleM->total = $inv_total;
         $saleM->save();
@@ -303,7 +305,7 @@ class SaleInvoiceController extends Controller
         }else{
             return back()->with('info', "Data Updated Successfully!");
         }
-        
+
     }
 
     /**
@@ -320,30 +322,31 @@ class SaleInvoiceController extends Controller
         return 'salman';
     }
     public function getProductBonus(Request $request)
-    {        
+    {
         $bonus = ProductBonus::join('general_bonuses','general_bonuses.id','=','product_bonuses.bouns_id')->where('product_id',$request->product)
                                 ->where('general_bonuses.branch_id',auth()->user()->branch_id)
                                 ->groupBy('product_id')
                                 ->having('quantity','<=',$request->qty)
                                 ->orderBy('end_date','desc')
-                                ->first();                                
+                                ->first();
           return response()->json($bonus);
     }
     public function getProductDiscount(Request $request)
     {
         $discount = ProductDiscount::with(['generalDiscount' => function($q) {
-            $q->whereDate('end_date','>',Carbon::now())->orderBy('end_date','desc');
+            $q->whereDate('end_date','>=',Carbon::now())->orderBy('end_date','desc');
         }])
                     ->where('product_id',$request->product)
                     ->where('branch_id',auth()->user()->branch_id)
                     ->first();
+//        return $discount;
         return response()->json($discount);
         // if(!empty($discount)){
-        //     return $discount->generalDiscount->discount;            
+        //     return $discount->generalDiscount->discount;
         // }else{
         //     return 0;
         // }
-        
+
     }
 }
 

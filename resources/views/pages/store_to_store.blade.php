@@ -193,7 +193,7 @@
       // },
       success: function(data) 
       {
-        //  console.log(data);
+          // console.log(data);
         var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
         var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
         <td class="product_count">` + product_count + `</td>
@@ -208,7 +208,7 @@
             </button>
         </td>
         <td class="stockQty">
-        <input type="number" class="form-control stockQty" id="stockQty" min="1" value="` + data.productArr.quantity + `" step="any" readonly/>
+        <input type="number" class="form-control stockQty" id="stockQty" min="1" value="` + data.productArr.currentQty + `" step="any" readonly/>
         </td>
         <td class="transferQty">
         <input type="number" class="form-control transferQty" id="transferQty" min="1" onkeyup="do_calculation()" name="transferQty[]" value="1" step="any" required/>
@@ -252,12 +252,13 @@
             },
             datatype: 'json',
             success: function(data) {
+              // console.log(data);
                 var tr = $(this).parent().parent();
                 var op = "";
                 $('#product_modal').val(product_id_modal); //this is used to get against this product batch
                 $.each(data, function(k, val) {
                     if (val.batch.id != null && val.batch.id != "") {
-                        op += "<option value='" + val.batch.id + "' data-price=" + val.price + " data-quantity=" + val.quantity + " data-batch_name='" + val.batch.batch_no + "'>" + val.batch.batch_no + " " + " | Quantity -> " + val.quantity + " " + " | Expiry Date -> " + val.batch.date + "</option>";
+                        op += "<option value='" + val.batch.id + "' data-price=" + val.price + " data-quantity=" + val.currentQty + " data-batch_name='" + val.batch.batch_no + "'>" + val.batch.batch_no + " " + " | Quantity -> " + val.currentQty + " " + " | Expiry Date -> " + val.batch.date + "</option>";
                     }
                 });
                 $('input[name="edit_row_id"]').val(row_id);

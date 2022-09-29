@@ -253,12 +253,12 @@ class StoreController extends Controller
         $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
         foreach($transDetail as $row)
         {
-            $stock = Stock::where('batch_id', $request->table_batch_id[$key])
-                ->where('product_id', $request->product_id[$key])
+            $stock = Stock::where('batch_id', $row->batch_id)
+                ->where('product_id', $row->product_id)
                 ->where('branch_id',auth()->user()->branch_id)
                 ->first();
-            $stock->reserve_qty -= $request->transferQty[$key];
-            $stock->quantity += $request->transferQty[$key];
+            $stock->reserve_qty -= $row->qty;
+            $stock->quantity -= $row->qty;
             $stock->save();
 //            $batch = Batch::find($row->batch_id)->first();
 //            $checkBatch = Batch::where('batch_no',$batch->batch_no)
@@ -314,7 +314,7 @@ class StoreController extends Controller
                                 ->where('product_id', $row->product_id)
                                 ->where('branch_id',$transMaster->from_branch_id)
                                 ->first();
-                $stock->quantity += $row->qty;
+                $stock->reserve_qty -= $row->transferQty;
                 $stock->save();
         }
         return back()->with('info', 'Data Updated Successfully!');
@@ -334,6 +334,41 @@ class StoreController extends Controller
         $transMaster->trans_changed_by = auth()->user()->id;
         $transMaster->received_on = Carbon::now();
         $transMaster->save();
+        $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
+        foreach($transDetail as $row)
+        {
+        $batch = Batch::find($row->batch_id)->first();
+           $checkBatch = Batch::where('batch_no',$batch->batch_no)
+                               ->where('date',$batch->date)
+                               ->where('branch_id',$transMaster->to_branch_id)
+                               ->get();
+             if($checkBatch->isEmpty())
+             {
+               $tansID = Batch::create([
+                   'batch_no'  => $batch->batch_no,
+                   'date'      => $batch->date,
+                   'branch_id' => $transMaster->to_branch_id,
+               ]);
+               $batch_id = $tansID->id;
+               Stock::create([
+                   'product_id' =>$row->product_id,
+                   'quantity'   =>$row->qty,
+                   'price'      =>$row->price,
+                   'batch_id'   =>$batch_id,
+                   'branch_id'  =>auth()->user()->branch_id,
+               ]);
+             }else{
+                $checkBatch = $checkBatch->first();
+                $batch_id = $checkBatch->id;
+                $stock = Stock::where('batch_id',$batch_id)
+                               ->where('product_id', $row->product_id)
+                               ->where('branch_id',auth()->user()->branch_id)
+                               ->first();
+           $stock->quantity += $row->qty;
+           $stock->save();
+             }
+           
+        }
         return back()->with('info', 'Data Updated Successfully!');
     }
 }

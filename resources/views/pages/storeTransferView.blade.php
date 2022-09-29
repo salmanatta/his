@@ -103,6 +103,21 @@
                                 </table>                                
                             </div>                                                         
                         </div>
+
+                        <div class="d-flex justify-content-around mt-4">
+                            <div class=" mx-6 d-flex justify-content-center text-center">
+                                {{ isset($transfer->approvedUser->name) ? $transfer->approvedUser->name : ''  }} <br>
+                                    ------------------------- <br>
+                                    Approved By                                
+                            </div>
+
+                                <div class="mx-6  d-flex justify-content-center text-center">
+                                    {{ isset($transfer->receivedUser->name) ? $transfer->receivedUser->name : ''  }} <br>
+                                    ------------------------- <br>
+                                    Received By
+                                </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

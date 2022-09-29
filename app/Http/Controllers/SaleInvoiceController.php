@@ -51,8 +51,14 @@ class SaleInvoiceController extends Controller
     }
     public function getStock(Request $request, $id)
     {
-        $productArr = Stock::where('product_id', $id)->with('product', 'batch')->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')->first();
-        $batchArr   = Stock::where('product_id', $id)->with('batch')->get()->toArray();
+        $productArr = Stock::where('product_id', $id)
+                    ->with('product', 'batch')
+                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
+                    ->first();
+        $batchArr   = Stock::where('product_id', $id)
+                    ->with('batch')
+                    ->get()
+                    ->toArray();
         return response()->json(['productArr' => $productArr, 'batchArr' => $batchArr]);
 
         // return response()->json([$data,$data1]);
@@ -61,6 +67,7 @@ class SaleInvoiceController extends Controller
     {
         $data = Stock::with('batch')
                         ->where('product_id', $request->product_id)
+                        ->where('branch_id',auth()->user()->branch_id)
                         ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
                         ->get();
         return ($data);

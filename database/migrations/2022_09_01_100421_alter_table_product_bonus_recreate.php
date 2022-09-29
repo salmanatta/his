@@ -1,4 +1,4 @@
-<?php
+`<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,9 +12,10 @@ class AlterTableProductBonusRecreate extends Migration
      * @return void
      */
     public function up()
-    {                        
+    {   
+        Schema::dropIfExists('product_bonuses');                     
         Schema::create('product_bonuses', function (Blueprint $table) {
-            $table->id;
+            $table->bigInteger('id');
             $table->unsignedBigInteger('bouns_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();   
             $table->unsignedBigInteger('branch_id')->nullable();

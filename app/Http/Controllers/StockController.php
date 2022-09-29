@@ -20,7 +20,9 @@ class StockController extends Controller
         //                 ->sum('quantity')
         //                 ->groupBy('product_id')->get();
         $stocks = DB::table('stocks')->join('products','stocks.product_id','=','products.id')
-                ->selectRaw('sum(quantity) as qty,sum(price) as price,count(batch_id) as batch, products.name,stocks.batch_id,stocks.product_id')->where('stocks.quantity','>','0')
+                ->selectRaw('sum(quantity) - sum(reserve_qty) as qty,sum(price) as price,count(batch_id) as batch, products.name,stocks.batch_id,stocks.product_id')
+                ->where('stocks.quantity','>','0')
+                ->where('stocks.branch_id',auth()->user()->branch_id)
                 ->groupBy('stocks.product_id')
                 ->get(); 
         return view('pages.reports.stock.stock_detail',compact('stocks'));

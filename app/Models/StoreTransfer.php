@@ -18,6 +18,14 @@ class StoreTransfer extends Model
     {
         return $this->belongsTo(User::class,'created_by','id');
     }
+    public function approvedUser()
+    {
+        return $this->belongsTo(User::class,'approved_by','id');
+    }
+    public function receivedUser()
+    {
+        return $this->belongsTo(User::class,'trans_changed_by','id');
+    }
     // public function store()
     // {
     //     return $this->belongsTo(Store::class,'store_transfer_id','id');

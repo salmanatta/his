@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\StoreTransfer;
 use App\Models\StoreTransferDetail;
@@ -20,7 +21,7 @@ class StoreController extends Controller
     public function __construct()
     {
         return $this->middleware('auth');
-    }    
+    }
     public function index()
     {
         $data['stores']=Store::all();
@@ -36,7 +37,7 @@ class StoreController extends Controller
         }
     }
      public function getProducts(Request $request)
-        {       
+        {
           //    $first_data = Batch::select('id','date','batch_no')->first();//this is save before every invoice and droft issue
              // App\Batch::select('date')->first();
           //      $batch_id=$first_data->id;
@@ -65,17 +66,17 @@ class StoreController extends Controller
         $request->validate(
             [
                 'to_branch_id'  => 'required',
-                'product_id'    =>'required|exists:products,id',                
+                'product_id'    =>'required|exists:products,id',
             ],
             [
                 'to_branch_id.required' => 'Please select Branch to Transfer.',
-                'product_id.required'   => 'Atleast One Product Must be Selected.',                
+                'product_id.required'   => 'Atleast One Product Must be Selected.',
             ]
-        ); 
-        //   dd($request->all());    
+        );
+        //   dd($request->all());
         $transID = StoreTransfer::create(
             [
-                'trans_id'          => 0,
+                'trans_id'          => StoreTransfer::MaxId(auth()->user()->branch_id),
                 'trans_date'        => $request->trans_date,
                 'trans_status'      => 'Pending',
                 'to_branch_id'      => $request->to_branch_id,
@@ -100,9 +101,9 @@ class StoreController extends Controller
                 );
                 $stock = Stock::where('batch_id', $request->table_batch_id[$key])
                                 ->where('product_id', $request->product_id[$key])
-                                ->where('branch_id',auth()->user()->branch_id)                                
+                                ->where('branch_id',auth()->user()->branch_id)
                                 ->first();
-                $stock->quantity -= $request->transferQty[$key];
+                $stock->reserve_qty += $request->transferQty[$key];
                 $stock->save();
         }
         return back()->with('success', 'Data Added Successfully!');
@@ -114,7 +115,7 @@ class StoreController extends Controller
         $from_branch_id=$request->input('from_branch_id');
         $expire_date=$request->input('expire_date');
         $description=$request->input('description');
-        foreach($rows as $key=>$row) 
+        foreach($rows as $key=>$row)
         {
             $product_id = $request->input('product_id')[$key];
             $price      = $request->input('price')[$key];
@@ -143,8 +144,7 @@ class StoreController extends Controller
          return redirect()->route('storetoStoreList')->with('success', 'Data Updated Successfully!');
     }
     public function storetoStoreList(){
-        $transfers  = StoreTransfer::where('to_branch_id',auth()->user()->branch_id)->get();
-        // dd($transfers);
+        $transfers  = StoreTransfer::where('from_branch_id',auth()->user()->branch_id)->get();
          return view('pages.store_to_store_list',compact('transfers'));
     }
     public function storetoStoreReport(){
@@ -163,12 +163,12 @@ class StoreController extends Controller
          $data['branchs']=Branch::all();
          // dd('off');
          return view('pages.pre_configuration.store.create',$data);
-    } 
+    }
     public function storeToStore()
-    {         
-         $data['branches']=Branch::whereNotIn('id',[ auth()->user()->branch_id])->get();         
+    {
+         $data['branches']=Branch::whereNotIn('id',[ auth()->user()->branch_id])->get();
          return view('pages.store_to_store',$data);
-    } 
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -180,6 +180,7 @@ class StoreController extends Controller
     {
         $input=$request->all();
       $createLice=Store::create($input);
+
        return redirect()->route('stores.index')->with('success','Data Added Successfully');
     }
 
@@ -191,7 +192,8 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-        
+
+
     }
     /**
      * Show the form for editing the specified resource.
@@ -231,74 +233,107 @@ class StoreController extends Controller
     public function destroy($id)
     {
         Store::find($id)->delete();
-        return redirect()->route('stores.index')->with('success','Data Deleted Successfully');   
+        return redirect()->route('stores.index')->with('success','Data Deleted Successfully');
     }
     public function storeTransferView($id)
     {
         $transfer       = StoreTransfer::where('id',$id)->first();
         $transferDetail = StoreTransferDetail::with('product','batch')
                                             ->where('trans_id',$id)
-                                            ->get();        
+                                            ->get();
         return view('pages.storeTransferView',compact('transfer','transferDetail'));
     }
     public function approveStoreTransfer($id)
     {
         $transMaster = StoreTransfer::find($id);
-        $transMaster->trans_status = 'Completed';
-        $transMaster->trans_changed_by = auth()->user()->id;
+        $transMaster->trans_status = 'Approved';
+        $transMaster->approved_by = auth()->user()->id;
+        $transMaster->approved_on = Carbon::now();
         $transMaster->save();
         $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
         foreach($transDetail as $row)
         {
-            $batch = Batch::find($row->batch_id)->first();
-            $checkBatch = Batch::where('batch_no',$batch->batch_no)
-                                ->where('date',$batch->date)
-                                ->where('branch_id',$transMaster->to_branch_id)
-                                ->get();                            
-              if($checkBatch->isEmpty())            
-              {                
-                $tansID = Batch::create([
-                    'batch_no'  => $batch->batch_no,
-                    'date'      => $batch->date,
-                    'branch_id' => $transMaster->to_branch_id,
-                ]);                
-                $batch_id = $tansID->id;
-                Stock::create([
-                    'product_id' =>$row->product_id,
-                    'quantity'   =>$row->quanity,
-                    'price'      =>$row->price,
-                    'batch_id'   =>$batch_id,
-                    'branch_id'  =>auth()->user()->branch_id,
-                ]);
-              }else{     
-                $checkBatch = $checkBatch->first();
-                $batch_id = $checkBatch->id;                
-              }
-            $stock = Stock::where('batch_id',$batch_id)
-                                ->where('product_id', $row->product_id)
-                                ->where('branch_id',auth()->user()->branch_id)                                
-                                ->first();
-            $stock->quantity -= $row->qty;
+            $stock = Stock::where('batch_id', $request->table_batch_id[$key])
+                ->where('product_id', $request->product_id[$key])
+                ->where('branch_id',auth()->user()->branch_id)
+                ->first();
+            $stock->reserve_qty -= $request->transferQty[$key];
+            $stock->quantity += $request->transferQty[$key];
             $stock->save();
-        }        
+//            $batch = Batch::find($row->batch_id)->first();
+//            $checkBatch = Batch::where('batch_no',$batch->batch_no)
+//                                ->where('date',$batch->date)
+//                                ->where('branch_id',$transMaster->to_branch_id)
+//                                ->get();
+//              if($checkBatch->isEmpty())
+//              {
+//                $tansID = Batch::create([
+//                    'batch_no'  => $batch->batch_no,
+//                    'date'      => $batch->date,
+//                    'branch_id' => $transMaster->to_branch_id,
+//                ]);
+//                $batch_id = $tansID->id;
+//                Stock::create([
+//                    'product_id' =>$row->product_id,
+//                    'quantity'   =>$row->quanity,
+//                    'price'      =>$row->price,
+//                    'batch_id'   =>$batch_id,
+//                    'branch_id'  =>auth()->user()->branch_id,
+//                ]);
+//              }else{
+//                $checkBatch = $checkBatch->first();
+//                $batch_id = $checkBatch->id;
+//              }
+//            $stock = Stock::where('batch_id',$batch_id)
+//                                ->where('product_id', $row->product_id)
+//                                ->where('branch_id',auth()->user()->branch_id)
+//                                ->first();
+//            $stock->quantity -= $row->qty;
+//            $stock->save();
+        }
         return back()->with('info', 'Data Updated Successfully!');
     }
     public function rejectStoreTransfer($id)
     {
-        $transMaster = StoreTransfer::find($id);        
+        $transMaster = StoreTransfer::find($id);
+        if(auth()->user()->branch_id == $transMaster->to_branch_id){
+            $transMaster->approved_by = auth()->user()->id;
+            $transMaster->approved_on = Carbon::now();
+        }else{
+            $transMaster->trans_changed_by = auth()->user()->id;
+            $transMaster->received_on = Carbon::now();
+        }
         $transMaster->trans_status = 'Rejected';
-        $transMaster->trans_changed_by = auth()->user()->id;
         $transMaster->save();
+
+
         $transDetail = StoreTransferDetail::where('trans_id',$id)->get();
         foreach($transDetail as $row)
         {
             $stock = Stock::where('batch_id', $row->batch_id)
                                 ->where('product_id', $row->product_id)
-                                ->where('branch_id',$transMaster->from_branch_id)                                
+                                ->where('branch_id',$transMaster->from_branch_id)
                                 ->first();
                 $stock->quantity += $row->qty;
                 $stock->save();
         }
+        return back()->with('info', 'Data Updated Successfully!');
+    }
+    public function receiveProductTransfer()
+    {
+        $transfers  = StoreTransfer::where('to_branch_id',auth()->user()->branch_id)
+//                                    ->where('trans_status','Approved')
+                                    ->whereIn('trans_status', array('Approved','Received'))
+                                    ->get();
+        return view('pages.store_to_store_list',compact('transfers'));
+    }
+    public function receiveStoreTransfer($id)
+    {
+        $transMaster = StoreTransfer::find($id);
+        $transMaster->trans_status = 'Received';
+        $transMaster->trans_changed_by = auth()->user()->id;
+        $transMaster->received_on = Carbon::now();
+        $transMaster->save();
         return back()->with('info', 'Data Updated Successfully!');
     }
 }

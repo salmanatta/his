@@ -70,7 +70,7 @@
                                             </div>
                                             <div class="mb-3 col-md-12">
                                                 @if(!isset($purchaseM))
-                                                <label class="form-label" for="description">Product</label>
+                                                <label class="form-label" for="_products_select">Product</label>
                                                 <select class="select2 form-control _products_select" id="_products_select" name="product_id">
                                                 </select>
                                                 @error('product_id')
@@ -83,16 +83,14 @@
                                         <div class="col-4">
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="branch">Branch Name</label>
-                                                @if(isset($purchaseM))
-                                                <input type="text" class="form-control" name="" value="{{ isset($purchaseM) ? $purchaseM->branch->name : '' }}" readonly>
-                                                <input type="hidden" value="{{ isset($purchaseM) ? $purchaseM->branch->id : ''  }}" name="branch_id">
-                                                @else
-                                                <select class="select2 form-control _branch_select" name="branch_id" id="branch">
-                                                </select>
+                                                    <input type="text" class="form-control" name="" value="{{ isset($purchaseM) ? $purchaseM->branch->name : auth()->user()->branch->name }}" readonly>
+                                                    <input type="hidden" value="{{ isset($purchaseM) ? $purchaseM->branch->id : auth()->user()->branch_id  }}" name="branch_id">
+{{--                                                <select class="select2 form-control _branch_select" name="branch_id" id="branch">--}}
+{{--                                                </select>--}}
                                                 @error('branch_id')
                                                 <span class="text-danger">{{$message}}</span>
                                                 @enderror
-                                                @endif
+
                                             </div>
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="description">Description</label>
@@ -217,27 +215,27 @@
 @endsection
 @push('script')
 <script>
-    $("._branch_select").select2({
-        ajax: {
-            type: 'get',
-            url: "{{url('get-all-branches')}}",
-            dataType: 'json',
-            data: function(params) {
-                return {
-                    q: params.term,
-                };
-            },
-            processResults: function(data, params) {
-                // console.log(data);
-                return {
-                    results: data.items,
-                };
-            },
-            cache: true
-        },
-        placeholder: '-- Select Branch --',
-        minimumInputLength: 2,
-    });
+    {{--$("._branch_select").select2({--}}
+    {{--    ajax: {--}}
+    {{--        type: 'get',--}}
+    {{--        url: "{{url('get-all-branches')}}",--}}
+    {{--        dataType: 'json',--}}
+    {{--        data: function(params) {--}}
+    {{--            return {--}}
+    {{--                q: params.term,--}}
+    {{--            };--}}
+    {{--        },--}}
+    {{--        processResults: function(data, params) {--}}
+    {{--            // console.log(data);--}}
+    {{--            return {--}}
+    {{--                results: data.items,--}}
+    {{--            };--}}
+    {{--        },--}}
+    {{--        cache: true--}}
+    {{--    },--}}
+    {{--    placeholder: '-- Select Branch --',--}}
+    {{--    minimumInputLength: 2,--}}
+    {{--});--}}
     //***********  Get all suppliers
     $("._supplier_select").select2({
         ajax: {
@@ -295,7 +293,7 @@
             },
             success: function(data) {
                 // console.log(data);
-                var table_body = $("table.order-list tbody");in
+                var table_body = $("table.order-list tbody");
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `">
         <td class="product_count">` + product_count + ` </td>
         <td class="name"> <input type="hidden" name="product_id[]" value="` + data.id + `"/>

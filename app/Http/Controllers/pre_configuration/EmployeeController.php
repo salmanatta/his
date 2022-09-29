@@ -73,6 +73,7 @@ class EmployeeController extends Controller
             $user->email_verified_at    = Carbon::now();
             $user->password             = Hash::make("password");
             $user->branch_id            = auth()->user()->branch_id;
+            $user->employee_id         = $employee->id;
             $user->save();
         }
         return redirect()->route('employees.index')->with('success','Data Added Successfully!');

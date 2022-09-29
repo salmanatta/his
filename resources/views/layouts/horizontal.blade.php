@@ -34,12 +34,12 @@
             <!-- <div class="dropdown dropdown-mega d-none d-lg-block ml-2">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
                     <span key="t-megamenu">@lang('translation.Mega_Menu')</span>
-                    <i class="mdi mdi-chevron-down"></i> 
+                    <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div class="dropdown-menu dropdown-megamenu">
                     <div class="row">
                         <div class="col-sm-8">
-    
+
                             <div class="row">
                                 <div class="col-md-4">
                                     <h5 class="font-size-14 mt-0" key="t-ui-components">@lang('translation.UI_Components')</h5>
@@ -116,7 +116,7 @@
                                         <li>
                                             <a href="javascript:void(0);" key="t-faqs">@lang('translation.FAQs')</a>
                                         </li>
-                            
+
                                     </ul>
                                 </div>
                             </div>
@@ -405,9 +405,9 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-
                             <a href="{{url('storetostore')}}" class="dropdown-item" key="t-saas">Product Transfer </a>
-                            <a href="{{url('storetoStoreList')}}" class="dropdown-item" key="t-saas">Product Transfer List </a>
+                            <a href="{{url('storetoStoreList')}}" class="dropdown-item" key="t-saas">Product Transfer Approval </a>
+                            <a href="{{url('receive-product-transfer')}}" class="dropdown-item" key="t-saas">Receive Product Transfer </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -418,7 +418,7 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
 
                             <a href="{{route('expense_categories.index')}}" class="dropdown-item" key="t-default">Expense Categories</a>
-                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>                            
+                            <a href="{{route('expenses.index')}}" class="dropdown-item" key="t-default">Expenses</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -480,10 +480,10 @@
                                     <a href="form-elements" class="dropdown-item" key="t-form-elements">Order Complete</a>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </li> --}}
 
-                    
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Setting</span>
@@ -502,7 +502,7 @@
                                     <a href="#" onclick="disableDateFive()" class="dropdown-item" key="t-form-elements">Five Days</a>
                                     <a href="#" onclick="disableDateSeven()" class="dropdown-item" key="t-form-elements">Seven Days</a>
                                 </div>
-                            </div>                           
+                            </div>
                         </div>
                     </li>
                 </ul>

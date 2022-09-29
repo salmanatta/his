@@ -31,7 +31,16 @@ class SaleInvoiceController extends Controller
         // dd($maxID);
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';
-        $salesman = Employee::where('designation_id','1')->get();
+        $salesman = auth()->user()->employee_id;
+        if($salesman == null){
+            $salesman = Employee::where('designation_id','1')
+                                ->where('branch_id',auth()->user()->branch_id)
+                                ->get();
+        }else{
+            $salesman = Employee::where('designation_id','1')
+                ->where('branch_id',auth()->user()->branch_id)
+                ->get();
+        }
         return view("pages/sale/invoice", compact('invoice_no','transType','salesman'));
     }
     public function invoiceReturn()

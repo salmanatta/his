@@ -11,24 +11,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\SaleInvoiceController;
 use App\Http\Controllers\StoreController;
-use App\Http\Controllers\CustomerController; 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisterController;
  use App\Http\Controllers\BatchController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProducBonusController;
 use App\Http\Controllers\StockController;
 // use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\SaleInvoiceController;      
-use App\Http\Controllers\PurchaseController; 
-use App\Http\Controllers\ProductDiscountController;    
+use App\Http\Controllers\SaleInvoiceController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseInvoice;
 use App\Http\Controllers\ProductMaxSalQuantityController;
 // use App\Http\Controllers\SaleInvoiceController;
 
-// use App\Http\Controllers\PurchaseController; 
+// use App\Http\Controllers\PurchaseController;
 // use App\Http\Controllers\PurchaseInvoice;
-// use App\Http\Controllers\SupplierController; 
+// use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 /*
@@ -65,7 +65,7 @@ Route::get('/', function () {
 
 });
 
-// ===================start restore backup to ==================================== 
+// ===================start restore backup to ====================================
 Route::get('backup', function () {
     return view('backup_folder.backup'); //this is actualy dash
 });
@@ -138,7 +138,7 @@ Route::get('getBonus',[ProducBonusController::class,'getBonus'])->name('getBonus
 
 Route::resource('product_discounts', 'App\Http\Controllers\ProducDiscountController')->middleware('auth');
 Route::resource('expenses','App\Http\Controllers\ExpenseController'); //done
-Route::resource('expense_categories','App\Http\Controllers\ExpenseCategoryController'); //done 
+Route::resource('expense_categories','App\Http\Controllers\ExpenseCategoryController'); //done
 Route::get('/logs', [LogController::class, "render"])->middleware('auth');
 Route::get('/get-all-logs', [LogController::class, "getAllLogs"])->middleware('auth');
 Route::get('/get-all-users', [UserController::class, "getAllUsers"])->middleware('auth');
@@ -180,11 +180,14 @@ Route::get('getProductDiscount',[SaleInvoiceController::class,'getProductDiscoun
 /*----------   Store Transfer  Resource Route  ----------*/
 Route::get('storetostore', 'App\Http\Controllers\StoreController@storeToStore')->name('storeToStore')->middleware("auth");
 Route::get('storetoStoreList', 'App\Http\Controllers\StoreController@storetoStoreList')->name('storetoStoreList')->middleware("auth");
+Route::get('receive-product-transfer',[StoreController::class,'receiveProductTransfer'])->name('receive-product-transfer')->middleware('auth');
 
-Route::group(['middleware' => ['auth', 'web']], function() {        
+
+Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get("store-transfer-view/{id}",[StoreController::class,"storeTransferView"]);
     Route::get('approve-store-transfer/{id}',[StoreController::class,'approveStoreTransfer']);
     Route::get('reject-store-transfer/{id}',[StoreController::class,'rejectStoreTransfer']);
+    Route::get('receive-store-transfer/{id}',[StoreController::class,'receiveStoreTransfer']);
   });
 
 // Route::group(['middleware' => ['role:superadmin']],function (){

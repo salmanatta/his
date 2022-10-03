@@ -18,33 +18,38 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <a href="javascript:window.print()"
-                                            class="float-end btn btn-success d-print-none"><i
-                                                class="fa fa-print ">Print</i></a>
+                                            class="float-end btn btn-success d-print-none">
+                                            <i class="fa fa-print ">Print</i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <address>
-                                        <strong>Billed To:</strong><br>
-                                        {{ !is_null($sale) ? $sale->user->name : '' }}
-                                    </address>
+                                <div class="col-12">
+                                    <div class="col-sm-4">
+                                        <address>
+                                            <strong>Customer Name:</strong>
+                                            {{ !is_null($sale) ? $sale->customer->name : '' }}
+                                        </address>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <address class="mt-2 mt-sm-0">
+                                            <strong>CNIC #:</strong>
+                                            {{ !is_null($sale) ? $sale->customer->cnic_nopu : '' }}
+                                        </address>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{-- <div class="col-sm-6 text-sm-end"> --}}
+                                        <address>
+                                            <strong>Branch Name:</strong><br>
+                                            {{ !is_null($sale) ? $sale->branch->name : '' }}
+                                        </address>
+                                    </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <address class="mt-2 mt-sm-0">
-                                        <strong>Shipped To:</strong><br>
-                                        {{ !is_null($sale) ? $sale->customer->name : '' }}
-                                    </address>
+
                                 </div>
-                                <div class="col-sm-4">
-                                    {{-- <div class="col-sm-6 text-sm-end"> --}}
-                                    <address>
-                                        <strong>Branch Name:</strong><br>
-                                        {{ !is_null($sale) ? $sale->branch->name : '' }}
-                                    </address>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-sm-4">
                                     <address>

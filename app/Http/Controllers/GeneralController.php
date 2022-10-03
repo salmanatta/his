@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarImplement;
+use App\Models\CalendarSetup;
 use Illuminate\Http\Request;
 use App\Models\GeneralBonus;
 use App\Models\products\Product;
@@ -58,7 +60,7 @@ class GeneralController extends Controller
       $generalBonus->end_date    = $request->end_date;
       $generalBonus->branch_id   = auth()->user()->branch_id;
       $generalBonus->save();
-    }    
+    }
     $data = GeneralBonus::all()->toArray();
     return response()->json($data);
   }
@@ -77,7 +79,7 @@ class GeneralController extends Controller
   }
 
   public function applyRule()
-  {    
+  {
     $bonuses    = GeneralBonus::getGeneralBonus()->get();
     $discounts  = GeneralDiscount::getGeneralDiscount()->get();
     $products   = Stock::with('product')->where('branch_id', auth()->user()->branch_id)->groupBy('product_id')->get();
@@ -145,4 +147,32 @@ class GeneralController extends Controller
     $productDiscount = ProductDiscount::with('generalDiscount')->where('product_id', $request->discountProduct)->where('branch_id', auth()->user()->branch_id)->get();
     return $productDiscount;
   }
+  public function calendarList()
+  {
+      $datePlan = CalendarSetup::all();
+      return view('calendar.calendar-list',compact('datePlan'));
+  }
+  public function createDatePlan()
+  {
+      return view('calendar.calendar');
+  }
+  public function InsertDatePlan(Request $request)
+  {
+//      dd($request->all());
+      CalendarSetup::create([
+          'name' => $request->name,
+          'min_days' => $request->min_days,
+          'max_days' => $request->max_days,
+      ]);
+      return redirect('create-Date-Plan')->with('success', "Data Added Successfully!");
+  }
+  public function getCalendarSetup(Request $request)
+  {
+      $calendar = CalendarImplement::with('CalendarSetup')
+                                    ->where('form_name',$request->transType)
+                                    ->where('branch_id',auth()->user()->branch_id)
+                                    ->first();
+      return response()->json($calendar);
+  }
+
 }

@@ -60,8 +60,7 @@
                                                     <select class="form-control select2" id="salesman" name="salesman">
                                                         <option disabled selected> Select Salesman </option>
                                                         @foreach($salesman as $saleman)
-                                                            <option value="{{$saleman->id}}">{{$saleman->first_name.' '.$saleman->last_name}}
-                                                            </option>
+                                                            <option value="{{ $saleman->id }}" {{ isset($sale) ? ($sale->salesman_id == $saleman->id ? 'selected' : '' ) : '' }}>{{ $saleman->first_name.' '.$saleman->last_name }}</option>
                                                         @endforeach
                                                     </select>
                                                     @error('product_id')
@@ -121,7 +120,7 @@
                                                 <th scope="row">Sales Tax</th>
                                                 <th scope="row">Advance Tax</th>
                                                 <th scope="row">Advance Tax value</th>
-                                                <th scope="row">Check</th>
+                                                <th scope="row">Allow Discount</th>
                                                 <th scope="row">Discount %</th>
                                                 <th scope="row">Discount Amount</th>
                                                 <th scope="row">Line Total</th>

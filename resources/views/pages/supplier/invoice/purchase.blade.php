@@ -395,10 +395,30 @@
             $(this).val("0");
     });
     $(document).ready(function() {
-        $("#fiveDays").datepicker({
-            minDate: -5,
-            maxDate: "+5D"
+        $.ajax({
+            type: 'GET',
+            url: '{{url("getCalendarSetup")}}',
+            data: {
+                transType: "<?php echo isset($transType) ? $transType :  $purchaseM->trans_type  ?>",
+            },
+            success: function (data) {
+                // console.log(data);
+                var minDays = data.calendar_setup.min_days;
+                var maxDays = data.calendar_setup.max_days;
+
+                $("#fiveDays").datepicker({
+                    minDate: -minDays,
+                    maxDate: +maxDays,
+                });
+            }
         });
+
+        {{--console.log('here');--}}
+        {{--console.log( "<?php echo $transType; ?>");--}}
+        {{--$("#fiveDays").datepicker({--}}
+        {{--    minDate: -5,--}}
+        {{--    maxDate: "+5D"--}}
+        {{--});--}}
 
     })
 </script>

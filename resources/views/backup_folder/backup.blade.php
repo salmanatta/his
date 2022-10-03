@@ -1,5 +1,7 @@
+@extends('layouts.main')
+@section('content')
 <title><?php echo "backup MySQL data - " . $_SERVER['SERVER_NAME'] ; ?></title>
-<?php 
+<?php
 
 // ref. to https://stackoverflow.com/questions/52530833/how-to-take-backup-of-mysql-database-using-php
     $dbhost = 'localhost';
@@ -78,5 +80,9 @@
     }
     // echo $backupAlert;
     //$backup_file
-    echo '<p><a href="' .$directory.'/'.$backup_file . '" Download>Download</a></p>';
+
+
+    echo '<p style="position:absolute; top:50%; right:50%; font-size:20px; font-style:blod"><a href="' .$directory.'/'.$backup_file . '" Download>Download Backup</a></p>';
+
 ?>
+@endsection

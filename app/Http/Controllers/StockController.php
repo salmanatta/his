@@ -24,13 +24,17 @@ class StockController extends Controller
                 ->where('stocks.quantity','>','0')
                 ->where('stocks.branch_id',auth()->user()->branch_id)
                 ->groupBy('stocks.product_id')
-                ->get(); 
+                ->get();
         return view('pages.reports.stock.stock_detail',compact('stocks'));
     }
     public function getProductBatch(Request $request)
     {
         $product_id = $request->product_id;
-        $stocks = Stock::with('batch')->where('product_id',$product_id)->where('quantity','>','0')->get();        
+        $stocks = Stock::with('batch')
+                        ->where('product_id',$product_id)
+                        ->where('quantity','>','0')
+                        ->where('branch_id',auth()->user()->branch_id)
+                        ->get();
         return response()->json( $stocks);
     }
 
@@ -38,7 +42,7 @@ class StockController extends Controller
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
-     */ 
+     */
     public function create()
     {
         //

@@ -31,16 +31,10 @@ class SaleInvoiceController extends Controller
         // dd($maxID);
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';
-        $salesman = auth()->user()->employee_id;
-        if($salesman == null){
-            $salesman = Employee::where('designation_id','1')
-                                ->where('branch_id',auth()->user()->branch_id)
-                                ->get();
-        }else{
-            $salesman = Employee::where('designation_id','1')
-                ->where('branch_id',auth()->user()->branch_id)
-                ->get();
-        }
+        $salesman = Employee::where('designation_id','1')
+                            ->where('branch_id',auth()->user()->branch_id)
+                            ->get();
+
         return view("pages/sale/invoice", compact('invoice_no','transType','salesman'));
     }
     public function invoiceReturn()
@@ -151,8 +145,11 @@ class SaleInvoiceController extends Controller
         $sale = SaleInvoice::find($id);
         $customer = Customer::find($sale->customer_id);
         $saleDetail = SaleInvoiceDetail::with('product','batch')->where('sale_invoice_id',$sale->id)->get();
+        $salesman = Employee::where('designation_id','1')
+                            ->where('branch_id',auth()->user()->branch_id)
+                            ->get();
         // dd($saleDetail);
-        return view("pages/sale/invoice", compact('sale','customer','saleDetail'));
+        return view("pages/sale/invoice", compact('sale','customer','saleDetail','salesman'));
 
     }
     /**
@@ -195,6 +192,7 @@ class SaleInvoiceController extends Controller
         $order_data['user_id']    =  auth()->user()->id;
         $order_data['branch_id']  =  auth()->user()->branch_id;
         $order_data['inv_status'] =  'Un-Post';
+        $order_data['salesman_id']   = $request->salesman;
         $order = SaleInvoice::create($order_data);
         if ($order) {
             $sale_invoice_detail_id = $order->id;
@@ -270,6 +268,7 @@ class SaleInvoiceController extends Controller
         // dd($request->all());
         $saleM = SaleInvoice::find($saleInvoice->id);
         $saleM->description = $request->description;
+        $saleM->salesman_id = $request->salesman;
         if($request->has('update-post')){
             $saleM->inv_status = 'Post';
             $saleM->status_changed_by = auth()->user()->id;

@@ -498,9 +498,9 @@
                                     <div class="arrow-down"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
-                                    <a href="#" onclick="disableDate()" class="dropdown-item" key="t-form-elements">Three Days</a>
-                                    <a href="#" onclick="disableDateFive()" class="dropdown-item" key="t-form-elements">Five Days</a>
-                                    <a href="#" onclick="disableDateSeven()" class="dropdown-item" key="t-form-elements">Seven Days</a>
+                                    <a href="{{ url('calendar-List') }}"  class="dropdown-item" key="t-form-elements">Date Plan</a>
+                                    <a href="#"  class="dropdown-item" key="t-form-elements">Assign Date Plan</a>
+{{--                                    <a href="#"  class="dropdown-item" key="t-form-elements">Seven Days</a>--}}
                                 </div>
                             </div>
                         </div>

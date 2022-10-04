@@ -5,13 +5,18 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Date Plan</h4>
-                    <form class="" method="post" action="{{url('create-Date-Plan')}}">
+                    @if(isset($calendarSetup))
+                        <form class="" method="post" action="{{url('calendar.setup/'.$calendarSetup->id)}}">
+                    @else
+                        <form class="" method="post" action="{{url('create-Date-Plan')}}">
+                    @endif
                         @csrf
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label" for="name">Description</label>
-                                    <input type="text" class="form-control" name="name" id="name" value="{{ isset($purchaseM) ? $purchaseM->freight : old('name')  }}" placeholder="Enter Description" required>
+                                    <input type="text" class="form-control" name="name" id="name" value="{{ isset($calendarSetup) ? $calendarSetup->name : old('name')  }}" placeholder="Enter Description" required>
+                                    <input type="hidden" name="id" value="{{ isset($calendarSetup) ? $calendarSetup->id : '' }}">
                                     @error('name')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
@@ -22,7 +27,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="min_days" class="form-label">Minimum Days</label>
-                                    <input type="number" name="min_days" class="form-control" id="min_days" id="min_days" required>
+                                    <input type="number" name="min_days" class="form-control" id="min_days" id="min_days" value="{{ isset($calendarSetup) ? $calendarSetup->min_days : old('min_days') }}" required>
                                     @error('min_days')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
@@ -33,7 +38,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="max_days" class="form-label">Maximum Days</label>
-                                    <input type="number" name="max_days" class="form-control" id="max_days" id="max_days" required>
+                                    <input type="number" name="max_days" class="form-control" id="max_days" id="max_days" value="{{ isset($calendarSetup) ? $calendarSetup->max_days : old('max_days') }}" required>
                                     @error('branch_id')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
@@ -43,13 +48,12 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="d-flex justify-content-end">
-                                    {{--                                    <button type="submit" class="btn btn-primary me-1" name="update">Update</button>--}}
-                                    {{--                                    <button type="submit" class="btn btn-warning me-1" name="update-post">Update & Post</button>--}}
-                                    {{--                                    <a class="btn btn-danger mx-0" href="{{ url('purchaseReport') }}">Exit</a>--}}
-
-                                    <button type="submit" class="btn btn-success me-1">Save</button>
-                                    <a class="btn btn-danger mx-0" href="{{ url('calendar-List') }}">Exit</a>
-
+                                    @if(isset($calendarSetup))
+                                        <button type="submit" class="btn btn-warning me-1" name="update">Update</button>
+                                    @else
+                                        <button type="submit" class="btn btn-success me-1">Save</button>
+                                    @endif
+                                        <a class="btn btn-danger mx-0" href="{{ url('calendar-List') }}">Exit</a>
                                 </div>
                             </div>
 

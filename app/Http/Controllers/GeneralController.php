@@ -156,15 +156,40 @@ class GeneralController extends Controller
   {
       return view('calendar.calendar');
   }
-  public function InsertDatePlan(Request $request)
+  public function insert_date_plan(Request $request)
   {
-//      dd($request->all());
-      CalendarSetup::create([
-          'name' => $request->name,
-          'min_days' => $request->min_days,
-          'max_days' => $request->max_days,
-      ]);
-      return redirect('create-Date-Plan')->with('success', "Data Added Successfully!");
+      CalendarSetup::create($request->all());
+      $datePlan = CalendarSetup::all();
+      return redirect()->route('calendar-List',compact('datePlan'))->with('success', "Data Added Successfully!");
+  }
+  public function edit_calendar($id)
+  {
+      $calendarSetup = CalendarSetup::find($id);
+      return view('calendar.calendar',compact('calendarSetup'));
+  }
+  public function update_calendar(Request $request,$id)
+  {
+      CalendarSetup::find($id)->update($request->all());
+      $datePlan = CalendarSetup::all();
+      return redirect()->route('calendar-List',compact('datePlan'))->with('success', "Data Added Successfully!");
+  }
+  public function calendar_implement_list()
+  {
+      $calendar_implements = CalendarImplement::where('branch_id',auth()->user()->branch_id)->get();
+      return view('calendar.calendar-implement-list',compact('calendar_implements'));
+  }
+  public function calendar_implement($id)
+  {
+      $cal_implement = CalendarImplement::find($id);
+      $date_plans = CalendarSetup::all();
+      return view('calendar.calendar-implement',compact('cal_implement','date_plans'));
+  }
+  public function update_calendar_implement(Request $request,$id)
+  {
+      CalendarImplement::find($id)->update($request->all());
+      $calendar_implements = CalendarImplement::where('branch_id',auth()->user()->branch_id)->get();
+      return redirect()->route('calendar.implement.list',compact('calendar_implements'))->with('info', "Data Updated Successfully!");
+
   }
   public function getCalendarSetup(Request $request)
   {

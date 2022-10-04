@@ -161,12 +161,14 @@ Route::get('showGeneralDiscount',[GeneralController::class,"showGeneralDiscount"
 Route::post('insertProductBonus',[GeneralController::class,'insertProductBonus'])->middleware('auth');
 Route::post('insertProductDiscount',[GeneralController::class,'insertProductDiscount'])->middleware('auth');
 Route::get('getCalendarSetup',[GeneralController::class,'getCalendarSetup'])->middleware('auth');
-Route::get('calendar-List',[GeneralController::class,'calendarList'])->middleware('auth');
+Route::get('calendar-List',[GeneralController::class,'calendarList'])->name('calendar-List')->middleware('auth');
 Route::get('create-Date-Plan',[GeneralController::class,'createDatePlan'])->middleware('auth');
-Route::post('create-Date-Plan',[GeneralController::class,'InsertDatePlan'])->middleware('auth');
-
-
-
+Route::post('create-Date-Plan',[GeneralController::class,'insert_date_plan'])->middleware('auth');
+Route::get('calendar.setup/{id}',[GeneralController::class,'edit_calendar'])->middleware('auth');
+Route::post('calendar.setup/{id}',[GeneralController::class,'update_calendar'])->middleware('auth');
+Route::get('calendar.implement.list',[GeneralController::class,'calendar_implement_list'])->name('calendar.implement.list')->middleware('auth');
+Route::get('calendar.implement/{id}',[GeneralController::class,'calendar_implement'])->middleware('auth');
+Route::post('calendar.implement/{id}',[GeneralController::class,'update_calendar_implement'])->middleware('auth');
 
 // ======================End use for define Rules Product Bonus and Discount======
 // ===================== Product Sale Side======

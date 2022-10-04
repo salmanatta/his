@@ -35,7 +35,7 @@
                                 <td style="text-align: center">{{$plan->min_days}}</td>
                                 <td style="text-align: center">{{$plan->max_days}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{route('cities.edit',$plan->id)}}" class="text-success editbtn">
+                                    <a href="{{url('calendar.setup',$plan->id)}}" class="text-success editbtn">
                                         <i class="mdi mdi-pencil font-size-18"></i>
                                     </a>
                                 </td>

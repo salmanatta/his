@@ -9,9 +9,7 @@ class CalendarSetup extends Model
 {
     use HasFactory;
     protected $table = 'calendar_setup';
-//    protected $fillable = [
-//
-//    ]
+    protected $fillable = ['name','min_days','max_days'];
 
 
 

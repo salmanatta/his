@@ -499,7 +499,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
                                     <a href="{{ url('calendar-List') }}"  class="dropdown-item" key="t-form-elements">Date Plan</a>
-                                    <a href="#"  class="dropdown-item" key="t-form-elements">Assign Date Plan</a>
+                                    <a href="{{ url('calendar.implement.list') }}"  class="dropdown-item" key="t-form-elements">Assign Date Plan</a>
 {{--                                    <a href="#"  class="dropdown-item" key="t-form-elements">Seven Days</a>--}}
                                 </div>
                             </div>

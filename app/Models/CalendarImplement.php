@@ -11,6 +11,7 @@ class CalendarImplement extends Model
 {
     use HasFactory;
     protected $table = 'calendar_implement';
+    protected $fillable =['calendar_id','branch_id','form_name'];
 
     public function CalendarSetup()
     {

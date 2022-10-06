@@ -24,30 +24,30 @@ class PurchaseController extends Controller
     public function __construct()
     {
         return $this->middleware('auth');
-        
+
     }
     public function index()
     {
-        
+
     }
     public function render()
     {
         // $invoice_no=mt_rand(0,8889);
         // $batches=Batch::all();
-        $transType = 'PURCHASE';        
+        $transType = 'PURCHASE';
         return view("pages/supplier/invoice/purchase",compact("transType"));
     }
     public function pruchaseReturn()
     {
         // $invoice_no=mt_rand(0,8889);
-        $transType = 'PURCHASE RETURN';    
+        $transType = 'PURCHASE RETURN';
         return view("pages/supplier/invoice/purchase",compact("transType"));
 
     }
     public function pruchaseReturnInsert(Request $request)
     {
         // dd($request->all());
-        
+
     }
     /**
      * Show the form for creating a new resource.
@@ -74,12 +74,12 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $this->validate($request,[            
+        $this->validate($request,[
             'product_id'=>'required|exists:products,id',
             'suplier_id'=>'required|exists:suppliers,id',
-            'branch_id'=>'required|exists:branches,id', 
+            'branch_id'=>'required|exists:branches,id',
         ],
-        [   
+        [
             'product_id.required'=> 'Please select any Product, Thank You.',
             'suplier_id.required'=> 'Please select any Supplier, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
@@ -101,23 +101,23 @@ class PurchaseController extends Controller
         if($order){
         $purchase_invoice_detail_id=$order->id;
         $rows=$request->input('product_id');
-        $branch_id=$request->input('branch_id');        
-        foreach($rows as $key=>$row) 
+        $branch_id=$request->input('branch_id');
+        foreach($rows as $key=>$row)
         {
             $purchase_price = $request->input('purchase_price')[$key];
             $after_discount = $request->input('after_discount')[$key];
             $purchase_discount = $request->input('purchase_discount')[$key];
             $quanity = $request->input('quanity')[$key];
-            $product_id=$request->input('product_id')[$key];  
-            $product_name=$request->input('product_name')[$key];  
-            $line_total=$request->input('line_total')[$key];  
+            $product_id=$request->input('product_id')[$key];
+            $product_name=$request->input('product_name')[$key];
+            $line_total=$request->input('line_total')[$key];
             // $bonus=$request->input('sale_tax_value')[$key];
 
             $batch = Batch::where('batch_no',$request->batch)
                             ->where('date',$request->expiry_date)
                             ->where('branch_id',auth()->user()->branch_id)
-                            ->get();                                        
-              if($batch->isEmpty())            
+                            ->get();
+              if($batch->isEmpty())
               {
                 $batchName  = $request->input('batch')[$key];
                 $expriyDate = $request->input('expiry_date')[$key];
@@ -129,7 +129,7 @@ class PurchaseController extends Controller
                 $batch_id = $tansID->id;
               }else{
                 $batch = $batch->first();
-                $batch_id = $batch->id;                
+                $batch_id = $batch->id;
               }
 
             PurchaseInvoiceDetail::create([
@@ -139,7 +139,7 @@ class PurchaseController extends Controller
                         'price'          =>$purchase_price,
                         'discount'       =>$purchase_discount,
                         'after_discount' =>$after_discount,
-                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,                        
+                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
                         'line_total'     =>$line_total,
                         'sales_tax'      =>$request->input('sale_tax_value')[$key],
                         'adv_tax'        =>$request->input('adv_tax_value')[$key],
@@ -172,7 +172,7 @@ class PurchaseController extends Controller
     }
     public function purchaseReport(Request $request)
     {
-        if(count($request->all()) > 0) 
+        if(count($request->all()) > 0)
         {
             $from=$request->from_date;
             $to=$request->to_date;
@@ -183,21 +183,21 @@ class PurchaseController extends Controller
             $fromDate =date('Y-m-d', strtotime($fromDate));
             $todate = Carbon::now();
             $todate =date('Y-m-d', strtotime($todate));
-        }        
+        }
         $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,auth()->user()->branch_id)
                                         ->with('supplier','branch','user')
-                                        ->get();        
+                                        ->get();
         //return $purchaseData;
         return view('pages.reports.purchase.purchase_report',compact('purchaseData'));
 
     }
-    public function unstokePurchaseReport(Request $request)    
+    public function unstokePurchaseReport(Request $request)
     {
 
         return view('pages.reports.purchase.unstokepurchase_report');
 
     }
-    
+
     public function searchPurchaseReport(Request $request)
     {
         $from=$request->from_date;
@@ -205,8 +205,8 @@ class PurchaseController extends Controller
         $fromDate=date('Y-m-d', strtotime($from));
         $todate=date('Y-m-d', strtotime($to));
         $new = PurchaseInvoice::ReportData($fromDate,$todate)
-                                ->with('supplier','branch','user')                                
-                                ->get();    
+                                ->with('supplier','branch','user')
+                                ->get();
         return response()->json($new);
     }
     public function searchUnstokePufrchaseReport(Request $request)
@@ -220,18 +220,18 @@ class PurchaseController extends Controller
         return response()->json($new);
     }
      public function purchaseDetail(Request $request,$id){
-         
+
          $purchase=PurchaseInvoice::where('id',$id)->with('supplier','branch','user')->first();
          $purchase_details=PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$id)->get();
         return view('pages.reports.purchase.purchase_details',compact('purchase','purchase_details'));
      }
      public function unstokePurchaseDetail(Request $request,$id){
-         
+
         $purchase=PurchaseInvoice::where('id',$id)->with('supplier','branch','user')->first();
         $purchase_details=PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$id)->get();
        return view('pages.reports.purchase.purchase_details',compact('purchase','purchase_details'));
     }
-     
+
     /**
      * Display the specified resource.
      *
@@ -263,40 +263,40 @@ class PurchaseController extends Controller
      */
     public function update(Request $request,PurchaseInvoice $PurchaseInvoice)
     {
-        // dd($request->all());        
-        $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);        
+        // dd($request->all());
+        $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);
         $purchaseM->description = $request->description;
         if($request->has('update-post')){
             $purchaseM->inv_status = 'Post';
             $purchaseM->status_changed_by = auth()->user()->id;
             $purchaseM->status_changed_on = Carbon::now();
-        }        
-        $rows = $request->product_id; 
-        $inv_total = 0;       
-        foreach ($rows as $key => $row) {            
-            if(!empty($request->id[$key])){            
-                $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);   
+        }
+        $rows = $request->product_id;
+        $inv_total = 0;
+        foreach ($rows as $key => $row) {
+            if(!empty($request->id[$key])){
+                $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);
                 $purchaseDetail->qty            = $request->quanity[$key];
                 $purchaseDetail->price          = $request->purchase_price[$key];
                 $purchaseDetail->discount       = $request->purchase_discount[$key];
-                $purchaseDetail->after_discount = $request->after_discount[$key];                
+                $purchaseDetail->after_discount = $request->after_discount[$key];
                 $purchaseDetail->line_total     = $request->line_total[$key];
-                $purchaseDetail->sales_tax      = $request->sale_tax_value[$key];                
-                $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];                
-                $purchaseDetail->save();            
+                $purchaseDetail->sales_tax      = $request->sale_tax_value[$key];
+                $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];
+                $purchaseDetail->save();
                 $inv_total += $request->line_total[$key];
                 if($request->has('update-post')){
                     $stock = Stock::where('product_id',$request->product_id[$key])
                                 ->where('batch_id',$request->batch_id[$key])
                                 ->where('branch_id',$request->branch_id)
-                                ->first(); 
-                    
-                    if($stock == null){                        
+                                ->first();
+
+                    if($stock == null){
                         $newStock = new Stock();
-                        $newStock-> product_id  = $request->product_id[$key];                        
+                        $newStock-> product_id  = $request->product_id[$key];
                         if($request->trans_type == 'PURCHASE'){
                             $newStock->quantity     = $request->quanity[$key];
-                        }else{                            
+                        }else{
                             $newStock->quantity     = $request->quanity[$key]*-1;
                         }
                         $newStock->price        = $request->purchase_price[$key];
@@ -311,17 +311,17 @@ class PurchaseController extends Controller
                             $stock->quantity  -= $request->quanity[$key];
                         }
                         $stock->save();
-                    }                        
-                }    
+                    }
+                }
             }
-        }            
+        }
         $purchaseM->total = $inv_total;
-        $purchaseM->save();        
+        $purchaseM->save();
         if($request->has('update-post')){
            return redirect('purchaseReport')->with('info', "Data Updated Successfully!");
         }else{
             return back()->with('info', "Data Updated Successfully!");
-        }       
+        }
     }
 
     /**
@@ -337,7 +337,14 @@ class PurchaseController extends Controller
     public function currentStockReport()
     {
         $product = Product::all();
+//        return $product;
         return view('pages.reports.purchase.item_report' , compact('product'));
+    }
+    public function date_wise_stock_view(Request $request)
+    {
+        //dd($request->all());
+        $product = Product::all();
+        return $product;
     }
     public function updatePurchaseStatus($id)
     {
@@ -345,7 +352,7 @@ class PurchaseController extends Controller
         $purchaseMaster->inv_status = 'Post';
         $purchaseMaster->status_changed_by = auth()->user()->id;
         $purchaseMaster->status_changed_on = Carbon::now();
-        $purchaseMaster->update();        
+        $purchaseMaster->update();
 
         $purchaseD = PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$id)->get();
         foreach($purchaseD as $purchaseData)
@@ -364,10 +371,7 @@ class PurchaseController extends Controller
     {
         $purchaseM = PurchaseInvoice::find($id);
         $purchaseD = PurchaseInvoiceDetail::with('product','batch')->where('purchase_invoice_detail_id',$id)->get();
-        
+
         return view("pages/supplier/invoice/purchase",compact('purchaseM','purchaseD'));
-        
-
-
     }
 }

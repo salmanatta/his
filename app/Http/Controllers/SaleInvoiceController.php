@@ -361,7 +361,22 @@ class SaleInvoiceController extends Controller
         // }else{
         //     return 0;
         // }
+    }
+    public function customer_wise_sale_view()
+    {
+        $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
+        return view('pages.reports.sale.customer-wise-sale',compact('customers'));
+    }
+    public function customer_wise_sale_view_screen(Request $request)
+    {
 
+        $sale_Master = SaleInvoice::whereDate('invoice_date','>=',$request->from_date)
+                                    ->whereDate('invoice_date','<=',$request->to_date)
+                                    ->where('trans_type',$request->trans_type)
+                                    ->where('customer_id',$request->customer_id)
+                                    ->where('branch_id',auth()->user()->branch_id)->get();
+        $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
+        return view('pages.reports.sale.customer-wise-sale',compact('customers','sale_Master'));
     }
 }
 

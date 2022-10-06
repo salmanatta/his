@@ -6,7 +6,7 @@
     </div><br>
     <div class="row">
         <!-- <form method="get" id="add_form" action=""> -->
-        <form method="GET" action="">
+        <form method="GET" action="{{ url('date.wise.stock.view') }}">
             <div class="row printBlock">
                 <div class="col-lg-6">
                     <div class="mb-3">

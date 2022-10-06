@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\CalendarImplement;
 use App\Models\CalendarSetup;
+//use Barryvdh\DomPDF\PDF;
+use App\Models\PurchaseInvoice;
+use App\Models\PurchaseInvoiceDetail;
 use Illuminate\Http\Request;
 use App\Models\GeneralBonus;
 use App\Models\products\Product;
@@ -12,6 +15,10 @@ use App\Models\ProductDiscount;
 use App\Models\ProductBonus;
 use App\Models\Stock;
 use Carbon\Carbon;
+
+//use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class GeneralController extends Controller
 {
@@ -199,5 +206,22 @@ class GeneralController extends Controller
                                     ->first();
       return response()->json($calendar);
   }
+    public function generate_pdf()
+    {
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y')
+        ];
+
+        $purchase=PurchaseInvoice::where('id',113)->with('supplier','branch','user')->first();
+        $purchase_details=PurchaseInvoiceDetail::where('purchase_invoice_detail_id',113)->get();
+
+        $pdf = PDF::loadView('pages.reports.purchase.purchase-detail-test', compact('purchase','purchase_details'))->setOptions(['defaultFont' => 'sans-serif']);
+
+
+        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+
+//        return $pdf->download('itsolutionstuff.pdf');
+    }
 
 }

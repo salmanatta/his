@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\branch\Branch;
 use App\Models\User;
 use App\Models\sales\Customer;
+use App\Models\employee\Employee;
 use Illuminate\Database\Eloquent\Scope;
 
 class SaleInvoice extends Model
@@ -33,6 +34,10 @@ class SaleInvoice extends Model
       public function customer()
       {
           return $this->belongsTo(Customer::class,'customer_id','id');
+      }
+      public function salesman()
+      {
+          return $this->belongsTo(Employee::class,'salesman_id','id');
       }
       public function saleDetail()
       {

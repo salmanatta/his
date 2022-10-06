@@ -170,6 +170,8 @@ Route::get('calendar.implement.list',[GeneralController::class,'calendar_impleme
 Route::get('calendar.implement/{id}',[GeneralController::class,'calendar_implement'])->middleware('auth');
 Route::post('calendar.implement/{id}',[GeneralController::class,'update_calendar_implement'])->middleware('auth');
 
+Route::get('pro',[GeneralController::class,'generate_pdf']);
+
 // ======================End use for define Rules Product Bonus and Discount======
 // ===================== Product Sale Side======
 Route::resource('sale_invoices', 'App\Http\Controllers\SaleInvoiceController')->middleware('auth');
@@ -237,19 +239,20 @@ Route::get('unstokepurchase_details/{id}',[PurchaseController::class,"unstokePur
 Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoStoreReport')->name('storetoStoreReport');//product transfer
 //for stock report
 Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('stock_detail')->middleware("auth");
-
 Route::get('getProductBatch',[StockController::class,"getProductBatch"])->name('getProductBatch');
-
-
 Route::get('stock-report',[PurchaseController::class,"currentStockReport"])->name('item_report');
 Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchaseStatus'])->name('updatePurchaseStatus');
+Route::get('date.wise.stock.view',[PurchaseController::class,'date_wise_stock_view'])->middleware('auth');
 // ==================End Reports =================
-
+// ================== Sale Reports ===============
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");
 Route::GET("searchSaleReport",[SaleInvoiceController::class,"searchSaleReport"])->name('searchSaleReport')->middleware("auth");
 Route::get('sale_details/{id}',[SaleInvoiceController::class,"saleDetail"])->name('sale_details')->middleware("auth");
-
 Route::get('viewSaleInvoice/{id}',[SaleInvoiceController::class,"viewSaleInvoice"])->name('viewSaleInvoice')->middleware('auth');
+Route::get('customer.sale',[SaleInvoiceController::class,'customer_wise_sale_view'])->middleware('auth');
+Route::get('customer.sale.view',[SaleInvoiceController::class,'customer_wise_sale_view_screen'])->middleware('auth');
+// ============== End Sale Reports ==============
+
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
@@ -257,8 +260,6 @@ Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('route:clear');
     return 'clear cache';
 });
-
-
 
 Route::get('backuprun',function(){
  $exitCode =Artisan::call('backup:run');

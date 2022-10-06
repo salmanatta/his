@@ -19,4 +19,8 @@ class SaleInvoiceDetail extends Model
     {
         return $this->belongsTo(Batch::class,'batch_id','id');
     }
+    public function salesMaster()
+    {
+        return $this->belongsTo(SaleInvoice::class,'sale_invoice_id','id');
+    }
 }

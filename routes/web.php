@@ -7,6 +7,7 @@ use App\Http\Controllers\pre_configuration\RoleController;
 use App\Http\Controllers\pre_configuration\BranchController;
 use App\Http\Controllers\pre_configuration\ProductController;
 use App\Http\Controllers\Stock;
+use App\Models\sales\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\SaleInvoiceController;
@@ -31,6 +32,9 @@ use App\Http\Controllers\ProductMaxSalQuantityController;
 // use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+//use App\Models\sales\Customer;
+
+//use app\Models\sales\Customer;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,7 +54,11 @@ Route::group(['middleware' => ['auth','HasPermission']],function (){
 });
 
 
-
+// ===================start restore backup to ====================================
+//Route::get('test', function () {
+//    $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
+//    return view('pages.reports.sale.customer-wise-sale',compact('customers'));
+//})->name('test');
 
 // Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 Route::get('/', function () {
@@ -251,6 +259,7 @@ Route::get('sale_details/{id}',[SaleInvoiceController::class,"saleDetail"])->nam
 Route::get('viewSaleInvoice/{id}',[SaleInvoiceController::class,"viewSaleInvoice"])->name('viewSaleInvoice')->middleware('auth');
 Route::get('customer.sale',[SaleInvoiceController::class,'customer_wise_sale_view'])->middleware('auth');
 Route::get('customer.sale.view',[SaleInvoiceController::class,'customer_wise_sale_view_screen'])->middleware('auth');
+Route::get('customer-wise-sale-pdf',[SaleInvoiceController::class,'customer_wise_sale_pdf'])->name('customer.wise.sale.pdf')->middleware('auth');
 // ============== End Sale Reports ==============
 
 

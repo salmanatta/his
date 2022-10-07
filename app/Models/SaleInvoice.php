@@ -13,59 +13,82 @@ use Illuminate\Database\Eloquent\Scope;
 class SaleInvoice extends Model
 {
     use HasFactory;
-     protected $guarded = [];
-     protected $appends = ['sumLineTotal','sumDiscountAmount','sumSalesTax','sumAdvTax','sumAdvTaxValue'];
 
-     public function setDateAttribute($date) {//get method same the set method
-        $this->attributes['invoice_date']=\Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
-      }
-       public function branch()
-      {
-          return $this->belongsTo(Branch::class,'branch_id','id');
-      }
-      public function user()
-      {
-          return $this->belongsTo(User::class,'user_id','id');
-      }
-      public function postUser()
-      {
-          return $this->belongsTo(User::class,'status_changed_by','id');
-      }
-      public function customer()
-      {
-          return $this->belongsTo(Customer::class,'customer_id','id');
-      }
-      public function salesman()
-      {
-          return $this->belongsTo(Employee::class,'salesman_id','id');
-      }
-      public function saleDetail()
-      {
-        return $this->hasMany(SaleInvoiceDetail::class,'sale_invoice_id','id');
-      }
-      public function getSumLineTotalAttribute()
-      {
+    protected $guarded = [];
+    protected $appends = ['sumLineTotal', 'sumDiscountAmount', 'sumSalesTax', 'sumAdvTax', 'sumAdvTaxValue'];
+
+    public function setDateAttribute($date)
+    {//get method same the set method
+        $this->attributes['invoice_date'] = \Carbon\Carbon::now();//this mutator is used to convert formate before the store data into db
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function postUser()
+    {
+        return $this->belongsTo(User::class, 'status_changed_by', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function salesman()
+    {
+        return $this->belongsTo(Employee::class, 'salesman_id', 'id');
+    }
+
+    public function saleDetail()
+    {
+        return $this->hasMany(SaleInvoiceDetail::class, 'sale_invoice_id', 'id');
+    }
+
+    public function getSumLineTotalAttribute()
+    {
         return $this->saleDetail()->sum('line_total');
-      }
-      public function getSumDiscountAmountAttribute()
-      {
+    }
+
+    public function getSumDiscountAmountAttribute()
+    {
         return $this->saleDetail()->sum('after_discount');
-      }
-      public function getSumSalesTaxAttribute()
-      {
+    }
+
+    public function getSumSalesTaxAttribute()
+    {
         return $this->saleDetail()->sum('sales_tax');
-      }
-      public function getSumAdvTaxAttribute()
-      {
+    }
+
+    public function getSumAdvTaxAttribute()
+    {
         return $this->saleDetail()->sum('adv_tax');
-      }
-      public function getSumAdvTaxValueAttribute()
-      {
+    }
+
+    public function getSumAdvTaxValueAttribute()
+    {
         return $this->saleDetail()->sum('adv_tax_value');
-      }
-      public function scopeMaxId($query,$branch,$transType)
-      {
+    }
+
+    public function scopeMaxId($query, $branch, $transType)
+    {
         $this->invoice_no ?? 0;
-        return $query->where('branch_id',$branch)->where('trans_type',$transType)->max('invoice_no')+1;
-      }
+        return $query->where('branch_id', $branch)->where('trans_type', $transType)->max('invoice_no') + 1;
+    }
+
+    public function scopeCustomer_sale_report($query,$from,$to,$customer,$trans_type,$branch)
+    {
+        return $query->whereDate('invoice_date','>=',$from)
+            ->whereDate('invoice_date','<=',$to)
+            ->where('trans_type',$trans_type)
+            ->where('customer_id',$customer)
+            ->where('branch_id',$branch);
+    }
 }

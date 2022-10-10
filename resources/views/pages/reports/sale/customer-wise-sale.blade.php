@@ -71,7 +71,7 @@
                         Search
                     </button>
                     <div class="pull-right btn-group btn-group-lg hidden-print printBlock">
-                        <a id="print" class="btn btn-info">
+                        <a id="print"  target="_blank" class="btn btn-info">
                             <i class="fa fa-print"></i> Print
                         </a>
                     </div>
@@ -121,7 +121,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <a href="{{ url('purchase_details') . '/' . $sale->id }}" style="border-radius: 44px;" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
+                                                    <a href="{{ url('sale-invoice/'.$sale->id) }}" style="border-radius: 44px;" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
                                                         Print Invoice </a>
                                                 </td>
                                             </tr>
@@ -137,6 +137,7 @@
                         </div>
                     </div>
                 </div>
+
         <footer class="footer">
             <div class="container-fluid">
                 <div class="row">
@@ -163,7 +164,7 @@
             var val = "<?= url('/') . '/customer-wise-sale-pdf' ?>";
             console.log( $("#from_date").val());
             console.log( $("#to_date").val());
-            window.location = val+"?from="+  $("#from_date").val() +'&to='+ $("#to_date").val() + '&customer=' + $("#customer_id").val() + '&trans' +  $("#trans_type").val();
+            window.location = val+"?from="+  $("#from_date").val() +"&to=" + $("#to_date").val() + "&customer=" + $("#customer_id").val() + "&trans=" +  $("#trans_type").val();
         });
 
         var product_count = 1;

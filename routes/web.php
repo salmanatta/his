@@ -260,6 +260,7 @@ Route::get('viewSaleInvoice/{id}',[SaleInvoiceController::class,"viewSaleInvoice
 Route::get('customer.sale',[SaleInvoiceController::class,'customer_wise_sale_view'])->middleware('auth');
 Route::get('customer.sale.view',[SaleInvoiceController::class,'customer_wise_sale_view_screen'])->middleware('auth');
 Route::get('customer-wise-sale-pdf',[SaleInvoiceController::class,'customer_wise_sale_pdf'])->name('customer.wise.sale.pdf')->middleware('auth');
+Route::get('sale-invoice/{id}',[SaleInvoiceController::class,'sale_invoice'])->middleware('auth');
 // ============== End Sale Reports ==============
 
 

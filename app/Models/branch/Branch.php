@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models\branch;
+use App\Models\Batch;
+use App\Models\Company;
 use  App\Models\PurchaseInvoice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +21,7 @@ class Branch extends Model
     // }
     // relation of one to many
 
-    
+
    public function purchases()
    {
        return $this->hasMany(PurchaseInvoice::class,'branch_id','id');
@@ -32,5 +34,8 @@ class Branch extends Model
    {
        return $this->hasMany(User::class,'branch_id','id');
    }
+   public function company()
+   {
+       return$this->belongsTo(Company::class,'company_id','id');
+   }
 }
- 

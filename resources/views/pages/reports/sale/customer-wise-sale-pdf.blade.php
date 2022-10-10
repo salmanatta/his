@@ -1,3 +1,18 @@
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        font-size: 12px;
+    }
+</style>
+
+
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
@@ -7,129 +22,94 @@
                         <div class="invoice-title">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <h4 class="float-end font-size-16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$purchase->inv_status}}</h4>
-                                    <h4 class="float-end font-size-16">Order # {{$purchase->invoice_no}}</h4>
+{{--                                    <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="logo-light.png" height="20"/>--}}
+                                </div>
+                                <div style="text-align: center">
+                                    <h4 style="margin-top: 0; margin-bottom: 0;" class="font-size-16">Customer Wise Sale Report</h4>
                                 </div>
                             </div>
                         </div>
-                        <hr>
                         <div class="row">
-                            <div class="col-sm-4">
-                                <address>
-                                    <strong>Billed To:</strong><br>
-                                    {{$purchase->user->name}}
-                                </address>
+                            <div class="col-12" style="text-align: center">
+                                <h4 style="margin-top: 0; margin-bottom: 0;">{{ $company->company->name }}</h4>
+                                {{ $company->name }}
                             </div>
-                            <div class="col-sm-4">
-                                <address class="mt-2 mt-sm-0">
-                                    <strong>Shipped To:</strong><br>
-                                    {{$purchase->supplier->name}}
-                                </address>
+                            <div style="font-size: 12px">
+                                <label for="customerName">From Date : </label>{{ date('d-m-Y', strtotime($from_date)) }}<br>
+                                <label for="customerName">To Date : </label>{{ date('d-m-Y', strtotime($to_date)) }}<br>
                             </div>
-                            <div class="col-sm-4">
-                                {{-- <div class="col-sm-6 text-sm-end"> --}}
-                                <address>
-                                    <strong>Branch Name:</strong><br>
-                                    {{$purchase->branch->name}}
-                                </address>
+                            <hr>
+                            <div style="display:flex;flex-direction:row;margin-bottom: 2%">
+                                <div style="float:left" >
+                                    <label for="customerName">Customer Name : </label>
+                                    {{ isset($sale_Master[0]->customer->name) ? $sale_Master[0]->customer->name : '' }}
+                                </div>
+                                <div style="float:right;width: 50% " >
+                                    <label for="customerName">Address : </label>
+                                    {{ isset($sale_Master[0]->customer->address) ? $sale_Master[0]->customer->address : '' }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <address>
-                                    <strong>Invoice Date:</strong><br>
-                                    {{$purchase->invoice_date}}
-                                </address>
-                            </div>
-                            <div class="col-sm-6">
-                                <address>
-                                    <strong>Description</strong><br>
-                                    {{$purchase->description}}
-                                </address>
-                            </div>
-                        </div>
-                        <div class="py-2 mt-3">
-                            <h3 class="font-size-15 fw-bold text-center">Order Details</h3>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-nowrap" border="1px">
-                                <thead>
-                                <tr style="background-color:#e4e6eb;">
-                                <!-- {{-- <th style="width: 70px;">No.</th> --}} -->
-                                    <th>#</th>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total Amount</th>
-                                    <th>Discount %</th>
-                                    <th>Discount Amount</th>
-                                    <th>Sales Tax</th>
-                                    <th>Advance Tax</th>
-                                    <th class="text-end">Line Total</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php $counter = 1 ?>
-                                @foreach ($purchase_details as $item)
-                                    <tr>
-                                        <td>{{$counter}}</td>
-                                        <td>{{$item->item}}</td>
-                                        <td>{{$item->price}}</td>
-                                        <td>{{$item->qty}}</td>
-                                        <td class="text-center">{{$item->qty * $item->price}}</td>
-                                        <td>{{$item->discount}}</td>
-                                        <td class="text-center">{{$item->after_discount}}</td>
-                                        <td>{{$item->sales_tax}}</td>
-                                        <td>{{$item->adv_tax}}</td>
-                                        <td class="text-end">{{$item->line_total}}</td>
-                                        <?php $counter++ ?>
+                            <div class="table-responsive">
+                                <table style="margin-top: 2%">
+                                    <thead>
+                                    <tr style="background-color:#e4e6eb;">
+                                        <th>#</th>
+                                        <th>Invoice #</th>
+                                        <th>Invoice Date</th>
+                                        <th>Salesman</th>
+                                        <th>Amount</th>
+                                        <th>Discount</th>
+                                        <th>Sales Tax</th>
+                                        <th>Advance Tax</th>
+                                        <th style="text-align: right">Net Total</th>
                                     </tr>
-                                @endforeach
-                                @php
-                                    $subTotal=0;
-                                    $totalDiscount=0;
-                                    $get_order_details=DB::table('purchase_invoice_details')->where('purchase_invoice_detail_id',$purchase->id)->get();
-                                @endphp
-                                @foreach($get_order_details as $row)
+                                    </thead>
+                                    <tbody>
                                     @php
-                                        $subTotal= $subTotal + $row->line_total ;
-                                        // $totalDiscount= $totalDiscount + $discount;
+                                        $counter = 1;
+                                        $net_total = 0;
+                                        $adv_tax = 0;
+                                        $sales_tax =0;
+                                        $discount =0;
+                                        $total_amount =0;
                                     @endphp
-                                @endforeach
-                                <tr>
-                                    <td colspan="9" class="border-0 text-end">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td class="border-0 text-end">
-                                        <h4 class="m-0">{{$purchase->total}}</h4>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-12 d-flex justify-content-end me-2">
-                            <strong>Freight Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-                            <h4 class="m-0">{{$purchase->freight}}</h4>
-                        </div>
-                        <br>
-                        <div class="col-md-12 d-flex justify-content-end me-2">
-                            <strong>Gross Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-                            <h4 class="m-0">{{$purchase->total - $purchase->freight}}</h4>
+                                    @foreach ($sale_Master as $item)
+                                        <tr>
+                                            <td>{{ $counter }}</td>
+                                            <td>{{ $item->invoice_no }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($item->invoice_date)) }}</td>
+                                            <td>{{ $item->salesman->first_name.' '.$item->salesman->last_name }}</td>
+                                            <td style="text-align: right">{{ $item->sumLineTotal + $item->sumDiscountAmount - $item->sumAdvTaxValue - $item->sumSalesTax }}</td>
+                                            <td style="text-align: center">{{ $item->sumDiscountAmount }}</td>
+                                            <td style="text-align: center">{{ $item->sumSalesTax  }}</td>
+                                            <td style="text-align: center">{{ $item->sumAdvTaxValue }}</td>
+                                            <td style="text-align: right">{{ $item->total }}</td>
+                                        @php
+                                            $net_total += $item->total;
+                                            $adv_tax += $item->sumAdvTaxValue;
+                                            $sales_tax += $item->sumSalesTax;
+                                            $discount += $item->sumDiscountAmount;
+                                            $total_amount += $item->sumLineTotal + $item->sumDiscountAmount - $item->sumAdvTaxValue - $item->sumSalesTax;
+                                        @endphp
+                                        </tr>
+                                    @endforeach
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td> <h4>Grant Total</h4></td>
+                                            <td style="text-align: right"> <h4>{{ $total_amount  }}</h4></td>
+                                            <td style="text-align: center"> <h4>{{ $discount  }}</h4></td>
+                                            <td style="text-align: center"> <h4>{{ $sales_tax  }}</h4></td>
+                                            <td style="text-align: center"> <h4>{{ $adv_tax }}</h4></td>
+                                            <td style="text-align: right"> <h4>{{ $net_total }}</h4> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="text-sm-end d-none d-sm-block">
-                        Design & Develop by The Blue
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-</div>

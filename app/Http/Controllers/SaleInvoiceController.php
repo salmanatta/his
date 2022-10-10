@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\branch\Branch;
+use App\Models\Company;
 use App\Models\employee\Employee;
 use App\Models\PurchaseInvoice;
 use App\Models\PurchaseInvoiceDetail;
@@ -399,14 +401,23 @@ class SaleInvoiceController extends Controller
 
     public function customer_wise_sale_pdf(Request $request)
     {
-//        dd($request->all());
         $sale_Master = SaleInvoice::Customer_sale_report($request->from, $request->to, $request->customer, $request->trans, auth()->user()->branch_id)->get();
-        dd($sale_Master);
-
-        $pdf = PDF::loadView('pages.reports.purchase.purchase-detail-test', compact('purchase', 'purchase_details'))->setOptions(['defaultFont' => 'sans-serif']);
-
-
+        $company = Branch::find(auth()->user()->branch_id);
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $pdf = PDF::loadView('pages.reports.sale.customer-wise-sale-pdf', compact('sale_Master', 'company','from_date','to_date'))->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+    }
+    public function sale_invoice($id)
+    {
+        $sale = SaleInvoice::where('id', $id)->with('customer', 'branch', 'user')->first();
+        $sale_details = SaleInvoiceDetail::with('product', 'batch')->where('sale_invoice_id', $id)->get();
+
+        $pdf = PDF::loadView('pages.reports.sale.sale-invoice', compact('sale', 'sale_details'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+
+
+
     }
 }
 

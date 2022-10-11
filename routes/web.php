@@ -168,7 +168,7 @@ Route::get('showGeneralBonus',[GeneralController::class,"showGeneralBonus"])->mi
 Route::get('showGeneralDiscount',[GeneralController::class,"showGeneralDiscount"])->middleware('auth');
 Route::post('insertProductBonus',[GeneralController::class,'insertProductBonus'])->middleware('auth');
 Route::post('insertProductDiscount',[GeneralController::class,'insertProductDiscount'])->middleware('auth');
-Route::get('getCalendarSetup',[GeneralController::class,'getCalendarSetup'])->middleware('auth');
+Route::get('getCalendarSetup',[GeneralController::class,'getCalendarSetup']);
 Route::get('calendar-List',[GeneralController::class,'calendarList'])->name('calendar-List')->middleware('auth');
 Route::get('create-Date-Plan',[GeneralController::class,'createDatePlan'])->middleware('auth');
 Route::post('create-Date-Plan',[GeneralController::class,'insert_date_plan'])->middleware('auth');

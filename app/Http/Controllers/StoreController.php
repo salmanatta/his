@@ -77,7 +77,7 @@ class StoreController extends Controller
         $transID = StoreTransfer::create(
             [
                 'trans_id'          => StoreTransfer::MaxId(auth()->user()->branch_id),
-                'trans_date'        => $request->trans_date,
+                'trans_date'        => Carbon::createFromFormat('m/d/Y', $request->trans_date)->format('Y-m-d'),
                 'trans_status'      => 'Pending',
                 'to_branch_id'      => $request->to_branch_id,
                 'from_branch_id'    => auth()->user()->branch_id,
@@ -367,7 +367,7 @@ class StoreController extends Controller
            $stock->quantity += $row->qty;
            $stock->save();
              }
-           
+
         }
         return back()->with('info', 'Data Updated Successfully!');
     }

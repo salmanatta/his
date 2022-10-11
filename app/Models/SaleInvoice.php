@@ -15,7 +15,7 @@ class SaleInvoice extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $appends = ['sumLineTotal', 'sumDiscountAmount', 'sumSalesTax', 'sumAdvTax', 'sumAdvTaxValue'];
+    protected $appends = ['sumLineTotal', 'sumDiscountAmount', 'sumSalesTax', 'sumAdvTax', 'sumAdvTaxValue','sumQty','sumBonus','sumDiscount'];
 
     public function setDateAttribute($date)
     {//get method same the set method
@@ -76,6 +76,22 @@ class SaleInvoice extends Model
     {
         return $this->saleDetail()->sum('adv_tax_value');
     }
+
+    public function getSumQtyAttribute()
+    {
+        return $this->saleDetail()->sum('qty');
+    }
+
+    public function getSumBonusAttribute()
+    {
+        return $this->saleDetail()->sum('bonus');
+    }
+
+    public function getSumDiscountAttribute()
+    {
+        return $this->saleDetail()->sum('discount');
+    }
+
 
     public function scopeMaxId($query, $branch, $transType)
     {

@@ -13,34 +13,53 @@
 
         th, td {
             padding: 8px;
-            text-align: center;
+            /*text-align: center;*/
             border-bottom: 1px solid #ddd;
             font-size: 12px;
         }
     </style>
 
 </head>
-<body>
+<body style="margin-bottom: 0;margin-top: 0">
 
-<table width="100%">
+<table style="margin-bottom: 0;margin-top: 0" >
     <tr>
         {{--        <td valign="top"><img src="{{asset('images/meteor-logo.png')}}" alt="" width="150"/></td>--}}
-        <td align="right">
-            <h3>Sale Invoice</h3>
+        <td align="left" style="font-size: 20px">
+            <h4>Sale Invoice</h4>
+        </td>
+        <td align="right" style="font-size: 20px">
+            <h4 style="margin-top: 0; margin-bottom: 0;">{{ $company->company->name }}</h4>
+            {{ $company->name }}
         </td>
     </tr>
 
 </table>
+<h4 style="text-align: center;margin-top: 0;margin-bottom: 0">{{ !is_null($sale) ? $sale->inv_status : '' }}</h4>
+<table  width="100%">
+    <tr>
+        <td style="border-bottom:0"><strong>Invoice #:</strong> {{ !is_null($sale) ? $sale->invoice_no : '' }}</td>
+        <td style="border-bottom:0"><strong>Invoice Date :</strong> {{ !is_null($sale) ? $sale->invoice_date : '' }}</td>
+    </tr>
+    <tr style="border-bottom:0">
+        @php
+            $filer;
+             if ($sale->customer->isfiler == 0){
+                 $filer = 'Non-Filer';
+            }elseif ($sale->customer->isfiler == 1){
+                 $filer = 'Filer';
+            }else{
+                 $filer = 'Exempted';
+            }
+        @endphp
+        <td style="border-bottom:0"><strong>Customer Name:</strong> {{ !is_null($sale) ? $sale->customer->name.' ( '.$filer.' )' : '' }}</td>
+        <td style="border-bottom:0"><strong>Salesman :</strong> {{ !is_null( $sale->salesman) ? $sale->salesman->first_name.' '.$sale->salesman->last_name : '' }}</td>
+    </tr>
+{{--    <tr>--}}
+{{--        --}}
+{{--        <td style="border-bottom: 0"><strong>Status :</strong> {{ !is_null($sale) ? $filer : '' }}</td>--}}
 
-<table width="100%">
-    <tr>
-        <td><strong>Invoice #:</strong> {{ !is_null($sale) ? $sale->invoice_no : '' }}</td>
-        <td><strong>Invoice Date :</strong> {{ !is_null($sale) ? $sale->invoice_date : '' }}</td>
-    </tr>
-    <tr>
-        <td><strong>Customer Name:</strong> {{ !is_null($sale) ? $sale->customer->name : '' }}</td>
-        <td><strong>Invoice Date :</strong> {{ !is_null($sale) ? $sale->invoice_date : '' }}</td>
-    </tr>
+{{--    </tr>--}}
 
 </table>
 
@@ -65,7 +84,9 @@
     </tr>
     </thead>
     <tbody>
-    @php $counter = 1 @endphp
+    @php
+        $counter = 1;
+     @endphp
     @foreach ($sale_details as $item)
         <tr>
             <td>{{ $counter }}</td>
@@ -96,26 +117,51 @@
             $subTotal = $subTotal + $row->line_total;
         @endphp
     @endforeach
-    <tr>
-        <td colspan="12" class="border-0 text-end">
-            <strong>Total</strong>
+    <tr style="margin-bottom:0;margin-top:0">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <h4>Total</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumQty }}</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumBonus }}</h4>
+        </td>
+        <td></td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumSalesTax }}</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumAdvTax }}</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumAdvTaxValue }}</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumDiscount }}</h4>
+        </td>
+        <td style="text-align: center">
+            <h4>{{ $sale->sumDiscountAmount }}</h4>
         </td>
         <td class="border-0 text-end">
-            <h4 class="m-0">{{ $subTotal }}</h4>
+            <h4 style="text-align: right">{{ $subTotal }}</h4>
         </td>
     </tr>
     </tbody>
 </table>
 <div style="display:flex;flex-direction:row;margin-top: 2%">
     <div style="float:left" >
-        <div style="text-align: center;margin-bottom:0%">{{ isset($sale->user->name) ? $sale->user->name : '' }}</div>
-        <br><div style="text-align: center">_____________________</div><br>
+        <div style="text-align: right;margin-bottom:0;margin-top:0;width: 50%">{{ isset($sale->user->name) ? $sale->user->name : '' }}</div>
+        <div style="text-align: center">_____________________</div>
         <div style="text-align: center">Created By</div>
     </div>
-    <div style="float:right;width: 50% " >
-        {{ isset($sale->postUser->name) ? $sale->postUser->name : '' }}
-        <br><div style="text-align: center">_____________________</div><br>
-        <div style="text-align: center">Post By</div>
+    <div style="float:right">
+        <div style="text-align: right;margin-bottom:0;margin-top:0;width: 50%">{{ isset($sale->postUser->name) ? $sale->postUser->name : '' }}</div>
+        <div style="text-align: center;margin-bottom:0;margin-top:0;">_____________________</div>
+        <div style="text-align: center;margin-bottom:0;margin-top:0;">Post By</div>
     </div>
 </div>
 

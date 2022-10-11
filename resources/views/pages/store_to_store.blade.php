@@ -12,7 +12,7 @@
               <div class="col-md-10">
                 <div class="mb-3">
                   <label for="formrow-inputState" class="col-md-2 col-form-label">Transfer Date </label>
-                  <input type="date" name="trans_date" value="<?php echo date('Y-m-d') ?>" class="form-control" required="">
+                  <input type="text" name="trans_date" value="<?php echo date('m/d/Y') ?>" class="form-control" required="" id="fiveDays" >
                 </div>
               </div>
               <div class="col-md-10">
@@ -62,7 +62,7 @@
                       <th>Batch</th>
                       <th>Stock Quanity</th>
                       <th>Quanity</th>
-                      <th>Price</th>                      
+                      <th>Price</th>
                       <th>Line Total</th>
                       <th>Action</th>
                     </tr>
@@ -75,7 +75,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td></td>                      
+                      <td></td>
                       <td style="width:10%;text-align:right">Grand Total</td>
                       <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
                     </tr>
@@ -191,10 +191,10 @@
       // data: {
       //   id: id
       // },
-      success: function(data) 
+      success: function(data)
       {
           // console.log(data);
-        var table_body = $("table.order-list tbody"); // assign table body to variable used in different area   
+        var table_body = $("table.order-list tbody"); // assign table body to variable used in different area
         var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `" >
         <td class="product_count">` + product_count + `</td>
         <td class="name">
@@ -224,7 +224,7 @@
         <input type="hidden" class="hidden_total" name="total" value="0">
         <input type="hidden" class="sub_total" name="sub_total" value="0">
         <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
-        </tr>`;        
+        </tr>`;
         table_body.append(new_row); // append new row to table body
         product_count++;
         row_id++;
@@ -268,13 +268,13 @@
             },
         });
     });
-    // @@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@    
-    $(document).on('click', '.update_modal', function() {        
+    // @@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@
+    $(document).on('click', '.update_modal', function() {
         var product_id = $('#product_modal').val();
         var price = $('#edit_batch :selected').data('price');
         var quantity = $('#edit_batch :selected').data('quantity');
         var batch_name = $('#edit_batch :selected').data('batch_name');
-        var batchId = $('#edit_batch :selected').val();                
+        var batchId = $('#edit_batch :selected').val();
         var batch_id_modal = $("#edit_batch :selected").text();
         var row_id_for_editing = $('input[name="edit_row_id"]').val();
         $('#' + row_id_for_editing).find('.stockQty').val(quantity);
@@ -283,35 +283,56 @@
         $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
 
         // $('#' + row_id_for_editing).find('.batch_no_id').text(batch_name);
-        
+
 
         $(".bs-example-modal-lg").modal('hide');
         do_calculation();
     });
-    function do_calculation() 
-    {     
+    function do_calculation()
+    {
       var product_count = 1;
-      var grand_subtotal = 0;                 
+      var grand_subtotal = 0;
       $('.table_append_rows').each(function() {
-        var qty_new = parseInt($(this).find('.transferQty').find('input').val());  
-        var s_qty   = parseInt($(this).find('.stockQty').find('input').val());          
-        if (qty_new > s_qty) 
+        var qty_new = parseInt($(this).find('.transferQty').find('input').val());
+        var s_qty   = parseInt($(this).find('.stockQty').find('input').val());
+        if (qty_new > s_qty)
         {
           alert("Quantity Must be less then Stock Quantity!");
-          $(this).find('.transferQty').find('input').val(1);          
-        }         
-        var qty = $(this).find('.transferQty').find('input').val();            
-        var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val());            
+          $(this).find('.transferQty').find('input').val(1);
+        }
+        var qty = $(this).find('.transferQty').find('input').val();
+        var purchase_price = parseFloat($(this).find('.purchase_price').find('input').val());
         total_rate = parseFloat(purchase_price * qty).toFixed(2);
         $(this).find('#total_rate').val(total_rate);
-        $(this).find('#line_total').val(total_rate);            
+        $(this).find('#line_total').val(total_rate);
         grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(total_rate)).toFixed(2);
         $("._tfootTotal").text(grand_subtotal);
-        $(".hidden_total").val(grand_subtotal);            
-        product_count++;          
+        $(".hidden_total").val(grand_subtotal);
+        product_count++;
       });
-      
     }
+
+
+  $(document).ready(function() {
+      $.ajax({
+          type: 'GET',
+          url: '{{url("getCalendarSetup")}}',
+          data: {
+              transType: "TRANSFER",
+          },
+          success: function (data) {
+              // console.log(data);
+              var minDays = data.calendar_setup.min_days;
+              var maxDays = data.calendar_setup.max_days;
+
+              $("#fiveDays").datepicker({
+                  minDate: -minDays,
+                  maxDate: +maxDays,
+              });
+          }
+      });
+  });
+
 
 
 </script>

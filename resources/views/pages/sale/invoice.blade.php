@@ -18,9 +18,9 @@
                                 <div class="d-flex justify-content-between">
                                     @if(isset($sale))
                                     @if($sale->trans_type == 'SALE' )
-                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail fdsfsdf</h4>
                                     @else
-                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail</h4>
+                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return Detail sdfsdfsd</h4>
                                     @endif
                                     @else
                                     @if($transType == 'SALE')
@@ -49,7 +49,7 @@
                                                         <p class="">
                                                             <span>
                                                                 <label class="form-label" for="Customer">Invoice Date</label>
-                                                                <input type="date" name="invoice_date" value="{{ isset($sale)? $sale->invoice_date : date('Y-m-d') }}" id="datepickercustom1" class="form-control _date">
+                                                                <input type="text" name="invoice_date" value="{{ isset($sale)? $sale->invoice_date : date('m/d/Y') }}" id="fiveDays" class="form-control">
                                                             </span>
                                                         </p>
                                                         <input type="hidden" name="trans_type" value="{{ isset($sale) ? $sale->trans_type : $transType }}">
@@ -608,8 +608,30 @@
         $('#' + row_id_for_editing).find('.price').val(price);
         $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
         $(".bs-example-modal-lg").modal('hide');
-        do_calculation();
+        // do_calculation();
     });
+
+    $(document).ready(function() {
+        $.ajax({
+            type: 'GET',
+            url: '{{url("getCalendarSetup")}}',
+            data: {
+                transType: "<?php echo isset($transType) ? $transType : $sale->trans_type  ?>",
+            },
+            success: function (data) {
+                // console.log(data);
+                var minDays = data.calendar_setup.min_days;
+                var maxDays = data.calendar_setup.max_days;
+
+                $("#fiveDays").datepicker({
+                    minDate: -minDays,
+                    maxDate: +maxDays,
+                });
+            }
+        });
+    });
+
+
 </script>
 
 @endpush

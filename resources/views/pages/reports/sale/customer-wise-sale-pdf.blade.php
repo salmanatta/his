@@ -27,6 +27,7 @@
                                 <div style="text-align: center">
                                     <h4 style="margin-top: 0; margin-bottom: 0;" class="font-size-16">Customer Wise Sale Report</h4>
                                 </div>
+
                             </div>
                         </div>
                         <div class="row">

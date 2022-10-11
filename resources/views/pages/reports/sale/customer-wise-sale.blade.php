@@ -15,8 +15,10 @@
                                     <label for="formrow-inputCity" class="form-label">From Date</label>
                                 </div>
                                 <div class="col-4">
+
                                     <input type="date" name="from_date" class="form-control to_date printBlock"
-                                           id="from_date" value='<?php echo date('Y-m-d'); ?>'>
+                                           id="from_date" value={{ isset($_GET['from_date']) ? $_GET['from_date'] :
+                                    date('Y-m-d')}}>
                                 </div>
                             </div>
                         </div>
@@ -29,7 +31,8 @@
                                 </div>
                                 <div class="col-4">
                                     <input type="date" name="to_date" class="form-control to_date printBlock"
-                                           id="to_date" value='<?php echo date('Y-m-d'); ?>'>
+                                           id="to_date" value={{ isset($_GET['to_date']) ? $_GET['to_date'] :
+                                    date('Y-m-d')}}>
                                 </div>
                             </div>
                         </div>

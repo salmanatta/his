@@ -49,7 +49,10 @@ class SaleInvoiceController extends Controller
     {
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE RETURN';
-        return view("pages/sale/invoice", compact('invoice_no', 'transType'));
+        $salesman = Employee::where('designation_id', '1')
+            ->where('branch_id', auth()->user()->branch_id)
+            ->get();
+        return view("pages/sale/invoice", compact('invoice_no', 'transType','salesman'));
     }
 
     public function getStock(Request $request, $id)
@@ -198,7 +201,7 @@ class SaleInvoiceController extends Controller
                 // 'branch_id.required' => 'Please select any Branch, Thank You.',
             ]
         );
-        $order_data = $request->only(['customer_id', 'invoice_date', 'description', 'total', 'trans_type']);
+        $order_data = $request->only(['customer_id', 'description', 'total', 'trans_type']);
         $maxId = SaleInvoice::maxId(auth()->user()->branch_id, $request->trans_type);
         // $maxId = $maxId + 1;
         $order_data['invoice_no'] = $maxId;
@@ -206,6 +209,7 @@ class SaleInvoiceController extends Controller
         $order_data['branch_id'] = auth()->user()->branch_id;
         $order_data['inv_status'] = 'Un-Post';
         $order_data['salesman_id'] = $request->salesman;
+        $order_data['invoice_date']  = Carbon::createFromFormat('m/d/Y', $request->invoice_date)->format('Y-m-d');
         $order = SaleInvoice::create($order_data);
         if ($order) {
             $sale_invoice_detail_id = $order->id;
@@ -412,8 +416,9 @@ class SaleInvoiceController extends Controller
     {
         $sale = SaleInvoice::where('id', $id)->with('customer', 'branch', 'user')->first();
         $sale_details = SaleInvoiceDetail::with('product', 'batch')->where('sale_invoice_id', $id)->get();
+        $company = Branch::find(auth()->user()->branch_id);
 
-        $pdf = PDF::loadView('pages.reports.sale.sale-invoice', compact('sale', 'sale_details'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('pages.reports.sale.sale-invoice', compact('sale', 'sale_details','company'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
 
 

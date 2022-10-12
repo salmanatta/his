@@ -19,5 +19,9 @@ class StoreTransferDetail extends Model
     {
       return $this->belongsTo(Batch::class,'batch_id','id');
     }
+
+    public function transferMaster()
+    {
+        return $this->belongsTo(StoreTransfer::class,'trans_id','id');
+    }
 }
-  

@@ -109,10 +109,10 @@ class ProductController extends Controller
                 'group_id.required' => 'Please select any Product Group, Thank You.',
             ]
         );
-        $data = $request->except('product_id');        
+        $data = $request->except('product_id');
         $create_product = Product::create($data);
         $product_id = $create_product->id;
-        return redirect()->route('getProduct', ['id' => $product_id])->with('success', 'Product Added Successfully!');        
+        return redirect()->route('getProduct', ['id' => $product_id])->with('success', 'Product Added Successfully!');
     }
     /**
      * Display the specified resource.
@@ -182,5 +182,18 @@ class ProductController extends Controller
     public function logsAction($data)
     {
         LogTable::store(["action" => $data["action"], "remarks" => $data['remarks'], "action_date" => date("Y-m-d"), "action_time" => date("H:i:s"), "user_id" => auth()->user()->id]);
+    }
+
+    public function date_wise_stock_view()
+    {
+        $product = Product::latest('name' ,'ASC')->get();
+        return view('pages.reports.purchase.item_report' , compact('product'));
+    }
+
+    public function date_wise_stock_data(Request $request)
+    {
+//        dd($request);
+        $product = Product::latest('name' ,'ASC')->get();
+        return view('pages.reports.purchase.item_report' , compact('product'));
     }
 }

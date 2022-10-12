@@ -334,18 +334,8 @@ class PurchaseController extends Controller
     {
         //
     }
-    public function currentStockReport()
-    {
-        $product = Product::all();
-//        return $product;
-        return view('pages.reports.purchase.item_report' , compact('product'));
-    }
-    public function date_wise_stock_view(Request $request)
-    {
-        //dd($request->all());
-        $product = Product::all();
-        return $product;
-    }
+
+
     public function updatePurchaseStatus($id)
     {
         $purchaseMaster = PurchaseInvoice::find($id);

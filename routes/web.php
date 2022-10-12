@@ -248,9 +248,12 @@ Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoSt
 //for stock report
 Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('stock_detail')->middleware("auth");
 Route::get('getProductBatch',[StockController::class,"getProductBatch"])->name('getProductBatch');
-Route::get('stock-report',[PurchaseController::class,"currentStockReport"])->name('item_report');
 Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchaseStatus'])->name('updatePurchaseStatus');
-Route::get('date.wise.stock.view',[PurchaseController::class,'date_wise_stock_view'])->middleware('auth');
+
+Route::get('date-wise-stock-view',[ProductController::class,"date_wise_stock_view"])->middleware('auth');
+
+Route::get('date-wise-stock-data',[ProductController::class,'date_wise_stock_data'])->middleware('auth');
+
 // ==================End Reports =================
 // ================== Sale Reports ===============
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");

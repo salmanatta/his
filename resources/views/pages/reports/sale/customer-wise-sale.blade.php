@@ -8,14 +8,12 @@
             <form method="GET" action="{{ url('customer.sale.view') }}">
                 <div class="row printBlock">
                     <div class="row">
-
                         <div class="col-4">
                             <div class="row d-flex align-items-center">
                                 <div class="col-4">
                                     <label for="formrow-inputCity" class="form-label">From Date</label>
                                 </div>
                                 <div class="col-4">
-
                                     <input type="date" name="from_date" class="form-control to_date printBlock"
                                            id="from_date" value={{ isset($_GET['from_date']) ? $_GET['from_date'] :
                                     date('Y-m-d')}}>

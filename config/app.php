@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-
     ],
 
     /*

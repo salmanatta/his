@@ -31,137 +31,6 @@
                     <span class="bx bx-search-alt"></span>
                 </div>
             </form>
-
-        <!-- <div class="dropdown dropdown-mega d-none d-lg-block ml-2">
-                <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-                    <span key="t-megamenu">@lang('translation.Mega_Menu')</span>
-                    <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div class="dropdown-menu dropdown-megamenu">
-                    <div class="row">
-                        <div class="col-sm-8">
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h5 class="font-size-14 mt-0" key="t-ui-components">@lang('translation.UI_Components')</h5>
-                                    <ul class="list-unstyled megamenu-list">
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-lightbox">@lang('translation.Lightbox')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-range-slider">@lang('translation.Range_Slider')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-sweet-alert">@lang('translation.Sweet_Alert')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-rating">@lang('translation.Rating')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-forms">@lang('translation.Forms')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-tables">@lang('translation.Tables')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-charts">@lang('translation.Charts')</a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <h5 class="font-size-14 mt-0" key="t-applications">@lang('translation.Applications')</h5>
-                                    <ul class="list-unstyled megamenu-list">
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-ecommerce">@lang('translation.Ecommerce')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-calendar">@lang('translation.Calendar')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-email">@lang('translation.Email')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-projects">@lang('translation.Projects')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-tasks">@lang('translation.Tasks')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-contacts">@lang('translation.Contacts')</a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <h5 class="font-size-14 mt-0" key="t-extra-pages">@lang('translation.Extra_Pages')</h5>
-                                    <ul class="list-unstyled megamenu-list">
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-light-sidebar">@lang('translation.Light_Sidebar')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-compact-sidebar">@lang('translation.Compact_Sidebar')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-horizontal">@lang('translation.Horizontal_layout')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-maintenance">@lang('translation.Maintenance')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-coming-soon">@lang('translation.Coming_Soon')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-timeline">@lang('translation.Timeline')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-faqs">@lang('translation.FAQs')</a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h5 class="font-size-14 mt-0" key="t-ui-components">@lang('translation.UI_Components')</h5>
-                                    <ul class="list-unstyled megamenu-list">
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-lightbox">@lang('translation.Lightbox')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-range-slider">@lang('translation.Range_Slider')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-sweet-alert">@lang('translation.Sweet_Alert')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-rating">@lang('translation.Rating')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-forms">@lang('translation.Forms')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-tables">@lang('translation.Tables')</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" key="t-charts">@lang('translation.Charts')</a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-sm-5">
-                                    <div>
-                                        <img src="{{ URL::asset ('/assets/images/megamenu-img.png') }}" alt="" class="img-fluid mx-auto d-block">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div> -->
         </div>
 
         <div class="d-flex">
@@ -251,67 +120,6 @@
                             </div>
                         </div>
                     </div>
-                <!--  <div data-simplebar style="max-height: 230px;">
-                        <a href="" class="text-reset notification-item">
-                            <div class="media">
-                                <div class="avatar-xs me-3">
-                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                        <i class="bx bx-cart"></i>
-                                    </span>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1" key="t-your-order">@lang('translation.Your_order_is_placed')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">@lang('translation.If_several_languages_coalesce_the_grammar')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">@lang('translation.3_min_ago')</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="text-reset notification-item">
-                            <div class="media">
-                                <img src="{{ URL::asset ('/assets/images/users/avatar-3.jpg') }}"
-                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1">@lang('translation.James_Lemire')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-simplified">@lang('translation.It_will_seem_like_simplified_English')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-hours-ago">@lang('translation.1_hours_ago')</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="text-reset notification-item">
-                            <div class="media">
-                                <div class="avatar-xs me-3">
-                                    <span class="avatar-title bg-success rounded-circle font-size-16">
-                                        <i class="bx bx-badge-check"></i>
-                                    </span>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1" key="t-shipped">@lang('translation.Your_item_is_shipped')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">@lang('translation.If_several_languages_coalesce_the_grammar')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">@lang('translation.3_min_ago')</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="" class="text-reset notification-item">
-                            <div class="media">
-                                <img src="{{ URL::asset ('/assets/images/users/avatar-4.jpg') }}"
-                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1">@lang('translation.Salena_Layfield')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-occidental">@lang('translation.As_a_skeptical_Cambridge_friend_of_mine_occidental')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-hours-ago">@lang('translation.1_hours_ago')</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div> -->
                     <div class="p-2 border-top d-grid">
                         <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
                             <i class="mdi mdi-arrow-right-circle me-1"></i> <span
@@ -353,13 +161,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
-                    <i class="bx bx-cog bx-spin"></i>
-                </button>
-            </div> -->
-
         </div>
     </div>
 </header>
@@ -425,7 +226,6 @@
                                 Purchase Invoice </a>
                         </div>
                     </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Sales</span>
@@ -503,36 +303,24 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
                                     <a href="{{url('customer.sale')}}" class="dropdown-item" key="t-form-elements">Customer
-                                        Purchase</a>
+                                        Wise Sale Report</a>
                                 </div>
                             </div>
-                            <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
-
-                            <a href="{{url('stock_detail')}}" class="dropdown-item" key="t-saas">Current Stock
-                                Reports</a>
-                            <a href="{{url('stock-report')}}" class="dropdown-item" key="t-saas">Item Ledger</a>
-                        </div>
-                    </li>
-
-                    {{-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
-                            <i class="bx bx-collection me-2"></i><span key="t-components">Orders</span>
-                            <div class="arrow-down"></div>
-                        </a>
-                         <div class="dropdown-menu" aria-labelledby="topnav-components">
                             <div class="dropdown">
-                                <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form" role="button">
-                                    <span key="t-forms">Pending Order</span>
+                                <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form"
+                                   role="button">
+                                    <span key="t-forms">Stock Reports</span>
                                     <div class="arrow-down"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
-                                    <a href="form-elements" class="dropdown-item" key="t-form-elements">Order Complete</a>
+                                    <a href="{{ url('stock_detail') }}" class="dropdown-item" key="t-form-elements">Current
+                                        Stock Register</a>
+                                    <a href="{{ url('date-wise-stock-view') }}" class="dropdown-item" key="t-form-elements">Date
+                                        Wise Stock Register</a>
                                 </div>
+                                <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
                             </div>
-                        </div>
-                    </li> --}}
-
-
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Setting</span>

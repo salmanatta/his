@@ -315,11 +315,13 @@
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
                                     <a href="{{ url('stock_detail') }}" class="dropdown-item" key="t-form-elements">Current
                                         Stock Register</a>
-                                    <a href="{{ url('date-wise-stock-view') }}" class="dropdown-item" key="t-form-elements">Date
+                                    <a href="{{ url('date-wise-stock-view') }}" class="dropdown-item"
+                                       key="t-form-elements">Date
                                         Wise Stock Register</a>
                                 </div>
-                                <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
                             </div>
+                            <a href="{{url('logs')}}" class="dropdown-item" key="t-saas">Logs</a>
+                        </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">

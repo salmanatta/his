@@ -403,25 +403,8 @@ class SaleInvoiceController extends Controller
         return view('pages.reports.sale.customer-wise-sale', compact('customers', 'sale_Master'));
     }
 
-    public function customer_wise_sale_pdf(Request $request)
-    {
-        $sale_Master = SaleInvoice::Customer_sale_report($request->from, $request->to, $request->customer, $request->trans, auth()->user()->branch_id)->get();
-        $company = Branch::find(auth()->user()->branch_id);
-        $from_date = $request->from;
-        $to_date = $request->to;
-        $pdf = PDF::loadView('pages.reports.sale.customer-wise-sale-pdf', compact('sale_Master', 'company', 'from_date', 'to_date'))->setOptions(['defaultFont' => 'sans-serif']);
-        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
-    }
 
-    public function sale_invoice($id)
-    {
-        $sale = SaleInvoice::where('id', $id)->with('customer', 'branch', 'user')->first();
-        $sale_details = SaleInvoiceDetail::with('product', 'batch')->where('sale_invoice_id', $id)->get();
-        $company = Branch::find(auth()->user()->branch_id);
 
-        $pdf = PDF::loadView('pages.reports.sale.sale-invoice', compact('sale', 'sale_details', 'company'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
-        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
-    }
 
     public function excel_test()
     {

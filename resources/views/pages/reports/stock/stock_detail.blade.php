@@ -114,7 +114,7 @@
                         </thead>
                         <tbody id="batch_data">
                         </tbody>
-                        <tr>                            
+                        <tr>
                         </tr>
                     </table>
                 </div>
@@ -147,8 +147,8 @@
                     // console.log(data);
                     var count = 1;
                     for (i = 0; i < data.length; i++) {
-                        //  console.log(data[i]);
-                        var markup = '<tr><td>'+ count +'</td><td>' + data[i].batch.batch_no + '</td><td>' + data[i].batch.date + '</td><td>'+ data[i].quantity+'</td></tr>';
+                        // console.log(data[i]);
+                        var markup = '<tr><td>'+ count +'</td><td>' + data[i].batch.batch_no + '</td><td>' + data[i].batch.date + '</td><td>'+ data[i].currentQty+'</td></tr>';
                         count++;
                         var body = $('#batch_data');
                         body.append(markup);

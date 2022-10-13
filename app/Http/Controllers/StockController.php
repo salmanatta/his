@@ -32,7 +32,8 @@ class StockController extends Controller
         $product_id = $request->product_id;
         $stocks = Stock::with('batch')
                         ->where('product_id',$product_id)
-                        ->where('quantity','>','0')
+//                        ->where('quantity','>','0')
+                        ->whereRaw('quantity - reserve_qty > 0')
                         ->where('branch_id',auth()->user()->branch_id)
                         ->get();
         return response()->json( $stocks);

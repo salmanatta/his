@@ -161,7 +161,6 @@
 @push('script')
     <script>
         $("body").on('click' , "#print", function (e) {
-
             var val = "<?= url('/') . '/customer-wise-sale-pdf' ?>";
             console.log( $("#from_date").val());
             console.log( $("#to_date").val());
@@ -175,7 +174,6 @@
             var from_date = $(".from_date").val();
             var to_date = $(".to_date").val();
             var formData = new FormData(document.getElementById("add_form"));
-            console.log(formData);
             $.ajax({
                 type: 'get',
                 url: "{{ route('searchSaleReport') }}",

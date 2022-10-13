@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Pharmacy\LogController;
 use App\Http\Controllers\pre_configuration\PermissionController;
 use App\Http\Controllers\pre_configuration\UserController;
@@ -246,7 +247,7 @@ Route::get('purchase_details/{id}',[PurchaseController::class,"purchaseDetail"])
 Route::get('unstokepurchase_details/{id}',[PurchaseController::class,"unstokePurchaseDetail"])->name('unstokepurchase_details')->middleware("auth");
 Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoStoreReport')->name('storetoStoreReport');//product transfer
 //for stock report
-Route::get('stock_detail', 'App\Http\Controllers\StockController@index')->name('stock_detail')->middleware("auth");
+Route::get('stock_detail', [StockController::class,"index"])->name('stock_detail')->middleware("auth");
 Route::get('getProductBatch',[StockController::class,"getProductBatch"])->name('getProductBatch');
 Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchaseStatus'])->name('updatePurchaseStatus');
 
@@ -262,8 +263,11 @@ Route::get('sale_details/{id}',[SaleInvoiceController::class,"saleDetail"])->nam
 Route::get('viewSaleInvoice/{id}',[SaleInvoiceController::class,"viewSaleInvoice"])->name('viewSaleInvoice')->middleware('auth');
 Route::get('customer.sale',[SaleInvoiceController::class,'customer_wise_sale_view'])->middleware('auth');
 Route::get('customer.sale.view',[SaleInvoiceController::class,'customer_wise_sale_view_screen'])->middleware('auth');
-Route::get('customer-wise-sale-pdf',[SaleInvoiceController::class,'customer_wise_sale_pdf'])->name('customer.wise.sale.pdf')->middleware('auth');
-Route::get('sale-invoice/{id}',[SaleInvoiceController::class,'sale_invoice'])->middleware('auth');
+
+// ============ PDF Reports Controller =========
+Route::get('customer-wise-sale-pdf',[PDFController::class,'customer_wise_sale_pdf'])->middleware('auth');
+Route::get('sale-invoice/{id}',[PDFController::class,'sale_invoice'])->middleware('auth');
+Route::get('date-wise-stock-pdf',[PDFController::class,"date_wise_stock_register"])->middleware('auth');
 // ============== End Sale Reports ==============
 
 

@@ -268,6 +268,7 @@ Route::get('customer.sale.view',[SaleInvoiceController::class,'customer_wise_sal
 Route::get('customer-wise-sale-pdf',[PDFController::class,'customer_wise_sale_pdf'])->middleware('auth');
 Route::get('sale-invoice/{id}',[PDFController::class,'sale_invoice'])->middleware('auth');
 Route::get('date-wise-stock-pdf',[PDFController::class,"date_wise_stock_register"])->middleware('auth');
+Route::get('purchase-invoice/{id}',[PDFController::class,'purchase_invoice'])->middleware('auth');
 // ============== End Sale Reports ==============
 
 

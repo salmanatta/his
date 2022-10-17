@@ -162,8 +162,8 @@
     <script>
         $("body").on('click' , "#print", function (e) {
             var val = "<?= url('/') . '/customer-wise-sale-pdf' ?>";
-            console.log( $("#from_date").val());
-            console.log( $("#to_date").val());
+            // console.log( $("#from_date").val());
+            // console.log( $("#to_date").val());
             window.location = val+"?from="+  $("#from_date").val() +"&to=" + $("#to_date").val() + "&customer=" + $("#customer_id").val() + "&trans=" +  $("#trans_type").val();
         });
 

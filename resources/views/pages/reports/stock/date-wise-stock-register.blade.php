@@ -63,6 +63,17 @@
                                     <tbody>
                                     @php
                                         $counter = 1;
+                                        $sumPurchQty         = 0;
+                                        $sumPurchPrice       = 0;
+                                        $sumPurchReturnQty   = 0;
+                                        $sumPruchReturnPrice = 0;
+                                        $sumSaleQty          = 0;
+                                        $sumSalePrice        = 0;
+                                        $sumSaleReturnQty    = 0;
+                                        $sumSaleReturnPrice  = 0;
+                                        $sumTransInQty       = 0;
+                                        $sumTransOutQty      = 0;
+                                        $sumClosingQty       = 0;
                                     @endphp
                                     @foreach ($product as $item)
                                         <tr>
@@ -80,22 +91,38 @@
                                             <td>{{ $item->transOutQty }}</td>
                                             <td>{{ $item->closingQty }}</td>
                                             <td></td>
-
                                             @php
-
+                                                $sumPurchQty          += $item->purchQty;
+                                                $sumPurchPrice        += $item->purchPrice;
+                                                $sumPurchReturnQty    += $item->purchReturnQty;
+                                                $sumPruchReturnPrice  += $item->purchReturnPrice;
+                                                $sumSaleQty           += $item->saleQty;
+                                                $sumSalePrice         += $item->salePrice;
+                                                $sumSaleReturnQty     += $item->saleReturnQty;
+                                                $sumSaleReturnPrice   += $item->saleReturnPrice;
+                                                $sumTransInQty        += $item->transInQty;
+                                                $sumTransInQty        += $item->transInQty;
+                                                $sumTransOutQty       += $item->transOutQty;
+                                                $sumClosingQty        += $item->closingQty;
                                             @endphp
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
                                         <td> <h4>Grant Total</h4></td>
-                                        <td style="text-align: right"> <h4>{{ 0  }}</h4></td>
-                                        <td style="text-align: center"> <h4>{{ 0  }}</h4></td>
-                                        <td style="text-align: center"> <h4>{{ 0  }}</h4></td>
-                                        <td style="text-align: center"> <h4>{{ 0 }}</h4></td>
-                                        <td style="text-align: right"> <h4>{{ 0 }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumPurchQty  }}</h4></td>
+                                        <td style="text-align: center"> <h4>{{ $sumPurchPrice  }}</h4></td>
+                                        <td style="text-align: center"> <h4>{{ $sumPurchReturnQty  }}</h4></td>
+                                        <td style="text-align: center"> <h4>{{ $sumPruchReturnPrice }}</h4></td>
+                                        <td style="text-align: center"> <h4>{{ $sumSaleQty }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumSalePrice }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumSaleReturnQty }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumSaleReturnPrice }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumTransInQty }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumTransOutQty }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ $sumClosingQty }}</h4> </td>
+                                        <td style="text-align: center"> <h4>{{ 0 }}</h4> </td>
+
                                     </tr>
                                     </tbody>
                                 </table>

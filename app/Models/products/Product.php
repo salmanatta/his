@@ -192,7 +192,7 @@ class Product extends Model
 
     public function getClosingQtyAttribute()
     {
-        return $this->purchQty - $this->purchReturnQty + $this->saleQty - $this->saleReturnQty + $this->transInQty - $this->transOutqty;
+        return $this->purchQty - $this->purchReturnQty - $this->saleQty + $this->saleReturnQty + $this->transInQty - $this->transOutqty;
     }
 
 }

@@ -43,7 +43,7 @@
                                 class="btn btn-primary search_btn float-left printBlock">Search
                         </button>
                         <div class="pull-right btn-group btn-group-lg hidden-print printBlock">
-                            <a id="print"  target="_blank" class="btn btn-info">
+                            <a id="print" target="_blank" class="btn btn-info">
                                 <i class="fa fa-print"></i>
                                 Print</a>
                         </div>
@@ -117,9 +117,9 @@
 @push('script')
             <script>
                 $("body").on('click' , "#print", function (e) {
-                    var val = "<?= url('/') . '/date-wise-stock-pdf' ?>";
-                    console.log( $("#from_date").val());
-                    console.log( $("#to_date").val());
+                    var val = "<?= url('/') .'/date-wise-stock-pdf' ?>";
+                    // console.log( $("#from_date").val());
+                    // console.log( $("#to_date").val());
                     window.location = val+"?report_from_date="+  $("#from_date").val() +"&report_to_date=" + $("#to_date").val() + "&report_branch_id=" + $("#branch_id").val();
                 });
 

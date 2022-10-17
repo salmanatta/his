@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\purchases\Supplier;
@@ -29,14 +30,30 @@ class PurchaseInvoice extends Model
     {
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+//    public function postUser()
+//    {
+//        return $this->belongsTo(User::class,'status_changed_by','id');
+//    }
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class,'suplier_id','id');
     }
-    public function scopeReportData($query,$fromDate,$todate,$branch)
+    public function scopeReportData($query,$fromDate,$todate,$branch,$trans,$supllier)
     {
+
+        if ($supllier != '') {
+            return $query->whereBetween('invoice_date',[ $fromDate,$todate])
+                          ->where('branch_id',$branch)
+                          ->where('trans_type',$trans)
+                          ->where('suplier_id', $supllier);
+
+        }
         return $query->whereBetween('invoice_date',[ $fromDate,$todate])
-                    ->where('branch_id',$branch);
+                     ->where('branch_id',$branch)
+                     ->where('trans_type',$trans);
+
     }
     public function purchaseDetail()
     {
@@ -60,7 +77,7 @@ class PurchaseInvoice extends Model
     }
     public function getSumQtyAttribute()
     {
-        return $this->purchaseDetail()->sum('qty');    
+        return $this->purchaseDetail()->sum('qty');
     }
     public function getLineTotalAttribute()
     {
@@ -71,4 +88,4 @@ class PurchaseInvoice extends Model
       $this->invoice_no ?? 0;
       return $query->where('branch_id',$branch)->where('trans_type',$transType)->max('invoice_no')+1;
     }
-}   
+}

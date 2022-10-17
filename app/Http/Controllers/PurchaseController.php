@@ -172,23 +172,26 @@ class PurchaseController extends Controller
     }
     public function purchaseReport(Request $request)
     {
+        $suppliers = Supplier::all();
         if(count($request->all()) > 0)
         {
             $from=$request->from_date;
             $to=$request->to_date;
             $fromDate=date('Y-m-d', strtotime($from));
             $todate=date('Y-m-d', strtotime($to));
+            $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,auth()->user()->branch_id,$request->trans_type,$request->supplier_id)
+                                            ->with('supplier','branch','user')
+                                            ->get();
+            return view('pages.reports.purchase.purchase_report',compact('purchaseData','suppliers'));
         }else{
             $fromDate = Carbon::now();
             $fromDate =date('Y-m-d', strtotime($fromDate));
             $todate = Carbon::now();
             $todate =date('Y-m-d', strtotime($todate));
         }
-        $purchaseData = PurchaseInvoice::ReportData($fromDate,$todate,auth()->user()->branch_id)
-                                        ->with('supplier','branch','user')
-                                        ->get();
+
         //return $purchaseData;
-        return view('pages.reports.purchase.purchase_report',compact('purchaseData'));
+        return view('pages.reports.purchase.purchase_report',compact('suppliers'));
 
     }
     public function unstokePurchaseReport(Request $request)

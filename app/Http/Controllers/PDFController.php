@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\branch\Branch;
 use App\Models\products\Product;
+use App\Models\PurchaseInvoice;
 use App\Models\SaleInvoice;
 use App\Models\SaleInvoiceDetail;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -45,5 +46,16 @@ class PDFController extends Controller
         return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
     }
 
+    public function purchase_invoice($id)
+    {
+        $purchase = PurchaseInvoice::where($id)->with('supplier','branch','user')->first();
+        $purchase_detail = SaleInvoiceDetail::with('product','batch')->where('purchase_invoice_detail_id',$id)->get();
+        $company = Branch::find(auth()->user()->branch_id);
+
+        $pdf = PDF::loadView('pages.reports.purchase.purchase-invoice', compact('purchase', 'purchase_detail', 'company'))
+            ->setPaper('a4', 'landscape')
+            ->setOptions(['defaultFont' => 'sans-serif']);
+        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+    }
 
 }

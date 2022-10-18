@@ -63,13 +63,12 @@
         <th>Batch No</th>
         <th>Expiry Date</th>
         <th>Quantity</th>
-        <th>Bonus</th>
         <th>Price</th>
-        <th>Sales Tax</th>
-        <th>Advance Tax</th>
-        <th>Advance Tax Amount</th>
+        <th>Total Price</th>
         <th>Discount %</th>
         <th>Discount Amount</th>
+        <th>Sales Tax</th>
+        <th>Advance Tax</th>
         <th style="text-align: right">Net Total</th>
     </tr>
     </thead>
@@ -84,13 +83,12 @@
             <td>{{ $item->batch->batch_no }}</td>
             <td style="text-align: center">{{ date('d-m-Y', strtotime($item->batch->date)) }}</td>
             <td style="text-align: center">{{ $item->qty }}</td>
-            <td style="text-align: center">{{ $item->bonus }}</td>
             <td style="text-align: center">{{ $item->price }}</td>
-            <td style="text-align: center">{{ $item->sales_tax }}</td>
-            <td style="text-align: center">{{ $item->adv_tax }}</td>
-            <td style="text-align: center">{{ $item->adv_tax_value }}</td>
+            <td style="text-align: center">{{ $item->qty * $item->price  }}</td>
             <td style="text-align: center">{{ $item->discount }}</td>
             <td style="text-align: center">{{ $item->after_discount }}</td>
+            <td style="text-align: center">{{ $item->sales_tax }}</td>
+            <td style="text-align: center">{{ $item->adv_tax }}</td>
             <td style="text-align: right">{{ $item->line_total }}</td>
         </tr>
         @php $counter++ @endphp
@@ -98,8 +96,8 @@
     @php
         $subTotal = 0;
         $totalDiscount = 0;
-        $get_order_details = DB::table('sale_invoice_details')
-            ->where('sale_invoice_id', $sale->id)
+        $get_order_details = DB::table('purchase_invoice_details')
+            ->where('purchase_invoice_detail_id', $purchase->id)
             ->get();
     @endphp
     @foreach ($get_order_details as $row)
@@ -115,29 +113,42 @@
             <h4>Total</h4>
         </td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumQty }}</h4>
+            <h4>{{ $purchase->sumQty }}</h4>
         </td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumBonus }}</h4>
+            <h4>{{ $purchase->sumBonus }}</h4>
         </td>
         <td></td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumSalesTax }}</h4>
+            <h4>{{ $purchase->sumSalesTax }}</h4>
         </td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumAdvTax }}</h4>
+            <h4>{{ $purchase->sumAdvTax }}</h4>
         </td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumAdvTaxValue }}</h4>
+            <h4>{{ $purchase->sumDiscount }}</h4>
         </td>
         <td style="text-align: center">
-            <h4>{{ $sale->sumDiscount }}</h4>
-        </td>
-        <td style="text-align: center">
-            <h4>{{ $sale->sumDiscountAmount }}</h4>
+            <h4>{{ $purchase->sumDiscountAmount }}</h4>
         </td>
         <td class="border-0 text-end">
             <h4 style="text-align: right">{{ $subTotal }}</h4>
+        </td>
+    </tr>
+    <tr style="margin-top: 0;margin-bottom: 0">
+        <td colspan="11" style="border-bottom:none">
+            <h4 style="text-align: right">Freight</h4>
+        </td>
+        <td colspan="12" style="border-bottom:none">
+            <h4 style="text-align: right">{{ $purchase->freight }}</h4>
+        </td>
+    </tr>
+    <tr style="margin-top: 0;margin-bottom: 0ho">
+        <td colspan="11" style="border-bottom:none">
+            <h4 style="text-align: right">Gross Total</h4>
+        </td>
+        <td colspan="12" style="border-bottom:none">
+            <h4 style="text-align: right">{{ $purchase->freight + $subTotal }}</h4>
         </td>
     </tr>
     </tbody>

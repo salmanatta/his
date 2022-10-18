@@ -2,7 +2,7 @@
 @section('content')
     <div class="main-content">
         <div class="text-center">
-            <h3> Purchase Reports</h3>
+            <h3> Purchase Invoice Approval</h3>
         </div>
         <br>
 
@@ -77,33 +77,13 @@
                                 class="btn btn-primary search_btn float-left printBlock">
                             Search
                         </button>
-                        <div class="pull-right btn-group btn-group-lg hidden-print printBlock">
-                            <a id="print" target="_blank" class="btn btn-info">
-                                <i class="fa fa-print"></i> Print
-                            </a>
-                        </div>
+{{--                        <div class="pull-right btn-group btn-group-lg hidden-print printBlock">--}}
+{{--                            <a id="print" target="_blank" class="btn btn-info">--}}
+{{--                                <i class="fa fa-print"></i> Print--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
-                {{--            <div class="row printBlock">--}}
-                {{--                <div class="col-lg-6">--}}
-                {{--                    <div class="mb-3">--}}
-                {{--                        <label for="formrow-inputCity" class="form-label">From Date</label>--}}
-                {{--                        <input type="date" name="from_date" class="form-control from_date printBlock" id="from_date" value='<?php echo date('Y-m-d'); ?>'>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-                {{--                <div class="col-lg-6">--}}
-                {{--                    <div class="mb-3">--}}
-                {{--                        <label for="formrow-inputCity" class="form-label">To Date</label>--}}
-                {{--                        <input type="date" name="to_date" class="form-control to_date printBlock" id="to_date" value='<?php echo date('Y-m-d'); ?>'>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-                {{--            </div>--}}
-                {{--            <div class="d-flex justify-content-between d-print-none">--}}
-                {{--                <button type="submit" id="search_btn000" class="btn btn-primary search_btn float-left printBlock">Search</button>--}}
-                {{--                <div class="pull-right btn-group btn-group-lg hidden-print printBlock">--}}
-                {{--                    <a href="javascript:window.print()" class="btn btn-info"><i class="fa fa-print"></i> Print</a>--}}
-                {{--                </div>--}}
-                {{--            </div>--}}
             </form>
         </div>
         <!-- end page title -->
@@ -127,14 +107,15 @@
                             <th scope="col">Freight</th>
                             <th scope="col">Net Amount</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">View</th>
                         </tr>
                         </thead>
                         <tbody id="append_here">
                         @if(isset($purchaseData))
                         @foreach ($purchaseData as $data)
                             <tr>
-                                <td>{{ $data->invoice_no }}</td>
+                                <td style="text-align:center;">{{ $data->invoice_no }}</td>
                                 <td>{{ $data->invoice_date }}</td>
                                 <td>{{ $data->user->name }}</td>
                                 <td>{{ $data->supplier->name }}</td>
@@ -146,8 +127,9 @@
                                 <td>{{ $data->sumAdvancTax }}</td>
                                 <td>{{ $data->freight }}</td>
                                 <td>{{ $data->lineTotal }}</td>
+                                <td style="text-align:center;">{{ $data->inv_status }}</td>
                                 @if($data->inv_status == 'Post')
-                                    <td style="text-align:center;">{{ $data->inv_status }}</td>
+                                    <td></td>
                                 @else
                                     <td style="text-align:center;">
                                         <a href="{{ url('view-purchase-invoice/'.$data->id) }}"
@@ -155,10 +137,10 @@
                                     </td>
                                 @endif
                                 <td>
-                                    <a href="{{ url('purchase_details') . '/' . $data->id }}"
+                                    <a href="{{ url('purchase-invoice') . '/' . $data->id }}"
                                        style="border-radius: 44px;"
                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
-                                        View Details </a>
+                                        Print Invoice </a>
                                 </td>
                             </tr>
                         @endforeach

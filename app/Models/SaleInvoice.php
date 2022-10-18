@@ -101,10 +101,18 @@ class SaleInvoice extends Model
 
     public function scopeCustomer_sale_report($query,$from,$to,$customer,$trans_type,$branch)
     {
+        if ($customer != ''){
+            return $query->whereDate('invoice_date','>=',$from)
+                ->whereDate('invoice_date','<=',$to)
+                ->where('trans_type',$trans_type)
+                ->where('customer_id',$customer)
+                ->where('branch_id',$branch);
+        }
         return $query->whereDate('invoice_date','>=',$from)
             ->whereDate('invoice_date','<=',$to)
             ->where('trans_type',$trans_type)
-            ->where('customer_id',$customer)
             ->where('branch_id',$branch);
     }
+
+
 }

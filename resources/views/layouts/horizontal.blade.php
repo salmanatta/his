@@ -222,8 +222,9 @@
                                 Invoice </a>
                             <a href="{{url('/purchase/return')}}" class="dropdown-item" key="t-saas">Purchase Return
                                 Invoice </a>
-                            <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">View
-                                Purchase Invoice </a>
+                            <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">
+                                Purchase Invoice Approval
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -235,7 +236,7 @@
                             <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Sale Invoice </a>
                             <a href="{{url('sale/invoiceReturn')}}" class="dropdown-item" key="t-saas"> Sale Return
                                 Invoice </a>
-                            <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas"> View Sale Reports</a>
+                            <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas">Sale Invoice Approval</a>
                         </div>
                     </li>
 
@@ -304,6 +305,17 @@
                                 <div class="dropdown-menu" aria-labelledby="topnav-form">
                                     <a href="{{url('customer.sale')}}" class="dropdown-item" key="t-form-elements">Customer
                                         Wise Sale Report</a>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form"
+                                   role="button">
+                                    <span key="t-forms">Purchase Reports</span>
+                                    <div class="arrow-down"></div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-form">
+                                    <a href="{{url('supplier-wise-purchase')}}" class="dropdown-item" key="t-form-elements">Supplier
+                                        Wise Purchase Report</a>
                                 </div>
                             </div>
                             <div class="dropdown">

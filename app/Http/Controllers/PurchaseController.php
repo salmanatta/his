@@ -367,4 +367,21 @@ class PurchaseController extends Controller
 
         return view("pages/supplier/invoice/purchase",compact('purchaseM','purchaseD'));
     }
+
+    public function suppler_wise_purchase(Request $request)
+    {
+        $suppliers = Supplier::all();
+        if(count($request->all()) > 0){
+//            $from=$request->from_date;
+//            $to=$request->to_date;
+//            $fromDate=date('Y-m-d', strtotime($from));
+//            $todate=date('Y-m-d', strtotime($to));
+            $purchaseData = PurchaseInvoice::ReportData($request->from_date,$request->to_date,auth()->user()->branch_id,$request->trans_type,$request->supplier_id)
+                ->with('supplier','branch','user')
+                ->get();
+            return view('pages.reports.purchase.supplier-wise-purchase',compact('purchaseData','suppliers'));
+        }else{
+            return view('pages.reports.purchase.supplier-wise-purchase',compact('suppliers'));
+        }
+    }
 }

@@ -89,23 +89,28 @@ class SaleInvoiceController extends Controller
 
     public function purchaseSale(Request $request)
     {
+        $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
         if (count($request->all()) > 0) {
             $from = $request->from_date;
             $to = $request->to_date;
             $fromDate = date('Y-m-d', strtotime($from));
             $todate = date('Y-m-d', strtotime($to));
+
+            $saleData = SaleInvoice::Customer_sale_report( $fromDate, $todate,$request->customer_id,$request->trans_type,auth()->user()->branch_id)
+                                    ->with('customer', 'branch', 'user')
+                                    ->orderBy('invoice_no', 'desc')
+                                    ->get();
+
+            return view('pages.reports.sale.sale_report', compact('customers','saleData'));
         } else {
             $fromDate = Carbon::now();
             $fromDate = date('Y-m-d', strtotime($fromDate));
             $todate = Carbon::now();
             $todate = date('Y-m-d', strtotime($todate));
         }
-        $saleData = SaleInvoice::whereBetween('invoice_date', [$fromDate, $todate])
-            ->with('customer', 'branch', 'user')
-            ->orderBy('invoice_no', 'desc')
-            ->get();
+
         // dd($saleData);
-        return view('pages.reports.sale.sale_report', compact('saleData'));
+        return view('pages.reports.sale.sale_report', compact('customers'));
     }
 
     public function allSaleProducts(Request $request)

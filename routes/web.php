@@ -255,6 +255,8 @@ Route::get('date-wise-stock-view',[ProductController::class,"date_wise_stock_vie
 
 Route::get('date-wise-stock-data',[ProductController::class,'date_wise_stock_data'])->middleware('auth');
 
+Route::get('supplier-wise-purchase',[PurchaseController::class,'suppler_wise_purchase'])->middleware('auth');
+
 // ==================End Reports =================
 // ================== Sale Reports ===============
 Route::GET("purchaseSale",[SaleInvoiceController::class,"purchaseSale"])->name('purchaseSale')->middleware("auth");
@@ -269,6 +271,7 @@ Route::get('customer-wise-sale-pdf',[PDFController::class,'customer_wise_sale_pd
 Route::get('sale-invoice/{id}',[PDFController::class,'sale_invoice'])->middleware('auth');
 Route::get('date-wise-stock-pdf',[PDFController::class,"date_wise_stock_register"])->middleware('auth');
 Route::get('purchase-invoice/{id}',[PDFController::class,'purchase_invoice'])->middleware('auth');
+Route::get('supplier-wise-purchase-pdf',[PDFController::class,'supplier_wise_purchase_pdf'])->middleware('auth');
 // ============== End Sale Reports ==============
 
 

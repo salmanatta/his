@@ -25,7 +25,7 @@
                                     {{--                                    <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="logo-light.png" height="20"/>--}}
                                 </div>
                                 <div style="text-align: center">
-                                    <h4 style="margin-top: 0; margin-bottom: 0;" class="font-size-16">Customer Wise Sale Report</h4>
+                                    <h4 style="margin-top: 0; margin-bottom: 0;" class="font-size-16">Supplier Wise Purchase Report</h4>
                                 </div>
 
                             </div>
@@ -42,7 +42,7 @@
                             <hr>
                             <div style="display:flex;flex-direction:row;margin-bottom: 2%">
                                 <div style="float:left" >
-                                    <label for="customerName">Customer Name : </label>
+                                    <label for="customerName">Supplier Name : </label>
                                     {{ isset($purchase_Master[0]->supplier->name) ? $purchase_Master[0]->supplier->name : '' }}
                                 </div>
                                 <div style="float:right;width: 50% " >

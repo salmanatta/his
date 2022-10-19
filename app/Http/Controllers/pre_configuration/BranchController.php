@@ -52,9 +52,18 @@ class BranchController extends Controller
     {
         $input = $request->all();
         $create = Branch::create($input);
-        // return redirect('branches');
-        $this->logsAction(["action" => "Store", "remarks" => "Branch id " . $create->id]);
 
+
+        $branch = new Branch();
+        $branch->logo_path = $request->logo_path->store('/', ['disk' => 'branch']);
+        $branch->branch_code = $request->branch_code;
+        $branch->name = $request->name;
+        $branch->isActive = $request->isActive;
+        $branch->company_id = $request->company_id;
+        $branch->save();
+
+
+        $this->logsAction(["action" => "Store", "remarks" => "Branch id " . $create->id]);
         return redirect()->route('branches.index')->with('success', 'Data Added Successfully');
     }
 

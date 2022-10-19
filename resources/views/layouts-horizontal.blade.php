@@ -3,18 +3,19 @@
     <div class="row">
         <div class="col-xl-4">
             <div class="card overflow-hidden">
-                <div class="bg-primary bg-soft">
+{{--                <div class="bg-primary bg-soft">--}}
                     <div class="row">
-                        <div class="col-7">
+                        <div class="col-12">
                             <div class="text-primary p-3">
                                 <h5 class="text-primary">Welcome Back !</h5>
                                 <p>Skote Dashboard</p>
                             </div>
                         </div>
-                        <div class="col-5 align-self-end">
-                            <img src="{{ URL::asset('/assets/images/profile-img.png') }}" alt="" class="img-fluid">
+                        <div class="col-5 align-self-start">
+                            <img src="{{  url('storage/app/public/company/'.$company[0]->logo) }}" style="width: 200px;height: 100px" alt="" class="img-fluid">
+{{--                            <img src="{{ URL::asset('/assets/images/profile-img.png') }}" alt="" class="img-fluid">--}}
                         </div>
-                    </div>
+{{--                    </div>--}}
                 </div>
                 <div class="card-body pt-0">
                     <div class="row">
@@ -81,7 +82,7 @@
                             <div class="media">
                                 <div class="media-body">
                                     <p class="text-muted fw-medium">Purchase</p>
-                                    <h4 class="mb-0">PKR{{$purchase_invoices}}</h4>
+                                    <h4 class="mb-0">PKR- {{$purchase_invoices}}</h4>
                                 </div>
 
                                 <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
@@ -366,7 +367,7 @@
     </div>
     <!-- end row -->
 
-    
+
     <!-- end row -->
 
     <!-- Transaction Modal -->

@@ -42,7 +42,7 @@
         <td style="border-bottom:0"><strong>Invoice Date :</strong> {{ !is_null($purchase) ? $purchase->invoice_date : '' }}</td>
     </tr>
     <tr style="border-bottom:0">
-        <td style="border-bottom:0"><strong>Customer Name:</strong> {{ !is_null($purchase) ? $purchase->supplier->name : '' }}</td>
+        <td style="border-bottom:0"><strong>Supplier Name:</strong> {{ !is_null($purchase) ? $purchase->supplier->name : '' }}</td>
 {{--        <td style="border-bottom:0"><strong>Salesman :</strong> {{ !is_null( $sale->salesman) ? $sale->salesman->first_name.' '.$sale->salesman->last_name : '' }}</td>--}}
     </tr>
     {{--    <tr>--}}

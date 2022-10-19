@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-body">
 
-                   
+
                    <h4 class="card-title">branch Details</h4>
                     <div class="col-sm-12">
                             <div class="text-sm-end">
@@ -30,7 +30,7 @@
                                     <th class="align-middle"> Branch Code</th>
                                     <th class="align-middle">Branch Name</th>
                                     <th class="align-middle">Status</th>
-                                    
+
                                     <th class="align-middle">Action</th>
                                 </tr>
                             </thead>
@@ -43,7 +43,7 @@
                                             <label class="form-check-label" for="orderidcheck01"></label>
                                         </div>
                                     </td> -->
-                                   
+
                                     <td><a href="javascript: void(0);" class="text-body fw-bold">{{$branch->branch_code}}</a> </td>
                                     <td>{{$branch->name}}</td>
                                     @if($branch->isActive==1)
@@ -51,18 +51,18 @@
                                     @else
                                     <td><span class="badge bg-danger font-size-12"> InActive</span></td>
                                     @endif
-                                   
-                                    
-                                   
-                                    
-                                   
+
+
+
+
+
                                     <td>
-                                        
+
                                         <div class="d-flex gap-3">
                                              <a data-bs-toggle="modal"  class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"  data-branch_id="{{$branch->id}}" data-branch_name="{{$branch->name}}" data-branch_status="{{$branch->isActive}}" data-branch_code="{{$branch->branch_code}}">
                                             View Details
                                         </a>
-                                       
+
                                         <a href="{{route('branches.edit',$branch->id)}}"  class="text-success editbtn"><i
                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                             <!-- <a  href="{{route('branches.destroy',$branch->id)}}" class="text-danger"><i
@@ -76,7 +76,7 @@
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                         </table>
@@ -103,7 +103,7 @@
                         <tr> <th> Branch Code </th><td> : <span class="m_branch_code"> </span>   </td></tr>
                         <tr> <th> Branch Name </th><td> : <span class="m_branch_name"> </span>     </td>  </tr>
                         <tr> <th> Status </th><td> : <span class="m_branch_status"> </span>     </td>  </tr>
-                        
+
                     </table>
                     <br>
                     <br>
@@ -119,13 +119,13 @@
 
     @endsection
 @push('script')
- 
+
      <!-- ==================Start Of Edit Footer=============== -->
  <script>
         $(document).ready(function(){
-           
+
             $(document).on('click','.detail_view_button',function(){
-               
+
                $('.m_branch_code').text($(this).data('branch_code'));
                $('.m_branch_id').text($(this).data('branch_id'));
                $('.m_branch_name').text($(this).data('branch_name'));

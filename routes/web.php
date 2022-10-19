@@ -69,6 +69,7 @@ Route::get('/', function () {
     	$data['purchase_invoices']  = DB::table('purchase_invoices')->sum('total');
     	$data['sale_invoices']  = DB::table('sale_invoices')->sum('sub_total');
     	$data['quantity']  = DB::table('stocks')->sum('quantity');
+    	$data['company'] = \App\Models\Company::all();
         return view('layouts-horizontal',$data); //this is actualy dashboard
     }
 

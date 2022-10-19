@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Pharmacy\LogController as LogTable;
 use App\Models\Company;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -37,10 +38,16 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        
-        $create = Company::create($inputs);
-        $this->logsAction(["action" => "Store", "remarks" => "Company id " . $create->id]);
+        $company = new Company();
+        $company->logo = $request->logo->store('/', ['disk' => 'company']);
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->phone = $request->phone;
+        $company->fax = $request->fax;
+        $company->address = $request->address;
+        $company->isActive = $request->isActive;
+        $company->save();
+//        $this->logsAction(["action" => "Store", "remarks" => "Company id " . auth()-User()->id]);
 
         return redirect()->route('companies.index')
             ->with('success', 'Data Added Successfully!');

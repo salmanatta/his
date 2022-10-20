@@ -14,8 +14,7 @@
                                     <div class="mb-3">
                                         <label for="formrow-inputCity" class="form-label">Branch Id</label>
                                         <input type="number" name="branch_code" class="form-control"
-                                               placeholder="Enter Branch ID" id="validationCustom01"
-                                               required>
+                                               placeholder="Enter Branch ID" id="validationCustom01" required>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +46,8 @@
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <label for="formrow-inputCity" class="form-label">Branch Logo</label>
-                                        <input type="file" accept=".gif,.jpg,.jpeg,.png" placeholder="Enter logo" name="logo_path" class="form-control"
+                                        <input type="file" accept=".gif,.jpg,.jpeg,.png" placeholder="Enter logo"
+                                               name="logo_path" class="form-control"
                                                required>
                                     </div>
                                 </div>
@@ -68,16 +68,10 @@
                             </div>
                         </form>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
         </div>
     </div>
-
-    <!-- end row -->
-
 @endsection
 @push('script')
     <!-- apexcharts -->

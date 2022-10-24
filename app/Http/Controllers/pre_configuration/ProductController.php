@@ -22,10 +22,18 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['products'] = Product::all();
-        return view('pages.pre_configuration.product.index', $data);
+        if ($request->searchData != '') {
+//            dd($request->all());
+            $data['products'] = Product::where('name', 'like', '%' . $request->searchData . '%')->paginate(1);
+            return view('pages.pre_configuration.product.index', $data);
+
+        }else{
+            $data['products'] = Product::paginate(1);
+            return view('pages.pre_configuration.product.index', $data);
+        }
+
     }
     /**
      * Show the form for creating a new resource.

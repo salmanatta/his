@@ -23,8 +23,7 @@
                                     <div class="mb-3">
                                         <label for="formrow-inputCity" class="form-label">Name</label>
                                         <input type="text" placeholder="Enter Branch Name" name="name"
-                                               class="form-control"
-                                               id="validationCustom01" required>
+                                               class="form-control" id="validationCustom01" required>
                                     </div>
                                 </div>
                             </div>

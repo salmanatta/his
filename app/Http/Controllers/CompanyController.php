@@ -74,7 +74,7 @@ class CompanyController extends Controller
     {
         $data['company'] = Company::find($id);
         // dd($data);
-        return view('pages.company.edit', $data);
+        return view('pages.company.create', $data);
     }
 
     /**
@@ -86,9 +86,21 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        $company = Company::find($id);
+//        $company->update($request->all());
+//        $this->logsAction(["action" => "Update", "remarks" => "Company id " . $id]);
+
         $company = Company::find($id);
-        $company->update($request->all());
-        $this->logsAction(["action" => "Update", "remarks" => "Company id " . $id]);
+//        $company->logo = $request->logo->store('/', ['disk' => 'company']);
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->phone = $request->phone;
+        $company->fax = $request->fax;
+        $company->address = $request->address;
+        $company->isActive = $request->isActive;
+        $company->save();
+
+
 
         return redirect()->route('companies.index')->with('info', 'Data Updated Successfully!');
     }

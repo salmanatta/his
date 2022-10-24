@@ -132,7 +132,7 @@ Route::resource('license_types', 'App\Http\Controllers\LicenseTypeController')->
 Route::resource('licenses', 'App\Http\Controllers\CustomerLicenseController')->middleware('auth');
 Route::resource('branches', 'App\Http\Controllers\pre_configuration\BranchController')->middleware('auth');
 Route::get("get-all-branches",[BranchController::class,"getAllBranches"])->middleware('auth');
-Route::resource('companies', 'App\Http\Controllers\CompanyController')->middleware('auth');
+//Route::resource('companies', 'App\Http\Controllers\CompanyController')->middleware('auth');
 Route::resource('customer_categories', 'App\Http\Controllers\pre_configuration\CustomerCategoryController')->middleware('auth');
 Route::resource('product_categories', 'App\Http\Controllers\pre_configuration\ProductCategoryController')->middleware('auth');
 Route::resource('product_types', 'App\Http\Controllers\pre_configuration\ProductTypeController')->middleware('auth');

@@ -18,10 +18,20 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-       $data['customers']=Customer::where('branch_id',auth()->user()->branch_id)->get();
-    return view('pages.customer.index',$data);
+
+        if ($request->searchData != '') {
+//            dd($request->all());
+            $data['customers'] = Customer::where('name', 'like', '%' . $request->searchData . '%')->paginate(15);
+            return view('pages.customer.index', $data);
+
+        }else{
+            $data['customers'] = Customer::paginate(15);
+            return view('pages.customer.index', $data);
+        }
+//        $data['customers']=Customer::where('branch_id',auth()->user()->branch_id)->paginate(5);
+//        return view('pages.customer.index',$data);
     }
     public function commonCustomer(Request $request){
         if (request()->has('q')) {
@@ -63,7 +73,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //  dd($request->all());        
+        //  dd($request->all());
         $createCustomer=Customer::create([
             'name'              => $request->name,
             'customer_code'     => $request->customer_code,
@@ -74,10 +84,10 @@ class CustomerController extends Controller
             'fax'               => $request->fax,
             'email'             => $request->email,
             'postal_code'       => $request->postal_code,
-            'cnic_no'           => $request->cnic_no,            
+            'cnic_no'           => $request->cnic_no,
             'group_id'          => $request->group_id,
             'city_id'           => $request->city_id,
-            'region_id'         => $request->region_id,            
+            'region_id'         => $request->region_id,
             'isfiler'           => $request->isfiler,
             'branch_id'           => $request->branch_id,
         ]);
@@ -85,14 +95,14 @@ class CustomerController extends Controller
         $rows=$request->input('cnic');
         $rows_to=$request->input('license_name');
         $checked=$request->input('license_type_id');
-                   
+
                     // $customer_id = $customer_id;
                     // $exemption = $request->input('exemption');
-                   
-        foreach($rows as $key=>$row) 
+
+        foreach($rows as $key=>$row)
         {
 
-                   
+
                     $cnic = $request->input('cnic')[$key];
                     $exemption = $request->input('exemption')[$key];
                     $ntn = $request->input('ntn')[$key];
@@ -104,9 +114,9 @@ class CustomerController extends Controller
                   if($request->hasFile('certificate')){
                     $file = $request->file('certificate')[$key];
                     // $fileName = $file->getClientOriginalName() ;
-                    $extension = $file->getClientOriginalExtension(); 
+                    $extension = $file->getClientOriginalExtension();
                     // $destinationPath = 'images/' ; // for online link will be
-                    $destinationPath = 'public/images/' ; //for local link will be 
+                    $destinationPath = 'public/images/' ; //for local link will be
                     $datetime = date('mdYhisa', time());
                     $complete_name=$destinationPath.$datetime.'.'.$extension;
                     $file_name=$datetime.'.'.$extension;
@@ -126,18 +136,18 @@ class CustomerController extends Controller
              ]);
         }
             if ($checked!='' || $checked!=null) {
-               foreach($rows_to as $key=>$row) 
+               foreach($rows_to as $key=>$row)
         {
-                   
+
                       $license_name = $request->input('license_name')[$key];
                    $exp_date = $request->input('exp_date')[$key];
                    $license_type_id = $request->input('license_type_id')[$key];
                    if($request->hasFile('document')){
                     $file = $request->file('document')[$key];
                     // $fileName = $file->getClientOriginalName() ;
-                    $extension = $file->getClientOriginalExtension(); 
+                    $extension = $file->getClientOriginalExtension();
                     // $destinationPath = 'images/' ; // for online link will be
-                    $destinationPath = 'public/images/' ; //for local link will be 
+                    $destinationPath = 'public/images/' ; //for local link will be
                     $datetime = date('mdYhisa', time());
                     $complete_name=$destinationPath.$datetime.'.'.$extension;
                     $file_name=$datetime.'.'.$extension;
@@ -152,11 +162,11 @@ class CustomerController extends Controller
                     'customer_id' =>$customer_id,
                'license_type_id' =>$license_type_id
              ]);
-                   
-                   
+
+
         }
             }
-            
+
          return redirect()->route('customers.index')->with('success','Data Added Successfully!');
     }
 
@@ -170,7 +180,7 @@ class CustomerController extends Controller
     {
         //
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -180,11 +190,11 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $data['license_types'] = LicenseType::all();
-        $data['regions'] = Region::all();        
+        $data['regions'] = Region::all();
         $data['groups'] = Group::all();
         $data['customer'] = Customer::find($id);
         $data['customerLicenses'] = CustomerLicense::where('customer_id',$id)->get();
-        $data['customerDocumentRegs'] = CustomerDocumentReg::where('customer_id',$id)->get();        
+        $data['customerDocumentRegs'] = CustomerDocumentReg::where('customer_id',$id)->get();
         $data['employees']  = Employee::all();
         $data['cities']    = City::all();
         return view('pages.customer.edit',$data);
@@ -208,10 +218,10 @@ class CustomerController extends Controller
          $rows=$request->input('ntn');
 
          $rows_to=$request->input('license_name');
-         foreach($rows as $key=>$row) 
+         foreach($rows as $key=>$row)
         {
 
-                   
+
                     $cnic = $request->input('cnic')[$key];
                     $exemption = $request->input('exemption')[$key];
                     $ntn = $request->input('ntn')[$key];
@@ -225,15 +235,15 @@ class CustomerController extends Controller
                     if(array_key_exists($key, $request->file('certificate'))){
                         $file = $request->file('certificate')[$key];
                     // $fileName = $file->getClientOriginalName() ;
-                    $extension = $file->getClientOriginalExtension(); 
+                    $extension = $file->getClientOriginalExtension();
                     // $destinationPath = 'images/' ; // for online link will be
-                    $destinationPath = 'public/images/' ; //for local link will be 
+                    $destinationPath = 'public/images/' ; //for local link will be
                     $datetime = date('mdYhisa', time());
                     $complete_name=$destinationPath.$datetime.'.'.$extension;
                     $file_name=$datetime.'.'.$extension;
                     $file->move($destinationPath,$file_name);
                     }
-                    
+
             }else{
                 $file_name='';
             }
@@ -245,10 +255,10 @@ class CustomerController extends Controller
                'exemption' =>$exemption,
               'customer_id'=>$customer_id,
                    'filer' =>$filer,
-             'certificate' =>$file_name 
+             'certificate' =>$file_name
              ]);
         }
-             foreach($rows_to as $key=>$row) 
+             foreach($rows_to as $key=>$row)
         {
                    $file_name='';
                    $license_name = $request->input('license_name')[$key];
@@ -260,15 +270,15 @@ class CustomerController extends Controller
                     {
                     $file = $request->file('document')[$key];
                     // $fileName = $file->getClientOriginalName() ;
-                    $extension = $file->getClientOriginalExtension(); 
+                    $extension = $file->getClientOriginalExtension();
                     // $destinationPath = 'images/' ; // for online link will be
-                    $destinationPath = 'public/images/' ; //for local link will be 
+                    $destinationPath = 'public/images/' ; //for local link will be
                     $datetime = date('mdYhisa', time());
                     $complete_name=$destinationPath.$datetime.'.'.$extension;
                     $file_name=$datetime.'.'.$extension;
                     $file->move($destinationPath,$file_name);
                     }
-                    
+
                     }else{
                         $file_name='';
 

@@ -43,11 +43,11 @@
                         <div class="col-4">
                             <div class="row d-flex align-items-center">
                                 <div class="col-4">
-                                    <label for="formrow-inputCity" class="form-label">Supplier</label>
+                                    <label for="customer_id" class="form-label">Customer</label>
                                 </div>
                                 <div class="col-8">
                                     <select class="form-control select2" name="customer_id" id="customer_id">
-                                        <option value="" >-- Select Supplier --</option>
+                                        <option value="" >-- Select Customer --</option>
                                         @foreach($customers as $customer)
                                             <option value="{{ $customer->id }}" >{{ $customer->name }}</option>
                                         @endforeach

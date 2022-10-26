@@ -30,7 +30,7 @@
                 </div>
                 <table class="table table-bordered dt-responsive nowrap w-100">
                     <thead class="table-light">
-                    <th class="align-middle"> Code #</th>
+                    <th class="text-center""> Code #</th>
                     <th class="align-middle">Product Name</th>
                     <th class="align-middle">Short Name</th>
                     <th class="align-middle">Group</th>
@@ -48,20 +48,20 @@
                             <td>{{isset($product->group->name) ? $product->group->name : '' }}</td>
                             <td>{{$product->packet}}</td>
                             <td>{{$product->comp_artd_no}}</td>
-                            <td>
-                                <div class="d-flex gap-2">
+                            <td class="text-center">
+{{--                                <div class="d-flex gap-2">--}}
 
                                     <a href="{{url('getProduct/'.$product->id)}}" class="text-success"><i
                                             class="mdi mdi-pencil font-size-18"></i></a>
                                 <!-- <a  href="{{route('products.destroy',$product->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                    <form method="post" action='{{route("products.destroy",$product->id) }}'>
-                                        {{csrf_field()}}
-                                        {{method_field('DELETE')}}
-                                        <button type="submit" class="btn btn-sm btn-danger"><i
-                                                class="fa fa-trash"></i></button>
-                                    </form>
-                                </div>
+{{--                                    <form method="post" action='{{route("products.destroy",$product->id) }}'>--}}
+{{--                                        {{csrf_field()}}--}}
+{{--                                        {{method_field('DELETE')}}--}}
+{{--                                        <button type="submit" class="btn btn-sm btn-danger"><i--}}
+{{--                                                class="fa fa-trash"></i></button>--}}
+{{--                                    </form>--}}
+{{--                                </div>--}}
                             </td>
                         </tr>
                     @endforeach

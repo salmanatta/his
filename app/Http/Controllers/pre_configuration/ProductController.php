@@ -26,11 +26,11 @@ class ProductController extends Controller
     {
         if ($request->searchData != '') {
 //            dd($request->all());
-            $data['products'] = Product::where('name', 'like', '%' . $request->searchData . '%')->paginate(1);
+            $data['products'] = Product::where('name', 'like', '%' . $request->searchData . '%')->orderBy('name')->paginate(15);
             return view('pages.pre_configuration.product.index', $data);
 
         }else{
-            $data['products'] = Product::paginate(1);
+            $data['products'] = Product::orderBy('name')->paginate(15);
             return view('pages.pre_configuration.product.index', $data);
         }
 

@@ -11,7 +11,7 @@
                     <form action="{{route('products.update',$product->id)}}" method="POST" id="infoFormId">
                     @method('PATCH')
                 @else
-                    <form action="{{route('products.store')}}" method="POST" id="infoFormId">                    
+                    <form action="{{route('products.store')}}" method="POST" id="infoFormId">
                 @endif
                     @csrf
                     <input type="hidden" class="product_id" value="@if(isset($product->id)){{$product->id}} @endif" name="product_id">
@@ -21,13 +21,13 @@
                                 <label for="dd">Product Code *</label>
                             </td>
                             <td>
-                                <input type="number" value="@if(isset($product->product_code)){{$product->product_code}} @endif" class="common" name="product_code"><br>
+                                <input type="number" value="{{ isset($product) ? $product->product_code : old('product_code') }}" class="common" name="product_code"><br>
                                 @error('product_code')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Name *</label></td>
-                            <td> <input type="text" step="any" value="@if(isset($product->name)){{$product->name}} @endif" class="common" name="name"><br>
+                            <td> <input type="text" step="any" value="{{ isset($product) ? $product->name : old('name') }}" class="common" name="name"><br>
                                 @error('name')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -36,7 +36,7 @@
                                 <label for="dd">Short Name *</label>
                             </td>
                             <td>
-                                <input type="text" value="@if(isset($product->short_name)){{$product->short_name}} @endif" class="common" name="short_name"><br>
+                                <input type="text" value="{{ isset($product) ? $product->short_name : old('short_name') }}" class="common" name="short_name"><br>
                                 @error('short_name')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -47,7 +47,7 @@
                             <td> <select name="type_id" class="form-control " style="width: 170px; height: 30px;">
                                     <option selected disabled="">Product Type</option>
                                     @foreach($productTypes as $productType)
-                                    <option value="{{$productType->id}}">{{$productType->name}}
+                                    <option value="{{$productType->id}} {{ isset($product) ? ($product->type_id == $productType->id ? 'selected' : '' ) : '' }}">{{$productType->name}}
                                     </option>
                                     @endforeach
                                 </select><br>
@@ -73,7 +73,7 @@
                                 <label for="dd">Group Sequence *</label>
                             </td>
                             <td>
-                                <input type="text" value="@if(isset($product->group_seq)){{$product->group_seq}} @endif" class="common" name="group_seq"><br>
+                                <input type="text" value="{{ isset($product) ? $product->group_seq : old('group_seq') }}" class="common" name="group_seq"><br>
                                 @error('group_seq')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -81,13 +81,13 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Computer Sequence</label></td>
-                            <td> <input type="text" value="@if(isset($product->comp_seq)){{$product->comp_seq}} @endif" class="common" name="comp_seq"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->comp_seq : old('comp_seq') }}" class="common" name="comp_seq"><br>
                                 @error('comp_seq')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Pack in Box *</label></td>
-                            <td> <input type="text" step="any" value="@if(isset($product->packet)){{$product->packet}} @endif" class="common" name="packet"><br>
+                            <td> <input type="text" step="any" value="{{ isset($product) ? $product->packet : old('packet') }}" class="common" name="packet"><br>
                                 @error('packet')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -109,19 +109,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Computer Arted No</label></td>
-                            <td> <input type="text" value="@if(isset($product->comp_artd_no)){{$product->comp_artd_no}} @endif" class="common" name="comp_artd_no"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->comp_artd_no : old('comp_artd_no') }}" class="common" name="comp_artd_no"><br>
                                 @error('comp_artd_no')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Purchase Discount%</label>
-                            <td> <input type="text" value="@if(isset($product->purchase_discount)){{$product->purchase_discount}} @endif" class="common" name="purchase_discount"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_discount : old('purchase_discount') }}" class="common" name="purchase_discount"><br>
                                 @error('purchase_discount')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">MaxSaleDiscount %</label></td>
-                            <td> <input type="text" value="@if(isset($product->max_sale_disc)){{$product->max_sale_disc}} @endif" class="common" name="max_sale_disc"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->max_sale_disc : old('max_sale_disc') }}" class="common" name="max_sale_disc"><br>
                                 @error('max_sale_disc')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -129,19 +129,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Waight </label></td>
-                            <td> <input type="text" value="@if(isset($product->weight)){{$product->weight}} @endif" class="common" name="weight"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->weight : old('weight') }}" class="common" name="weight"><br>
                                 @error('weight')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td> <label for="dd">Sales Tax Val *</label></td>
-                            <td> <input type="text" value="@if(isset($product->sale_tax_value)){{$product->sale_tax_value}} @endif" class="common" name="sale_tax_value"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->sale_tax_value : old('sale_tax_value') }}" class="common" name="sale_tax_value"><br>
                                 @error('sale_tax_value')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
-                            <td><label for="dd">Inventory Days</label></td>
-                            <td> <input type="text" value="@if(isset($product->inventory_day)){{$product->inventory_day}} @endif" class="common" name="inventory_day"><br>
+                            <td><label for="dd">Inventory Days</label>
+                            <td> <input type="text" value="{{ isset($product) ? $product->inventory_day : old('inventory_day') }}" class="common" name="inventory_day"><br>
                                 @error('inventory_day')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -149,19 +149,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Purchase Rate *</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_rate)){{$product->purchase_rate}} @endif" class="common" name="purchase_rate"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_rate : old('purchase_rate') }}" class="common" name="purchase_rate"><br>
                                 @error('purchase_rate')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Purchase Tax Type*</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_tax_type)){{$product->purchase_tax_type}} @endif" class="common" name="purchase_tax_type"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_tax_type : old('purchase_tax_type') }}" class="common" name="purchase_tax_type"><br>
                                 @error('purchase_tax_type')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Purchase Tax Value*</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_tax_value)){{$product->purchase_tax_value}} @endif" class="common" name="purchase_tax_value"><br>
+                            <td> <input type="text" value=" {{ isset($product) ? $product->purchase_tax_value : old('purchase_tax_value') }} " class="common" name="purchase_tax_value"><br>
                                 @error('purchase_tax_value')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -169,19 +169,19 @@
                         </tr>
                         <tr>
                             <td> <label for="dd">Advance Tax Type</label></td>
-                            <td> <input type="text" value="@if(isset($product->advance_tax_type)){{$product->advance_tax_type}} @endif" class="common" name="advance_tax_type"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->advance_tax_type : old('advance_tax_type') }} " class="common" name="advance_tax_type"><br>
                                 @error('advance_tax_type')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Expire Days</label></td>
-                            <td> <input type="text" value="@if(isset($product->expire_day)){{$product->expire_day}} @endif" class="common" name="expire_day"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->expire_day : old('expire_day') }} " class="common" name="expire_day"><br>
                                 @error('expire_day')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Purchase Tax</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_tax)){{$product->purchase_tax}} @endif" class="common" name="purchase_tax"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_tax : old('purchase_tax') }}" class="common" name="purchase_tax"><br>
                                 @error('purchase_tax')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -189,19 +189,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Min Flat Rate</label></td>
-                            <td> <input type="text" value="@if(isset($product->min_flat_rate)){{$product->min_flat_rate}} @endif" class="common" name="min_flat_rate"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->min_flat_rate : old('min_flat_rate') }}" class="common" name="min_flat_rate"><br>
                                 @error('min_flat_rate')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Max Flat Rate</label></td>
-                            <td> <input type="text" value="@if(isset($product->max_flat_rate)){{$product->max_flat_rate}} @endif" class="common" name="max_flat_rate"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->max_flat_rate : old('max_flat_rate') }}" class="common" name="max_flat_rate"><br>
                                 @error('max_flat_rate')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Adv Tax Filer</label></td>
-                            <td> <input type="text" value="@if(isset($product->adv_tax_filer)){{$product->adv_tax_filer}} @endif" class="common" name="adv_tax_filer"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->adv_tax_filer : old('adv_tax_filer') }}" class="common" name="adv_tax_filer"><br>
                                 @error('adv_tax_filer')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -209,19 +209,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Adv Tax Non Filer *</label></td>
-                            <td> <input type="text" value="@if(isset($product->adv_tax_non_filer)){{$product->adv_tax_non_filer}} @endif" class="common" name="adv_tax_non_filer"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->adv_tax_non_filer : old('adv_tax_non_filer') }}" class="common" name="adv_tax_non_filer"><br>
                                 @error('adv_tax_non_filer')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Adv Tax Supplier *</label></td>
-                            <td> <input type="text" value="@if(isset($product->adv_tax_supplier)){{$product->adv_tax_supplier}} @endif" class="common" name="adv_tax_supplier"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->adv_tax_supplier : old('adv_tax_supplier') }}" class="common" name="adv_tax_supplier"><br>
                                 @error('adv_tax_supplier')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Purchase Price</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_price)){{$product->purchase_price}} @endif" class="common" name="purchase_price"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_price : old('purchase_price') }}" class="common" name="purchase_price"><br>
                                 @error('purchase_price')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -229,19 +229,19 @@
                         </tr>
                         <tr>
                             <td><label for="dd">Purchase Disc Value</label></td>
-                            <td> <input type="text" value="@if(isset($product->purchase_disc_value)){{$product->purchase_disc_value}} @endif" class="common" name="purchase_disc_value"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->purchase_disc_value : old('purchase_disc_value') }}" class="common" name="purchase_disc_value"><br>
                                 @error('purchase_disc_value')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Re Order Level</label></td>
-                            <td> <input type="text" value="@if(isset($product->re_order_level)){{$product->re_order_level}} @endif" class="common" name="re_order_level"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->re_order_level : old('re_order_level') }}" class="common" name="re_order_level"><br>
                                 @error('re_order_level')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </td>
                             <td><label for="dd">Product Shel Life Day</label></td>
-                            <td> <input type="text" value="@if(isset($product->prod_shel_life_day)){{$product->prod_shel_life_day}} @endif" class="common" name="prod_shel_life_day"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->prod_shel_life_day : old('prod_shel_life_day') }}" class="common" name="prod_shel_life_day"><br>
                                 @error('prod_shel_life_day')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -249,7 +249,7 @@
                         </tr>
                         <tr>
                             <td><label for="dd">*Trade Price</label></td>
-                            <td> <input type="text" value="@if(isset($product->trade_price)){{$product->trade_price}} @endif" class="common" name="trade_price"><br>
+                            <td> <input type="text" value="{{ isset($product) ? $product->trade_price : old('trade_price') }}" class="common" name="trade_price"><br>
                                 @error('trade_price')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror

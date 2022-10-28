@@ -18,8 +18,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $data['employees'] = Employee::all();
-    return view('pages.pre_configuration.employee.index',$data);
+        $employees = Employee::all();
+    return view('pages.pre_configuration.employee.index',compact('employees'));
     }
 
     /**
@@ -29,9 +29,10 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $data['cities']=City::all();
-        $data['designations']=Designation::all();
-         return view('pages.pre_configuration.employee.create',$data);
+        $cities=City::all();
+        $designations = Designation::all();
+        $manager = Employee::where('designation_id',2)->where('branch_id',auth()->user()->branch_id)->get();
+         return view('pages.pre_configuration.employee.create',compact('cities','designations','manager'));
     }
 
     /**
@@ -59,12 +60,17 @@ class EmployeeController extends Controller
         $employee->emg_name         = $request->emg_name;
         $employee->emg_phone        = $request->emg_phone;
         $employee->hire_date        = $request->hire_date;
-        $employee->leave_date       = $request->leave_date;
+//        $employee->leave_date       = $request->leave_date;
         $employee->basic_salery     = $request->basic_salery;
         $employee->isAtive          = 1;
-        $employee->last_modification_date  = $request->last_modification_date;
+//        $employee->last_modification_date  = $request->last_modification_date;
         $employee->designation_id   = $request->designation_id;
         $employee->branch_id        = auth()->user()->branch_id;
+        if ($request->designation_id == 1){
+            $employee->reported_to      = $request->reported_to;
+        }else{
+            $employee->reported_to      = '';
+        }
         $employee->save();
         if($request->createUser == 1){
             $user = new User();

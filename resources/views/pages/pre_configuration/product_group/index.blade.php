@@ -15,44 +15,41 @@
                         </div><!-- end col-->
 
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                        
+
                             <thead class="table-light">
                                 <tr>
-                                    <th class="align-middle" width="15%"> ID</th>
-                                    <th class="align-middle" width="60%">Product Group Name</th>
-                                    <!-- <th class="align-middle">Date</th>
-                                    <th class="align-middle">Total</th>
-                                    <th class="align-middle">Payment Status</th>
-                                    <th class="align-middle">Payment Method</th>
-                                    <th class="align-middle">View Details</th> -->
-                                    <th class="align-middle" width="20%">Action</th>
+                                    <th class="text-center" width="10%"> ID</th>
+                                    <th class="align-middle" width="40%">Product Group Name</th>
+                                    <th class="align-middle" width="40%">Group Supplier</th>
+                                    <th class="text-center" width="10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($groups as $group)
                                 <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">{{$group->id}}</a> </td>
+                                    <td class="text-center"><a href="javascript: void(0);" class="text-body fw-bold">{{$group->id}}</a> </td>
                                     <td>{{$group->name}}</td>
-                                    <td>
-                                        
-                                        <div class="d-flex gap-3">
-                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-group_id="{{$group->id}}" data-group_name="{{$group->name}}">
-                                            View Details
-                                        </a>
+                                    <td>{{isset($group->supplier->name) ? $group->supplier->name : ''}}</td>
+                                    <td class="text-center">
+
+{{--                                        <div class="d-flex gap-3">--}}
+{{--                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-group_id="{{$group->id}}" data-group_name="{{$group->name}}">--}}
+{{--                                            View Details--}}
+{{--                                        </a>--}}
                                             <a  class="text-success" href="{{route('product_groups.edit',$group->id)}}"><i
                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                             <!-- <a  href="{{route('product_groups.destroy',$group->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                                     <form method="post" action='{{route("product_groups.destroy",$group->id) }}'>
-                                          {{csrf_field()}}
-                                          {{method_field('DELETE')}}
-                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                        </form>
-                                        </div>
+{{--                                            <form method="post" action='{{route("product_groups.destroy",$group->id) }}'>--}}
+{{--                                            {{csrf_field()}}--}}
+{{--                                            {{method_field('DELETE')}}--}}
+{{--                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>--}}
+{{--                                        </form>--}}
+{{--                                        </div>--}}
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                          </table>
@@ -97,9 +94,9 @@
     @push('script')
     <script>
         $(document).ready(function(){
-           
+
             $(document).on('click','.detail_view_button',function(){
-               
+
                $('.m_group_id').text($(this).data('group_id'));
                $('.m_group_name').text($(this).data('group_name'));
             });

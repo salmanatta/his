@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductGroup;
+use App\Models\purchases\Supplier;
 use Illuminate\Http\Request;
 
 class ProductGroupController extends Controller
@@ -14,8 +15,9 @@ class ProductGroupController extends Controller
      */
     public function index()
     {
-        $data['groups']=ProductGroup::all();
-        return view('pages.pre_configuration.product_group.index',$data);
+        $groups =ProductGroup::all();
+
+        return view('pages.pre_configuration.product_group.index',compact('groups'));
     }
 
     /**
@@ -25,7 +27,8 @@ class ProductGroupController extends Controller
      */
     public function create()
     {
-       return view('pages.pre_configuration.product_group.create');
+        $suppliers = Supplier::all();
+        return view('pages.pre_configuration.product_group.create',compact('suppliers'));
     }
 
     /**
@@ -36,9 +39,9 @@ class ProductGroupController extends Controller
      */
     public function store(Request $request)
     {
-     $input=$request->all();
-      $createCity=ProductGroup::create($input);
-       return redirect()->route('product_groups.index')->with('info','Data Added Successfully!');  
+        $input=$request->all();
+        $createCity=ProductGroup::create($input);
+        return redirect()->route('product_groups.index')->with('info','Data Added Successfully!');
     }
 
     /**
@@ -60,9 +63,9 @@ class ProductGroupController extends Controller
      */
     public function edit($id)
     {
-          $data['group']=ProductGroup::find($id);
-     
-        return view('pages.pre_configuration.product_group.edit',$data);
+        $group =ProductGroup::find($id);
+        $suppliers = Supplier::all();
+        return view('pages.pre_configuration.product_group.create',compact('group','suppliers'));
     }
 
     /**
@@ -76,8 +79,9 @@ class ProductGroupController extends Controller
     {
          $ProductGroup=ProductGroup::find($id);
        $ProductGroup->name =$request->input('name');
+        $ProductGroup->supplier_id =$request->input('supplier_id');
        $ProductGroup->save();
-       return redirect()->route('product_groups.index')->with('info','Data Updated Successfully!'); 
+       return redirect()->route('product_groups.index')->with('info','Data Updated Successfully!');
     }
 
     /**

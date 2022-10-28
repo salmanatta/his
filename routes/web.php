@@ -97,7 +97,9 @@ Route::get('/user_register', [RegisterController::class, 'showRegistrationForm']
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 
 // ==============work on product ====================
-Route::get('getProduct/{id}', 'App\Http\Controllers\pre_configuration\ProductController@getProduct')->name('getProduct');
+Route::get('getProduct/{id}', 'App\Http\Controllers\pre_configuration\ProductController@getProduct')->name('getProduct')->middleware('auth');
+Route::get('getSupplierGroup/{id}',[ProductController::class,'get_supplier_group']);
+
 Route::post('infoFind', 'App\Http\Controllers\ProductInfoController@infoFind')->name('infoFind');
 Route::post('discountFind', 'App\Http\Controllers\ProductInfoController@discountFind')->name('discountFind');
 Route::post('store_bonuses', 'App\Http\Controllers\ProductInfoController@store_bonuses')->name('store_bonuses');

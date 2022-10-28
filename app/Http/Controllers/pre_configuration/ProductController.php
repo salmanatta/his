@@ -11,6 +11,7 @@ use App\Models\ProductGroup;
 use App\Models\ProductInfo;
 use App\Models\products\Product;
 use App\Models\ProductType;
+use App\Models\purchases\Supplier;
 use Illuminate\Http\Request;
 // use App\Http\Requests\StoreProductRequest;
 use App\Http\Controllers\Pharmacy\LogController as LogTable;
@@ -45,7 +46,8 @@ class ProductController extends Controller
         $data['productTypes'] = ProductType::all();
         $data['products'] = Product::all();
         $data['productcategories'] = ProductCategory::all();
-        $data['groups'] = ProductGroup::all();
+//        $data['groups'] = ProductGroup::all();
+        $data['suppliers'] = Supplier::all();
         return view('pages.pre_configuration.product.details', $data);
     }
     public function getAllProducts(Request $request)
@@ -73,48 +75,50 @@ class ProductController extends Controller
         $this->validate(
             $request,
             [
-                'type_id'           => 'required|exists:product_types,id',
-                'category_id'       => 'required|exists:product_categories,id',
-                'group_id' => 'required|exists:product_groups,id',
-                'name' => 'required',
-                'product_code' => 'required',
-                'short_name' => 'nullable',
-                'genral_name' => 'string|nullable',
-                'product_id' => 'nullable',
-                'group_seq' => 'nullable',
-                'packet' => 'nullable',
-                'sale_price' => 'nullable',
-                'comp_artd_no' => 'nullable',
-                'comp_seq' => 'nullable',
-                'weight' => 'nullable',
-                'max_sale_disc' => 'nullable',
-                'purchase_price' => 'nullable',
-                'purchase_tax_type' => 'nullable',
-                'purchase_tax_value' => 'nullable',
-                'sale_tax_value' => 'nullable',
-                're_order_level' => 'nullable',
-                'prod_shel_life_day' => 'nullable',
-                'trade_price' => 'nullable',
-                'purchase_disc_value' => 'nullable',
-                'tax3_value' => 'nullable',
-                'purchase_discount' => 'nullable',
-                'purchase_rate' => 'nullable',
-                'purchase_tax' => 'nullable',
-                'inventory_day' => 'nullable',
-                'tax3_type' => 'nullable',
-                'advance_tax_type' => 'nullable',
-                'expire_day' => 'nullable',
-                'net_balance' => 'nullable',
-                'max_flat_rate' => 'nullable',
-                'min_flat_rate' => 'nullable',
-                'adv_tax_filer' => 'nullable',
-                'adv_tax_non_filer' => 'nullable',
-                'adv_tax_supplier' => 'nullable',
+                'type_id'               => 'required|exists:product_types,id',
+                'category_id'           => 'required|exists:product_categories,id',
+                'group_id'              => 'required|exists:product_groups,id',
+                'name'                  => 'required',
+                'product_code'          => 'required',
+                'supplier_id'           => 'required',
+                'short_name'            => 'nullable',
+                'genral_name'           => 'string|nullable',
+                'product_id'            => 'nullable',
+                'group_seq'             => 'nullable',
+                'packet'                => 'nullable',
+                'sale_price'            => 'nullable',
+                'comp_artd_no'          => 'nullable',
+                'comp_seq'              => 'nullable',
+                'weight'                => 'nullable',
+                'max_sale_disc'         => 'nullable',
+                'purchase_price'        => 'nullable',
+                'purchase_tax_type'     => 'nullable',
+                'purchase_tax_value'    => 'nullable',
+                'sale_tax_value'        => 'nullable',
+                're_order_level'        => 'nullable',
+                'prod_shel_life_day'    => 'nullable',
+                'trade_price'           => 'nullable',
+                'purchase_disc_value'   => 'nullable',
+                'tax3_value'            => 'nullable',
+                'purchase_discount'     => 'nullable',
+                'purchase_rate'         => 'nullable',
+                'purchase_tax'          => 'nullable',
+                'inventory_day'         => 'nullable',
+                'tax3_type'             => 'nullable',
+                'advance_tax_type'      => 'nullable',
+                'expire_day'            => 'nullable',
+                'net_balance'           => 'nullable',
+                'max_flat_rate'         => 'nullable',
+                'min_flat_rate'         => 'nullable',
+                'adv_tax_filer'         => 'nullable',
+                'adv_tax_non_filer'     => 'nullable',
+                'adv_tax_supplier'      => 'nullable',
             ],
             [
                 'type_id.required' => 'Please select any Product Type, Thank You.',
                 'category_id.required' => 'Please select any Product Category, Thank You.',
                 'group_id.required' => 'Please select any Product Group, Thank You.',
+                'supplier_id.required' => 'Please select supplier, Thank You.',
             ]
         );
         $data = $request->except('product_id');
@@ -130,14 +134,15 @@ class ProductController extends Controller
      */
     public function getProduct($id)
     {
-        $data['product']    = Product::where('id', $id)->first();
-        $data['discounts']  = ProductDiscount::with('generalDiscount')->where('product_id', $id)->where('branch_id', auth()->user()->branch_id)->get();
-        $data['bonus']      = ProductBonus::with('bonuses')->where('product_id', $id)->where('branch_id', auth()->user()->branch_id)->get();
-        $data['productTypes'] = ProductType::all();
-        $data['productcategories'] = ProductCategory::all();
-        $data['groups'] = ProductGroup::all();
-        $data['max_sale_qty'] = ProductMaxSalQuantity::where('product_id', $id)->get();
-        return view('pages.pre_configuration.product.details', $data);
+        $product            = Product::where('id', $id)->first();
+        $discounts          = ProductDiscount::with('generalDiscount')->where('product_id', $id)->where('branch_id', auth()->user()->branch_id)->get();
+        $bonus              = ProductBonus::with('bonuses')->where('product_id', $id)->where('branch_id', auth()->user()->branch_id)->get();
+        $productTypes       = ProductType::all();
+        $productcategories  = ProductCategory::all();
+        $groups             = ProductGroup::where('supplier_id',$product->supplier_id)->get();
+        $max_sale_qty       = ProductMaxSalQuantity::where('product_id', $id)->get();
+        $suppliers          = Supplier::all();
+        return view('pages.pre_configuration.product.details', compact('product','discounts','bonus','productTypes','productcategories','groups','max_sale_qty','suppliers'));
     }
     public function show(Product $product)
     {
@@ -203,5 +208,11 @@ class ProductController extends Controller
 //        dd($request);
         $product = Product::latest('name' ,'ASC')->get();
         return view('pages.reports.purchase.item_report' , compact('product'));
+    }
+
+    public function get_supplier_group($id)
+    {
+        $group = ProductGroup::where('supplier_id',$id)->get();
+        return response()->json($group);
     }
 }

@@ -64,8 +64,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="mb-3">
@@ -78,8 +76,6 @@
                                     </select>
                                 </div>
                             </div>
-
-
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="validationCustom01" class="form-label">Trade Price </label>

@@ -1,5 +1,8 @@
-<?php
 
+
+<?php
+use App\Http\Controllers\ProductMaxSalQuantityController;
+// use App\Http\Controllers\SaleInvoiceController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Pharmacy\LogController;
 use App\Http\Controllers\pre_configuration\PermissionController;
@@ -15,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisterController;
- use App\Http\Controllers\BatchController;
+use App\Http\Controllers\BatchController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProducBonusController;
 use App\Http\Controllers\StockController;
@@ -25,9 +28,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseInvoice;
-use App\Http\Controllers\ProductMaxSalQuantityController;
-// use App\Http\Controllers\SaleInvoiceController;
-
+use App\Http\Controllers\StockAdjustmentsController;
 // use App\Http\Controllers\PurchaseController;
 // use App\Http\Controllers\PurchaseInvoice;
 // use App\Http\Controllers\SupplierController;
@@ -253,11 +254,8 @@ Route::get('storetoStoreReport', 'App\Http\Controllers\StoreController@storetoSt
 Route::get('stock_detail', [StockController::class,"index"])->name('stock_detail')->middleware("auth");
 Route::get('getProductBatch',[StockController::class,"getProductBatch"])->name('getProductBatch');
 Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchaseStatus'])->name('updatePurchaseStatus');
-
 Route::get('date-wise-stock-view',[ProductController::class,"date_wise_stock_view"])->middleware('auth');
-
 Route::get('date-wise-stock-data',[ProductController::class,'date_wise_stock_data'])->middleware('auth');
-
 Route::get('supplier-wise-purchase',[PurchaseController::class,'suppler_wise_purchase'])->middleware('auth');
 
 // ==================End Reports =================
@@ -276,7 +274,9 @@ Route::get('date-wise-stock-pdf',[PDFController::class,"date_wise_stock_register
 Route::get('purchase-invoice/{id}',[PDFController::class,'purchase_invoice'])->middleware('auth');
 Route::get('supplier-wise-purchase-pdf',[PDFController::class,'supplier_wise_purchase_pdf'])->middleware('auth');
 // ============== End Sale Reports ==============
-
+// ============== Stock Adjustment ==============
+Route::get('stock-adjustment',[StockAdjustmentsController::class,'stock_adjustment'])->middleware('auth');
+// ============== End Stock Adjustment ==========
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

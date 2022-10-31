@@ -123,7 +123,7 @@
                             <div class="col-md-2" id="reportedDiv">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Reported to</label>
-                                    <select id="reported_to" name="reported_to" class="form-select select2">
+                                    <select id="reported_to" wname="reported_to" class="form-select select2">
                                         <option selected disabled="" value=""> -- Select Manager --</option>
                                         @foreach($manager as $mgr)
                                             <option value="{{$mgr->id}}">{{$mgr->first_name.' '.$mgr->last_name}}</option>

@@ -77,7 +77,7 @@ class SaleInvoiceController extends Controller
             ->where('branch_id', auth()->user()->branch_id)
             ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
             ->get();
-        return ($data);
+//        return ($data);
         return response()->json($data);
     }
 

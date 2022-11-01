@@ -683,7 +683,7 @@
             $(".bs-example-modal-lg").modal('hide');
             // do_calculation();
         });
-
+        // @@@@@@@@@@@@@@@@@@@@@@ batch update End @@@@@@@@@@@@@@@@
         $(document).ready(function () {
             $.ajax({
                 type: 'GET',

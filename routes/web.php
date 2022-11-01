@@ -193,7 +193,7 @@ Route::get("/sale/invoice",[SaleInvoiceController::class,"render"])->middleware(
 Route::get("get-all-sale-products",[SaleInvoiceController::class,"allSaleProducts"]);
 Route::get("get-stock/{id}",[SaleInvoiceController::class,"getStock"]);
 Route::get("common_customer",[CustomerController::class,"commonCustomer"])->middleware('auth');
-Route::get('getBatches', 'App\Http\Controllers\SaleInvoiceController@getBatches')->name('getBatches');
+Route::get('getBatches', [SaleInvoiceController::class,"getBatches"])->name('getBatches');
 Route::get('getBatcheWiseProduct', 'App\Http\Controllers\SaleInvoiceController@getBatcheWiseProduct')->name('getBatcheWiseProduct');
 Route::get('getProductBonus',[SaleInvoiceController::class,'getProductBonus'])->middleware('auth');
 

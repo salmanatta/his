@@ -276,6 +276,7 @@ Route::get('supplier-wise-purchase-pdf',[PDFController::class,'supplier_wise_pur
 // ============== End Sale Reports ==============
 // ============== Stock Adjustment ==============
 Route::get('stock-adjustment',[StockAdjustmentsController::class,'stock_adjustment'])->middleware('auth');
+Route::post('stock-adjustment',[StockAdjustmentsController::class,'store_stock_adjustment'])->middleware('auth');
 // ============== End Stock Adjustment ==========
 
 Route::get('/clear-cache', function () {

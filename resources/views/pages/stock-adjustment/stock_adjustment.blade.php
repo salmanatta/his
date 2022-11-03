@@ -7,7 +7,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="post" action="{{route('sale_invoices.store')}}">
+                    <form method="post" action="{{url('stock-adjustment')}}">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -47,9 +47,9 @@
                                                            for="description">Product</label>
                                                     <select
                                                         class="select2 form-control" id="products_select"
-                                                        name="product_id">
+                                                        name="products_select">
                                                     </select>
-                                                    @error('product_id')
+                                                    @error('products_select')
                                                     <span class="text-danger">{{$message}}</span>
                                                     @enderror
 
@@ -59,9 +59,9 @@
                                             <div class="col-4">
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label" for="Customer">Adjustment Type</label>
-                                                    <select class="form-control" name="customer_id">
-                                                        <option value="">Positive Adjustment</option>
-                                                        <option value="">Negative Adjustment</option>
+                                                    <select class="form-control" name="trans_type">
+                                                        <option value="Positive Adjustment">Positive Adjustment</option>
+                                                        <option value="Negative Adjustment">Negative Adjustment</option>
                                                     </select>
                                                     @error('customer_id')
                                                     <span class="text-danger">{{$message}}</span>
@@ -107,8 +107,7 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td style="width:10%;text-align:right">Grand Total</td>
-                                                <td style="width:8%;text-align:right"
-                                                    class="_tfootTotal"> {{ 0 }}</td>
+                                                <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -212,38 +211,42 @@
             <input type="hidden" name="product_id[]" value="` + data.productArr.product.id + `"/>
             <input type="hidden" name="product_name[]" value="` + data.productArr.product.name + `"/>` + data.productArr.product.name + `
         </td>
-        <td width="15%" class="batch_no">
-            <button type="button" data-bs-toggle="modal" class="btn btn-primary btn-sm edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
-                <i class="dripicons-document-edit"></i>
-            </button>
+        <td width="15%">
+            <a style="font-size: large;font-family: bold" data-bs-toggle="modal" class="edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="` + data.productArr.product_id + `" >` + data.productArr.batch.batch_no + `
+            </a>
         </td>
-        <td width="10%" class="expiry_dater">
+        <td width="10%">
             <input type="text" class="form-control expiry_date text-center"  value="` + data.productArr.batch.date + `" name="expiry_date[]" step="any" readonly/>
         </td>
-        <td width='10%' class="text-center">
-            <input type="number" class="form-control all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" readonly/>
+        <td width='10%'>
+            <input type="number" class="form-control batch_qty" min="1" value="` + data.productArr.currentQty + `" step="any" readonly/>
         </td>
-        <td width='10%' class="quanity">
-            <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
+        <td width='10%'>
+            <input type="number" class="form-control qty" style="text-align:center" min="1" name="qty[]" value="1" step="any" required/>
         </td>
-        <td width='10%' class="purchase_price">
-            <input type="number" class="form-control trade_price text-end" style="text-align:center" onKeyup="do_calculation()" value="` + data.productArr.product.trade_price + `"  name="purchase_price[]" step="any" required/>
+        <td width='10%'>
+            <input type="number" class="form-control trade_price text-end" style="text-align:center"  value="` + data.productArr.product.trade_price + `"  name="trade_price[]" step="any" required/>
         </td>
-        <td width="10%" class="line_total text-end">
-            <input type="number" class="form-control line_total text-end" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
+        <td width="10%" class="text-end">
+            <input type="number" class="form-control line_total text-end" style="text-align:right" value="` + 1 * data.productArr.product.trade_price + `"  name="line_total[]" step="any" readonly/>
         </td>
         <td width="5%">
             <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>
-            <input type="hidden" class="sub_total" name="sub_total" value="0">
-            <input type="hidden" class="hidden_total" name="total">
+            <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="` + data.productArr.batch_id + `">
         </td>
         </tr>`;
+                        var totalPrice = parseFloat($('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html());
+                        // console.log(totalPrice + "  "  + data.productArr.product.trade_price );
+                        $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice + data.productArr.product.trade_price));
                         table_body.append(new_row);
                         product_count++;
                         row_id++;
+                        $('.select2-search__field').focus();
+
                     }
                 })
             };
+
         });
 $(document).on('click','.edit_modal',function (){
     var row_id = $(this).closest('.table_append_rows').attr('id');
@@ -261,7 +264,7 @@ $(document).on('click','.edit_modal',function (){
             $('#product_modal').val(product_id); //this is used to get against this product batch
             $.each(data, function (k, val) {
                 if (val.batch.id != null && val.batch.id != "") {
-                    op += "<option value='" + val.batch.id + "' data-price=" + val.price + "  data-quantity=" + val.currentQty + "data-expiry=" + val.batch.date + ">" + val.batch.batch_no + " " + " | Quantity -> " + val.currentQty + " " + " | Expiry Date -> " + val.batch.date + "</option>";
+                    op += "<option value='" + val.batch.id + "' data-price=" + val.price + "  data-quantity=" + val.currentQty +  "  data-expiry=" + val.batch.date + "  data-batch_no='" + val.batch.batch_no +  "'>" + val.batch.batch_no + " " + " | Quantity -> " + val.currentQty + " " + " | Expiry Date -> " + val.batch.date + "</option>";
                 }
             });
             $('input[name="edit_row_id"]').val(row_id);
@@ -270,5 +273,69 @@ $(document).on('click','.edit_modal',function (){
         },
     });
 });
+        // @@@@@@@@@@@@@@@@@@@@@@ batch update @@@@@@@@@@@@@@@@
+        $(document).on('click', '.update_modal', function () {
+            var product_id = $('#product_modal').val();
+            var price = $('#edit_batch :selected').data('price');
+            var quantity = $('#edit_batch :selected').data('quantity');
+            var expiry_date = $('#edit_batch :selected').data('expiry');
+            var batchId = $('#edit_batch :selected').val();
+            var batch_id_modal = $("#edit_batch :selected").text();
+            var row_id_for_editing = $('input[name="edit_row_id"]').val();
+            $('#' + row_id_for_editing).find('.batch_qty').val(quantity);
+            $('#' + row_id_for_editing).find('.batch_no_id').val(batch_id_modal);
+            $('#' + row_id_for_editing).find('.batch_no_id').text($('#edit_batch :selected').data('batch_no'));
+            $('#' + row_id_for_editing).find('.trade_price').val(price);
+            $('#' + row_id_for_editing).find('.table_batch_id').val(batchId);
+            $('#' + row_id_for_editing).find('.expiry_date').val(expiry_date);
+            // $(".bs-example-modal-lg").modal('hide');
+        });
+        $("body").on('keyup' ,'table.order-list' , function() {
+            var total = $(this).children('tbody').find('tr').length;
+            var sub_price = 0;
+            for (var i = 1 ; i <= total; i++) {
+                var qty = parseInt($(this).find('#table_append_rows_'+i).find('input.qty').val())
+                var price = parseFloat($(this).find('#table_append_rows_'+i).find('input.trade_price').val()).toFixed(2);
+                $(this).find('#table_append_rows_'+i).find('input.line_total').val(parseFloat(qty * price).toFixed(2));
+                if (! isNaN($(this).find('#table_append_rows_'+i).find('td > input.line_total').val())) {
+                    sub_price = parseFloat(sub_price) +  parseFloat($(this).find('#table_append_rows_'+i).find('td > input.line_total').val());
+                }
+            }
+            $(this).children("tfoot").children("tr").find("._tfootTotal").html(sub_price.toFixed(2));
+            $(this).children("tfoot").children("tr").find(".sub_total").val(sub_price.toFixed(2));
+        });
+        // function do_calculation() {
+
+            // $('.table_append_rows').each(function() {
+            //     $(this).find('.product_count').text(product_count);
+            //      var quantity = $(this).find('.quantity').find('input').val();
+
+            //     var purchase_price = $(this).find('.purchase_price').find('input').val();
+            //     var total_price = parseFloat(purchase_price * quanity).toFixed(2);
+            //     $(this).find(".total_price").val(total_price);
+            //     var purchase_discount = $(this).find('.purchase_discount').find('input').val();
+            //     var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val());
+            //     var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val());
+            //     var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2);
+            //     $(this).find('.after_discount').val(price_after_discount);
+            //     if (isNaN(sale_tax_value)) {
+            //         sale_tax_value = 0;
+            //     }
+            //     if (isNaN(adv_tax_value)) {
+            //         adv_tax_value = 0;
+            //     }
+            //     var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
+            //     $(this).find('.sub_total').val(row_sub_total);
+            //     $(this).find('.line_total').val(row_sub_total);
+            //     grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
+            //
+            //     $(".hidden_total").val(grand_subtotal);
+            //     $("._tfootTotal").text(grand_subtotal);
+            //     $("input[name='total_qty']").val(total_qty);
+            //     $("input[name='item']").val(product_count);
+            //     product_count++;
+            //
+            // });
+        // };
     </script>
 @endpush

@@ -10,4 +10,9 @@ class StockAdjustmentsController extends Controller
     {
         return view('pages.stock-adjustment.stock_adjustment');
     }
+
+    public function store_stock_adjustment(Request $request)
+    {
+        dd($request->all());
+    }
 }

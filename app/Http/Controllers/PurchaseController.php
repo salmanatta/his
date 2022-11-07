@@ -90,7 +90,7 @@ class PurchaseController extends Controller
                 'invoice_no'    =>PurchaseInvoice::maxId(auth()->user()->branch_id,$request->trans_type),
                 'suplier_id'    =>$request->suplier_id,
                 'invoice_date'  =>Carbon::createFromFormat('m/d/Y', $request->invoiceDate)->format('Y-m-d'),
-                'branch_id'     =>$request->branch_id,
+                'branch_id'     => $request->branch_id,
                 'description'   =>$request->description,
                 'trans_type'    =>$request->trans_type,
                 'inv_status'    =>$request->inv_status,

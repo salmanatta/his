@@ -37,6 +37,9 @@
                                                    for="Customer">Invoice Date</label>
                                             <input type="text" name="invoice_date" value="{{ date('m/d/Y') }}"
                                                    id="fiveDays" class="form-control">
+                                            @error('invoice_date')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </span>
                                                         </p>
                                                         <input type="hidden" name="trans_type">
@@ -71,7 +74,7 @@
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label"
                                                            for="description">Remarks</label>
-                                                    <textarea placeholder="Remarks" name="description"
+                                                    <textarea placeholder="Remarks" name="remarks"
                                                               rows="5"
                                                               class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
                                                 </div>
@@ -237,7 +240,7 @@
         </tr>`;
                         var totalPrice = parseFloat($('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html());
                         // console.log(totalPrice + "  "  + data.productArr.product.trade_price );
-                        $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice + data.productArr.product.trade_price));
+                        $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice + data.productArr.product.trade_price).toFixed(2));
                         table_body.append(new_row);
                         product_count++;
                         row_id++;
@@ -304,38 +307,14 @@ $(document).on('click','.edit_modal',function (){
             $(this).children("tfoot").children("tr").find("._tfootTotal").html(sub_price.toFixed(2));
             $(this).children("tfoot").children("tr").find(".sub_total").val(sub_price.toFixed(2));
         });
-        // function do_calculation() {
+        $(document).on('click', '.delete_row', function () {
+            var id = $(this).closest('tr').attr('id');
+            var tempLineTotal = $("#" + id).find('input.line_total').val();
+            var totalPrice = parseFloat($('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html());
+             var ggTotal = (parseFloat(totalPrice) - parseFloat(tempLineTotal)).toFixed(2);
+            $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice - tempLineTotal).toFixed(2));
+            $(this).closest('tr').remove();
 
-            // $('.table_append_rows').each(function() {
-            //     $(this).find('.product_count').text(product_count);
-            //      var quantity = $(this).find('.quantity').find('input').val();
-
-            //     var purchase_price = $(this).find('.purchase_price').find('input').val();
-            //     var total_price = parseFloat(purchase_price * quanity).toFixed(2);
-            //     $(this).find(".total_price").val(total_price);
-            //     var purchase_discount = $(this).find('.purchase_discount').find('input').val();
-            //     var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val());
-            //     var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val());
-            //     var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2);
-            //     $(this).find('.after_discount').val(price_after_discount);
-            //     if (isNaN(sale_tax_value)) {
-            //         sale_tax_value = 0;
-            //     }
-            //     if (isNaN(adv_tax_value)) {
-            //         adv_tax_value = 0;
-            //     }
-            //     var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
-            //     $(this).find('.sub_total').val(row_sub_total);
-            //     $(this).find('.line_total').val(row_sub_total);
-            //     grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
-            //
-            //     $(".hidden_total").val(grand_subtotal);
-            //     $("._tfootTotal").text(grand_subtotal);
-            //     $("input[name='total_qty']").val(total_qty);
-            //     $("input[name='item']").val(product_count);
-            //     product_count++;
-            //
-            // });
-        // };
+        });
     </script>
 @endpush

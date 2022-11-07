@@ -563,7 +563,7 @@
         }
 
         $(document).on('click', '.discount-check', function () {
-            console.log($(this).closest('tr').attr('id'));
+            // console.log($(this).closest('tr').attr('id'));
             var rowID = $(this).closest('tr').attr('id');
             if ($(this).is(":checked")) {
                 // console.log('checked');

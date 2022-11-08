@@ -56,4 +56,23 @@ class StockAdjustmentsController extends Controller
 
         return back()->with('success',"Data Added Successfully!");
     }
+
+    public function adjustment_approval(Request $request)
+    {
+
+        if(count($request->all()) > 0)
+        {
+            $adjustments = StockAdjustment::whereBetween('invoice_date',[$request->from_date,$request->to_date])
+                                        ->where('branch_id',auth()->user()->branch_id)
+                                        ->where('trans_type',$request->adjustment_type)
+                                        ->where('inv_status',$request->trans_type)->get();
+            return view('pages.stock-adjustment.adjustment_approval',compact('adjustments'));
+        }
+        return view('pages.stock-adjustment.adjustment_approval');
+    }
+
+    public function view_stock_adjustment($id)
+    {
+        return $id;
+    }
 }

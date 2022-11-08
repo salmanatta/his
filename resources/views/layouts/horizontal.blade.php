@@ -262,8 +262,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
                             <a href="{{url('stock-adjustment')}}" class="dropdown-item" key="t-saas">Stock Adjustment </a>
-{{--                            <a href="{{url('storetoStoreList')}}" class="dropdown-item" key="t-saas">Product Transfer--}}
-{{--                                Approval </a>--}}
+                            <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Adjustment Approval </a>
 {{--                            <a href="{{url('receive-product-transfer')}}" class="dropdown-item" key="t-saas">Receive--}}
 {{--                                Product Transfer </a>--}}
                         </div>

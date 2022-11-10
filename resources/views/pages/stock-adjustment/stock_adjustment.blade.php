@@ -19,7 +19,7 @@
                                         <h3>
                                             <b>
                                                 <label class="form-label" for="invStatus"
-                                                       style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
+                                                       style="color:red">{{ isset($adjustment) ? $adjustment->inv_status : 'Un-Post' }}</label>
                                             </b>
                                         </h3>
                                         </p>
@@ -35,7 +35,7 @@
                                         <span>
                                             <label class="form-label"
                                                    for="Customer">Invoice Date</label>
-                                            <input type="text" name="invoice_date" value="{{ date('m/d/Y') }}"
+                                            <input type="text" name="invoice_date" value="{{ isset($adjustment) ? date('m/d/Y',strtotime($adjustment->invoice_date)) : date('m/d/Y') }}"
                                                    id="fiveDays" class="form-control">
                                             @error('invoice_date')
                                                 <span class="text-danger">{{$message}}</span>
@@ -63,8 +63,8 @@
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label" for="Customer">Adjustment Type</label>
                                                     <select class="form-control" name="trans_type">
-                                                        <option value="Positive Adjustment">Positive Adjustment</option>
-                                                        <option value="Negative Adjustment">Negative Adjustment</option>
+                                                        <option value="Positive Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Positive Adjustment' ? 'selected' : '') : '' }}>Positive Adjustment</option>
+                                                        <option value="Negative Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Negative Adjustment' ? 'selected' : '') : '' }}>Negative Adjustment</option>
                                                     </select>
                                                     @error('customer_id')
                                                     <span class="text-danger">{{$message}}</span>
@@ -76,7 +76,7 @@
                                                            for="description">Remarks</label>
                                                     <textarea placeholder="Remarks" name="remarks"
                                                               rows="5"
-                                                              class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
+                                                              class="form-control _description">{{ isset($adjustment) ? $adjustment->remarks : old('remarks') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,6 +100,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
                                             </tbody>
                                             <tfoot>
                                             <tr>

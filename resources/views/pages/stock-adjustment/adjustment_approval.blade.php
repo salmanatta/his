@@ -75,17 +75,10 @@
                                 class="btn btn-primary search_btn float-left printBlock">
                             Search
                         </button>
-                        {{--                        <div class="pull-right btn-group btn-group-lg hidden-print printBlock">--}}
-                        {{--                            <a id="print" target="_blank" class="btn btn-info">--}}
-                        {{--                                <i class="fa fa-print"></i> Print--}}
-                        {{--                            </a>--}}
-                        {{--                        </div>--}}
                     </div>
                 </div>
             </form>
         </div>
-        <!-- end page title -->
-
 
         <div class="card">
             <div class="card-body">

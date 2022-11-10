@@ -73,6 +73,8 @@ class StockAdjustmentsController extends Controller
 
     public function view_stock_adjustment($id)
     {
-        return $id;
+
+        $adjustment = StockAdjustment::find($id);
+        return view('pages.stock-adjustment.stock_adjustment',compact('adjustment'));
     }
 }

@@ -123,8 +123,9 @@
                         <?php $granttotal = 0; ?>
                         <tbody>
                             @if(isset($purchaseD))
-                            <?php $counter = 1;
-                            $row_id = 1;
+                            <?php
+                                $counter = 1;
+                                $row_id = 1;
                             ?>
                             @foreach($purchaseD as $purchase)
                             <tr class="table_append_rows" id="table_append_rows_{{$row_id}}">

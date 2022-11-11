@@ -62,9 +62,9 @@
                                             <div class="col-4">
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label" for="Customer">Adjustment Type</label>
-                                                    <select class="form-control" name="trans_type">
-                                                        <option value="Positive Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Positive Adjustment' ? 'selected' : '') : '' }}>Positive Adjustment</option>
-                                                        <option value="Negative Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Negative Adjustment' ? 'selected' : '') : '' }}>Negative Adjustment</option>
+                                                    <select class="form-control" name="trans_type" {{ isset($adjustment) ? 'disabled' : '' }}>
+                                                        <option value="Positive Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Positive Adjustment' ? 'selected' : '') : '' }} >Positive Adjustment</option>
+                                                        <option value="Negative Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Negative Adjustment' ? 'selected' : '') : '' }} >Negative Adjustment</option>
                                                     </select>
                                                     @error('customer_id')
                                                     <span class="text-danger">{{$message}}</span>
@@ -100,7 +100,51 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            @if(isset($adjustmentDetail))
+                                                @php
+                                                    $row_id = 1;
+                                                    $total_amount = 0;
+                                                @endphp
+                                                @foreach($adjustmentDetail as $data)
+                                                    <tr class="table_append_rows" id="table_append_rows_{{$row_id}}">
+                                                        <td width="5%" class="product_count"> {{ $row_id }} </td>
+                                                        <td width="25%" class="name">
+                                                            {{ $data->product->name }}
+                                                            <input type="hidden" name="product_id[]" value="{{ $data->product_id }}"/>
 
+                                                        </td>
+                                                        <td width="15%">
+                                                            <a style="font-size: large;font-family: bold" data-bs-toggle="modal" class="edit_modal batch_no_id" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-product_id="{{ $data->product_id }}" >{{ $data->batch->batch_no }}
+                                                            </a>
+                                                        </td>
+                                                        <td width="10%">
+                                                            <input type="text" class="form-control expiry_date text-center"  value="{{ date('m/d/Y',strtotime($data->batch->date)) }}" name="expiry_date[]" step="any" readonly/>
+                                                        </td>
+                                                        <td width='10%'>
+                                                            <input type="number" class="form-control batch_qty" min="1" value="" step="any" readonly/>
+                                                        </td>
+                                                        <td width='10%'>
+                                                            <input type="number" class="form-control qty" style="text-align:center" min="1" name="qty[]" value="{{ $data->qty }}" step="any" required/>
+                                                        </td>
+                                                        <td width='10%'>
+                                                            <input type="number" class="form-control trade_price text-end" style="text-align:center"  value="{{ $data->cost_price }}"  name="trade_price[]" step="any" required/>
+                                                        </td>
+                                                        <td width="10%" class="text-end">
+                                                            <input type="number" class="form-control line_total text-end" style="text-align:right" value="{{ $data->line_total }}"  name="line_total[]" step="any" readonly/>
+                                                        </td>
+                                                        <td width="5%">
+                                                            <button type="button" class="delete_row btn btn-sm btn-danger" >
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                            <input type="hidden" class="table_batch_id" name="table_batch_id[]" value="{{ $data->batch_id }}">
+                                                        </td>
+                                                    </tr>
+                                                    @php
+                                                        $row_id++;
+                                                        $total_amount += $data->line_total;
+                                                    @endphp
+                                                @endforeach
+                                            @endif
                                             </tbody>
                                             <tfoot>
                                             <tr>
@@ -111,17 +155,24 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td style="width:10%;text-align:right">Grand Total</td>
-                                                <td style="width:8%;text-align:right" class="_tfootTotal">0</td>
+                                                <td style="width:8%;text-align:right" class="_tfootTotal">{{ isset($adjustmentDetail) ? $total_amount : 0 }}</td>
                                             </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-success me-1">Save</button>
-                                    <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                                    @if(isset(($adjustment)))
+                                        <button type="submit" class="btn btn-primary me-1" name="update">Update</button>
+                                        <button type="submit" class="btn btn-warning me-1" name="update-post">Update & Post</button>
+                                        <a class="btn btn-danger mx-0" href="{{ url('adjustment-approval') }}">Exit</a>
+                                    @else
+                                        <button type="submit" class="btn btn-success me-1">Save</button>
+                                        <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

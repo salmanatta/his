@@ -73,8 +73,9 @@ class StockAdjustmentsController extends Controller
 
     public function view_stock_adjustment($id)
     {
-
         $adjustment = StockAdjustment::find($id);
-        return view('pages.stock-adjustment.stock_adjustment',compact('adjustment'));
+        $adjustmentDetail = StockAdjustmentDetail::with('product','batch')->where('stock_adjustments_id',$id)->get();
+//        dd($adjustmentDetail);
+        return view('pages.stock-adjustment.stock_adjustment',compact('adjustment','adjustmentDetail'));
     }
 }

@@ -78,4 +78,41 @@ class StockAdjustmentsController extends Controller
 //        dd($adjustmentDetail);
         return view('pages.stock-adjustment.stock_adjustment',compact('adjustment','adjustmentDetail'));
     }
+
+    public function update_stock_adjustment(Request $request,$id)
+    {
+//        dd($request->all());
+        $adjustment = StockAdjustment::find($id);
+        $adjustment->invoice_date = Carbon::createFromFormat('m/d/Y', $request->invoice_date)->format('Y-m-d');
+        $adjustment->remarks = $request->remarks;
+        if ($request->has('update-post')){
+            $adjustment->inv_status = 'Post';
+            $adjustment->status_changed_by = auth()->user()->id;
+            $adjustment->status_changed_on = Carbon::now();
+        }
+        $adjustment->save();
+        $rows = $request->product_id;
+        foreach ($rows as $key => $row){
+            if (!empty($request->id[$key])){
+                $adjustmentDetail                  = StockAdjustmentDetail::find($request->id[$key]);
+                $adjustmentDetail->product_id      = $request->product_id[$key];
+                $adjustmentDetail->qty             = $request->qty[$key];
+                $adjustmentDetail->batch_id        = $request->table_batch_id[$key];
+                $adjustmentDetail->cost_price      = $request->trade_price[$key];
+                $adjustmentDetail->line_total      = $request->line_total[$key];
+                $adjustmentDetail->save();
+            }else{
+                StockAdjustmentDetail::create([
+                    'stock_adjustments_id'  => $id,
+                    'product_id'            => $request->product_id[$key],
+                    'qty'                   => $request->qty[$key],
+                    'batch_id'              => $request->table_batch_id[$key],
+                    'cost_price'            => $request->trade_price[$key],
+                    'line_total'            => $request->line_total[$key],
+                ]);
+            }
+        }
+        return back()->with('info',"Data Updated Successfully!");
+    }
+
 }

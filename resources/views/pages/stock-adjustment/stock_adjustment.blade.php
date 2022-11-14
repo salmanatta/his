@@ -7,7 +7,12 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
+                    @if(isset($adjustment))
+                    <form method="post" action="{{url('stock-adjustment/'.$adjustment->id)}}">
+
+                    @else
                     <form method="post" action="{{url('stock-adjustment')}}">
+                    @endif
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -20,6 +25,8 @@
                                             <b>
                                                 <label class="form-label" for="invStatus"
                                                        style="color:red">{{ isset($adjustment) ? $adjustment->inv_status : 'Un-Post' }}</label>
+                                                <input type="hidden" name="inv_status" value="{{ isset($adjustment) ? $adjustment->inv_status : 'Un-Post' }}">
+
                                             </b>
                                         </h3>
                                         </p>
@@ -62,11 +69,15 @@
                                             <div class="col-4">
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label" for="Customer">Adjustment Type</label>
-                                                    <select class="form-control" name="trans_type" {{ isset($adjustment) ? 'disabled' : '' }}>
+                                                    @if(isset($adjustment))
+                                                    <input type="text" class="form-control" name="trans_type" value="{{ isset($adjustment) ? $adjustment->trans_type : ''}}" readonly>
+                                                    @else
+                                                    <select class="form-control" name="trans_type" {{ isset($adjustment) ? 'readonly' : '' }} id="trans_type">
                                                         <option value="Positive Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Positive Adjustment' ? 'selected' : '') : '' }} >Positive Adjustment</option>
                                                         <option value="Negative Adjustment" {{ isset($adjustment) ? ($adjustment->trans_type == 'Negative Adjustment' ? 'selected' : '') : '' }} >Negative Adjustment</option>
                                                     </select>
-                                                    @error('customer_id')
+                                                    @endif
+                                                    @error('trans_type')
                                                     <span class="text-danger">{{$message}}</span>
                                                     @enderror
 
@@ -111,6 +122,8 @@
                                                         <td width="25%" class="name">
                                                             {{ $data->product->name }}
                                                             <input type="hidden" name="product_id[]" value="{{ $data->product_id }}"/>
+                                                            <input type="hidden" name="id[]" value="{{ $data->id }}"/>
+
 
                                                         </td>
                                                         <td width="15%">
@@ -248,7 +261,7 @@
         //         }]
         //     });
         // }
-        var row_id = 1;
+        var row_id = $('table.order-list').children('tbody').find('tr').length;
         var product_count = 1;
         $('#products_select').on('change', function (data) {
             var id = $(this).val();
@@ -259,6 +272,7 @@
                     url: '{{url("get-stock")}}/' + id,
                     success: function (data) {
                         // console.log(data);
+                        ++row_id;
                         var table_body = $("table.order-list tbody");
                         var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `">
         <td width="5%" class="product_count">` + product_count + ` </td>
@@ -295,7 +309,6 @@
                         $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice + data.productArr.product.trade_price).toFixed(2));
                         table_body.append(new_row);
                         product_count++;
-                        row_id++;
                         $('.select2-search__field').focus();
 
                     }
@@ -348,6 +361,7 @@ $(document).on('click','.edit_modal',function (){
         $("body").on('keyup' ,'table.order-list' , function() {
             var total = $(this).children('tbody').find('tr').length;
             var sub_price = 0;
+
             for (var i = 1 ; i <= total; i++) {
                 var qty = parseInt($(this).find('#table_append_rows_'+i).find('input.qty').val())
                 var price = parseFloat($(this).find('#table_append_rows_'+i).find('input.trade_price').val()).toFixed(2);
@@ -367,6 +381,27 @@ $(document).on('click','.edit_modal',function (){
             $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").html(parseFloat(totalPrice - tempLineTotal).toFixed(2));
             $(this).closest('tr').remove();
 
+        });
+
+
+        $(document).ready(function() {
+            $.ajax({
+                type: 'GET',
+                url: '{{url("getCalendarSetup")}}',
+                data: {
+                    transType: "ADJUSTMENT",
+                },
+                success: function (data) {
+                    // console.log(data);
+                    var minDays = data.calendar_setup.min_days;
+                    var maxDays = data.calendar_setup.max_days;
+
+                    $("#fiveDays").datepicker({
+                        minDate: -minDays,
+                        maxDate: +maxDays,
+                    });
+                }
+            });
         });
     </script>
 @endpush

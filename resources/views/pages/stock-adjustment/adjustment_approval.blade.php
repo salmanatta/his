@@ -104,7 +104,9 @@
                                 $counter = 0;
                             @endphp
                             @foreach ($adjustments as $data)
-                                {{$counter++}}
+                                @php
+                                $counter++
+                                @endphp
                                 <tr>
                                     <td style="text-align:center;">{{ $counter }}</td>
                                     <td style="text-align:center;">{{ $data->invoice_no }}</td>

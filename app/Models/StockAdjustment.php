@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\branch\Branch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +27,11 @@ class StockAdjustment extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function postUser()
+    {
+        return $this->belongsTo(User::class, 'status_changed_by', 'id');
+    }
+
     public function adjustment_detail()
     {
         return $this->hasMany(StockAdjustmentDetail::class,'stock_adjustments_id','id');
@@ -39,5 +45,10 @@ class StockAdjustment extends Model
     public function getSumLineTotalAttribute()
     {
         return $this->adjustment_detail()->sum('line_total');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }

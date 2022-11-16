@@ -125,7 +125,7 @@
                                         </td>
                                     @endif
                                     <td class="text-center">
-                                        <a href="{{ url('purchase-invoice') . '/' . $data->id }}"
+                                        <a href="{{ url('adjustment-invoice/'.$data->id) }}"
                                            style="border-radius: 44px;"
                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
                                             Print Invoice </a>

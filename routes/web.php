@@ -273,6 +273,7 @@ Route::get('sale-invoice/{id}',[PDFController::class,'sale_invoice'])->middlewar
 Route::get('date-wise-stock-pdf',[PDFController::class,"date_wise_stock_register"])->middleware('auth');
 Route::get('purchase-invoice/{id}',[PDFController::class,'purchase_invoice'])->middleware('auth');
 Route::get('supplier-wise-purchase-pdf',[PDFController::class,'supplier_wise_purchase_pdf'])->middleware('auth');
+Route::get('adjustment-invoice/{id}',[PDFController::class,'adjustment_invoice'])->middleware('auth');
 // ============== End Sale Reports ==============
 // ============== Stock Adjustment ==============
 Route::get('stock-adjustment',[StockAdjustmentsController::class,'stock_adjustment'])->middleware('auth');
@@ -280,6 +281,7 @@ Route::post('stock-adjustment',[StockAdjustmentsController::class,'store_stock_a
 Route::get('adjustment-approval',[StockAdjustmentsController::class,'adjustment_approval'])->middleware('auth');
 Route::get('stock-adjustment/{id}',[StockAdjustmentsController::class,'view_stock_adjustment'])->middleware('auth');
 Route::post('stock-adjustment/{id}',[StockAdjustmentsController::class,'update_stock_adjustment'])->middleware('auth');
+
 // ============== End Stock Adjustment ==========
 
 Route::get('/clear-cache', function () {

@@ -8,6 +8,8 @@ use App\Models\PurchaseInvoice;
 use App\Models\PurchaseInvoiceDetail;
 use App\Models\SaleInvoice;
 use App\Models\SaleInvoiceDetail;
+use App\Models\StockAdjustment;
+use App\Models\StockAdjustmentDetail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -67,6 +69,18 @@ class PDFController extends Controller
         $to_date = $request->to_date;
         $pdf = PDF::loadView('pages.reports.purchase.supplier-wise-purchase-pdf', compact('purchase_Master', 'company', 'from_date', 'to_date'))->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+    }
+
+    public function adjustment_invoice($id)
+    {
+        $adjustment_Master = StockAdjustment::with('branch','user')->find($id);
+        $adjustment_detail = StockAdjustmentDetail::with('product','batch')->where('stock_adjustments_id',$id)->get();
+        $company = Branch::find(auth()->user()->branch_id);
+        $pdf = PDF::loadView('pages.stock-adjustment..adjustment-invoice', compact('adjustment_Master', 'adjustment_detail', 'company'))
+//            ->setPaper('a4', 'landscape')
+            ->setOptions(['defaultFont' => 'sans-serif']);
+        return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
+
     }
 
 }

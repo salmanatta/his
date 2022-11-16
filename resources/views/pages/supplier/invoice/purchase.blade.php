@@ -109,7 +109,7 @@
                                 <th>Item</th>
                                 <th>Batch No</th>
                                 <th>Exp. Date</th>
-                                <th>Quanity</th>
+                                <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Total Rate</th>
                                 <th>Discount %</th>
@@ -140,7 +140,7 @@
                                     <input type="hidden" value="{{ $purchase->batch->id }}" name="batch_id[]">
                                 </td>
                                 <td class="expiry_date">
-                                    <input type="date" class="form-control expiry_date" value="{{ $purchase->batch->date }}" name="expiry_date[]" step="any" readonly />
+                                    <input type="text" class="form-control expiry_date" value="{{ $purchase->batch->date }}" name="expiry_date[]" step="any" readonly />
                                 </td>
                                 <td class="quanity">
                                     <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="{{ $purchase->qty }}" step="any" required />

@@ -269,6 +269,7 @@ class PurchaseController extends Controller
         // dd($request->all());
         $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);
         $purchaseM->description = $request->description;
+        $purchaseM->freight     = $request->freight;
         if($request->has('update-post')){
             $purchaseM->inv_status = 'Post';
             $purchaseM->status_changed_by = auth()->user()->id;

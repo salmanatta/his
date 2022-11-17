@@ -243,14 +243,15 @@ class SaleInvoiceController extends Controller
                         ->first();
                     $stock->reserve_qty += $request->quanity[$key];
                     $stock->save();
-                } else {
-                    $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                        ->where('product_id', $request->product_id[$key])
-                        ->where('branch_id', auth()->user()->branch_id)
-                        ->first();
-                    $stock->reserve_qty -= $request->quanity[$key];
-                    $stock->save();
                 }
+//                  else {
+//                    $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+//                        ->where('product_id', $request->product_id[$key])
+//                        ->where('branch_id', auth()->user()->branch_id)
+//                        ->first();
+//                    $stock->reserve_qty -= $request->quanity[$key];
+//                    $stock->save();
+//                }
             }
         }
         return back()->with('success', "Data Added Successfully!");
@@ -302,7 +303,8 @@ class SaleInvoiceController extends Controller
         foreach ($rows as $key => $row) {
             if (!empty($request->id[$key])) {
                 $saleDetail = SaleInvoiceDetail::find($request->id[$key]);
-                $saleDetail->qty = $request->quanity[$key];
+                $old_Qty = $saleDetail->qty;
+                $saleDetail->qty =  $request->quanity[$key];
                 $saleDetail->price = $request->purchase_price[$key];
                 $saleDetail->discount = $request->purchase_discount[$key];
                 $saleDetail->after_discount = $request->after_discount[$key];
@@ -314,25 +316,43 @@ class SaleInvoiceController extends Controller
                 $saleDetail->adv_tax_value = $request->adv_tax_value[$key];
                 $saleDetail->save();
                 $inv_total += $request->line_total[$key];
+                $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+                                ->where('product_id', $request->product_id[$key])
+                                ->where('branch_id', auth()->user()->branch_id)
+                                ->first();
                 if ($request->has('update-post')) {
                     if ($request->trans_type == 'SALE') {
-                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                            ->where('product_id', $request->product_id[$key])
-                            ->where('branch_id', auth()->user()->branch_id)
-                            ->first();
-                        $stock->reserve_qty -= $request->quanity[$key];
+                        $stock->reserve_qty = $stock->reserve_qty - $old_Qty + $request->quanity[$key];
                         $stock->quantity -= $request->quanity[$key];
-                        $stock->save();
-                    } else {
-                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
-                            ->where('product_id', $request->product_id[$key])
-                            ->where('branch_id', auth()->user()->branch_id)
-                            ->first();
-                        $stock->reserve_qty += $request->quanity[$key];
-                        $stock->quantity -= $request->quanity[$key];
-                        $stock->save();
+                    }else{
+                        $stock->quantity += $request->quanity[$key];
+                    }
+                }else{
+                    if ($request->trans_type == 'SALE') {
+                        $stock->reserve_qty = $stock->reserve_qty + $request->quanity[$key] - $old_Qty;
                     }
                 }
+                $stock->save();
+
+
+//                    if ($request->trans_type == 'SALE') {
+//                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+//                            ->where('product_id', $request->product_id[$key])
+//                            ->where('branch_id', auth()->user()->branch_id)
+//                            ->first();
+//                        $stock->reserve_qty =  $stock->reserve_qty + $request->quanity[$key] - $old_Qty;
+//                        $stock->quantity -= $request->quanity[$key];
+//                        $stock->save();
+//                    } else {
+//                        $stock = Stock::where('batch_id', $request->input('table_batch_id')[$key])
+//                            ->where('product_id', $request->product_id[$key])
+//                            ->where('branch_id', auth()->user()->branch_id)
+//                            ->first();
+//                        $stock->reserve_qty += $request->quanity[$key];
+//                        $stock->quantity -= $request->quanity[$key];
+//                        $stock->save();
+//                    }
+
             }
         }
         $saleM->total = $inv_total;

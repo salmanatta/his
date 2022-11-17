@@ -18,11 +18,10 @@
                                             <div class="d-flex justify-content-between">
                                                 @if(isset($sale))
                                                     @if($sale->trans_type == 'SALE' )
-                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Detail
-                                                            fdsfsdf</h4>
+                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
                                                     @else
                                                         <h4 class="card-title mb-4 text-center">Sale Invoice Return
-                                                            Detail sdfsdfsd</h4>
+                                                            Detail</h4>
                                                     @endif
                                                 @else
                                                     @if($transType == 'SALE')
@@ -55,7 +54,7 @@
                                                                 <label class="form-label"
                                                                        for="Customer">Invoice Date</label>
                                                                 <input type="text" name="invoice_date"
-                                                                       value="{{ isset($sale)? $sale->invoice_date : date('m/d/Y') }}"
+                                                                       value="{{ isset($sale)? date('d/m/Y', strtotime($sale->invoice_date)) : date('m/d/Y') }}"
                                                                        id="fiveDays" class="form-control">
                                                             </span>
                                                                     </p>
@@ -138,8 +137,8 @@
                                                         <th scope="row">#</th>
                                                         <th scope="row">Products</th>
                                                         <th scope="row">Batch</th>
-                                                        <th scope="row">Stock Quanity</th>
-                                                        <th scope="row">Quanity</th>
+                                                        <th scope="row">Stock Quantity</th>
+                                                        <th scope="row">Quantity</th>
                                                         <th scope="row">Bonus</th>
                                                         <th scope="row">Price</th>
                                                         <th scope="row">Sales Tax</th>
@@ -177,23 +176,23 @@
                                                                     </button>
                                                                 </td>
                                                                 <td width='7%'>
-                                                                    <input type="number" class="form-control all_qty"
+                                                                    <input type="number" class="form-control text-center all_qty"
                                                                            min="1" value="" step="any" disabled/>
                                                                 </td>
                                                                 <td class="qty" width='7%'>
-                                                                    <input type="number" class="form-control qty_sale"
+                                                                    <input type="number" class="form-control text-center qty_sale"
                                                                            min="1" name="quanity[]"
                                                                            value="{{ $saleD->qty }}" step="any"
                                                                            required/>
                                                                 </td>
                                                                 <td width='7%'>
-                                                                    <input type="number" class="form-control bouns"
+                                                                    <input type="number" class="form-control text-center bouns"
                                                                            value="{{ $saleD->bonus }}" name="bouns[]"
                                                                            step="any"/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
-                                                                           class="form-control purchase_price price"
+                                                                           class="form-control text-end purchase_price price"
                                                                            value="{{ $saleD->price }}"
                                                                            name="purchase_price[]" step="any" required/>
                                                                     <input type="hidden" class="total_rate"
@@ -201,18 +200,18 @@
                                                                            value="{{  $saleD->price * $saleD->qty }}"/>
                                                                 </td>
                                                                 <td width='7%'>
-                                                                    <input type="number" class="form-control sales_tax"
+                                                                    <input type="number" class="form-control text-center sales_tax"
                                                                            value="{{ $saleD->sales_tax }}"
                                                                            name="sales_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
-                                                                    <input type="number" class="form-control adv_tax"
+                                                                    <input type="number" class="form-control text-center adv_tax"
                                                                            value="{{ $saleD->adv_tax }}"
                                                                            name="adv_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
-                                                                           class="form-control adv_tax_value"
+                                                                           class="form-control text-end adv_tax_value"
                                                                            value="{{ $saleD->adv_tax_value }}"
                                                                            name="adv_tax_value[]" step="any" required/>
                                                                 </td>
@@ -222,19 +221,19 @@
                                                                         type="checkbox" name="discount_check[]">
                                                                 </td>
                                                                 <td width='7%'>
-                                                                    <input type="number" class="form-control discount"
+                                                                    <input type="number" class="form-control text-center discount"
                                                                            value="{{ $saleD->discount }}"
                                                                            name="purchase_discount[]" step="any"
                                                                            readonly/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
-                                                                           class="form-control after_discount"
+                                                                           class="form-control text-end after_discount"
                                                                            value="{{ $saleD->after_discount }}"
                                                                            name="after_discount[]" step="any" readonly/>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" class="form-control line_total"
+                                                                    <input type="number" class="form-control text-end line_total"
                                                                            value="{{ $saleD->line_total }}"
                                                                            name="line_total[]" step="any" readonly/>
                                                                     <input type="hidden" class="hidden_total"
@@ -421,6 +420,7 @@
                 type: 'GET',
                 url: '{{url("get-stock")}}/' + id,
                 success: function (data) {
+                    // console.log(data);
                     var isfiler = $("#filer").val();
                     if (isfiler == 1) {
                         isfiler = data.productArr.product.adv_tax_filer;
@@ -445,38 +445,38 @@
     </button>
 </td>
 <td width='7%'>
-<input type="number" class="form-control all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
+<input type="number" class="form-control text-center all_qty" min="1" value="` + data.productArr.currentQty + `" step="any" disabled/>
 </td>
 <td width='7%'>
-<input type="number" class="form-control qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
+<input type="number" class="form-control text-center qty_sale" min="1" name="quanity[]" value="1" step="any" required/>
 </td>
 <td width='7%'>
-<input type="number" class="form-control bouns" value="0" name="bouns[]" step="any"/>
+<input type="number" class="form-control text-center bouns" value="0" name="bouns[]" step="any"/>
 </td>
 <td width='7%'>
-<input type="number" class="form-control purchase_price price" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
+<input type="number" class="form-control text-end purchase_price price" value="` + data.productArr.product.trade_price + `"  name="purchase_price[]" step="any" required/>
 <input type="hidden" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
 </td>
 <td width='7%'>
-<input type="number" class="form-control sales_tax" value="` + data.productArr.product.sale_tax_value + `" name="sales_tax[]" step="any" />
+<input type="number" class="form-control text-center sales_tax" value="` + data.productArr.product.sale_tax_value + `" name="sales_tax[]" step="any" />
 </td>
 <td width='7%'>
-    <input type="number" class="form-control adv_tax"  value="` + isfiler + `"  name="adv_tax[]" step="any" />
+    <input type="number" class="form-control text-center adv_tax"  value="` + isfiler + `"  name="adv_tax[]" step="any" />
 </td>
 <td width='7%'>
-<input type="number" class="form-control adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" name="adv_tax_value[]" step="any" />
+<input type="number" class="form-control text-end adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" name="adv_tax_value[]" step="any" />
 </td>
 <td width='3%'>
 <input type="checkbox" class="form-control form-check-input discount-check" name="discount_check[]"  />
 </td>
 <td width='7%'>
-<input type="number" class="form-control discount" value="0" name="purchase_discount[]" step="any" readonly />
+<input type="number" class="form-control text-center discount" value="0" name="purchase_discount[]" step="any" readonly />
 </td>
 <td width='7%'>
-<input type="number" class="form-control after_discount" value="0" name="after_discount[]" step="any" readonly/>
+<input type="number" class="form-control text-end after_discount" value="0" name="after_discount[]" step="any" readonly/>
 </td>
-<td width='7%'>
-<input type="number" class="form-control line_total" value="0" name="line_total[]" step="any" readonly/>
+<td width='7%'">
+<input type="number" class="form-control text-end line_total" value="0" name="line_total[]" step="any" readonly/>
 </td>
 <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
 <input type="hidden" class="hidden_total" name="total" value="0">

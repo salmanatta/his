@@ -99,7 +99,6 @@
                             <th scope="col">Date</th>
                             <th scope="col">User Name</th>
                             <th scope="col">Supplier</th>
-                            <th scope="col">Type</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Discount</th>
                             <th scope="col">S.Tax</th>
@@ -116,12 +115,10 @@
                         @foreach ($purchaseData as $data)
                             <tr>
                                 <td style="text-align:center;">{{ $data->invoice_no }}</td>
-                                <td>{{ $data->invoice_date }}</td>
+                                <td>{{ date('d/m/Y', strtotime($data->invoice_date)) }}</td>
                                 <td>{{ $data->user->name }}</td>
                                 <td>{{ $data->supplier->name }}</td>
-                                <td>{{ $data->trans_type }}</td>
-                                <td>{{ $data->lineTotal + $data->sumDiscountAmount - $data->sumSaleTax - $data->sumAdvancTax }}
-                                </td>
+                                <td>{{ $data->lineTotal + ($data->sumDiscountAmount - $data->sumSaleTax - $data->sumAdvancTax) }}</td>
                                 <td>{{ $data->sumDiscountAmount }}</td>
                                 <td>{{ $data->sumSaleTax }}</td>
                                 <td>{{ $data->sumAdvancTax }}</td>

@@ -50,7 +50,7 @@
                                         <div class="col-4">
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="InvoiceDate">Invoice Date</label>
-                                                <input type="text" class="form-control" value="{{ isset($purchaseM) ? $purchaseM->invoice_date : date('m/d/Y') }}" name="invoiceDate" id="fiveDays" />
+                                                <input type="text" class="form-control" value="{{ isset($purchaseM) ? date('d/m/Y', strtotime($purchaseM->invoice_date)) : date('m/d/Y') }}" name="invoiceDate" id="fiveDays" />
                                             </div>
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label" for="supplier">Supplier Name</label>
@@ -140,7 +140,7 @@
                                     <input type="hidden" value="{{ $purchase->batch->id }}" name="batch_id[]">
                                 </td>
                                 <td class="expiry_date">
-                                    <input type="text" class="form-control expiry_date" value="{{ $purchase->batch->date }}" name="expiry_date[]" step="any" readonly />
+                                    <input type="text" class="form-control text-center expiry_date" value="{{ date('d/m/Y', strtotime($purchase->batch->date)) }}" name="expiry_date[]" step="any" readonly />
                                 </td>
                                 <td class="quanity">
                                     <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="{{ $purchase->qty }}" step="any" required />

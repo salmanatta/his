@@ -9,7 +9,7 @@
                 <table id="datatable-buttons" class="table table-responsive nowrap w-100">
                     <thead class="table-light">
                         <tr>
-                            <th class="align-middle">#</th>
+                            <th class="text-center">#</th>
                             <th class="align-middle">Transfer From</th>
                             <th class="align-middle">Transfer Date</th>
                             <th class="align-middle">Description</th>
@@ -23,11 +23,9 @@
                     <tbody>
                         @foreach($transfers as $transfer)
                         <tr data-id="{{$transfer->id}}">
-                            <td>
-                                {{$loop->iteration}}
-                            </td>
+                            <td class="text-center">{{$loop->iteration}}</td>
                             <td>{{ $transfer->branchFrom->name }}</td>
-                            <td>{{ $transfer->trans_date }}</td>
+                            <td>{{ date('d-m-Y', strtotime($transfer->trans_date)) }}</td>
                             <td>{{ $transfer->remarks }}</td>
                             <td>{{ $transfer->countProduct }}</td>
                             <td>{{ $transfer->sumQty }}</td>

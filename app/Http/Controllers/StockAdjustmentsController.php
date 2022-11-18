@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\StockAdjustment;
@@ -50,10 +51,8 @@ class StockAdjustmentsController extends Controller
                     'cost_price'            => $request->trade_price[$key],
                     'line_total'            => $request->line_total[$key],
                 ]);
-
             }
         }
-
         return back()->with('success',"Data Added Successfully!");
     }
 
@@ -96,6 +95,7 @@ class StockAdjustmentsController extends Controller
             if (!empty($request->id[$key])){
                 $adjustmentDetail                  = StockAdjustmentDetail::find($request->id[$key]);
                 $adjustmentDetail->product_id      = $request->product_id[$key];
+                $old_Qty = $adjustmentDetail->qty;
                 $adjustmentDetail->qty             = $request->qty[$key];
                 $adjustmentDetail->batch_id        = $request->table_batch_id[$key];
                 $adjustmentDetail->cost_price      = $request->trade_price[$key];
@@ -110,6 +110,19 @@ class StockAdjustmentsController extends Controller
                     'cost_price'            => $request->trade_price[$key],
                     'line_total'            => $request->line_total[$key],
                 ]);
+                $stock = Stock::where('batch_id', $request->table_batch_id[$key])
+                    ->where('product_id', $request->product_id[$key])
+                    ->where('branch_id', auth()->user()->branch_id)
+                    ->first();
+                if ($request->has('update-post')) {
+                    if ($request->trans_type == 'Positive Adjustment') {
+//                        $stock->reserve_qty = $stock->reserve_qty - $old_Qty - $request->quanity[$key];
+                        $stock->quantity += $request->quanity[$key];
+                    }else{
+//                        $stock->reserve_qty = $stock->reserve_qty - $old_Qty + $request->quanity[$key];
+                        $stock->quantity -= $request->quanity[$key];
+                    }
+                }
             }
         }
         return back()->with('info',"Data Updated Successfully!");

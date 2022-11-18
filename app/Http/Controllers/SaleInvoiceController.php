@@ -58,6 +58,7 @@ class SaleInvoiceController extends Controller
     public function getStock(Request $request, $id)
     {
         $productArr = Stock::where('product_id', $id)
+            ->where('branch_id',auth()->user()->branch_id)
             ->with('product', 'batch')
             ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
             ->first();

@@ -201,7 +201,7 @@ Route::get('getProductDiscount',[SaleInvoiceController::class,'getProductDiscoun
 
 // ===================== Product Sale Side======
 /*----------   Store Transfer  Resource Route  ----------*/
-Route::get('storetostore', 'App\Http\Controllers\StoreController@storeToStore')->name('storeToStore')->middleware("auth");
+Route::get('storetostore',[StoreController::class,'storeToStore'])->name('storeToStore')->middleware("auth");
 Route::get('storetoStoreList', 'App\Http\Controllers\StoreController@storetoStoreList')->name('storetoStoreList')->middleware("auth");
 Route::get('receive-product-transfer',[StoreController::class,'receiveProductTransfer'])->name('receive-product-transfer')->middleware('auth');
 

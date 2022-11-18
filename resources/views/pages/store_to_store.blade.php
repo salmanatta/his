@@ -11,7 +11,7 @@
             <div class="col-4">
               <div class="col-md-10">
                 <div class="mb-3">
-                  <label for="formrow-inputState" class="col-md-2 col-form-label">Transfer Date </label>
+                  <label for="trans_date" class="col-md-2 col-form-label">Transfer Date </label>
                   <input type="text" name="trans_date" value="<?php echo date('m/d/Y') ?>" class="form-control" required="" id="fiveDays" >
                 </div>
               </div>
@@ -60,8 +60,9 @@
                       <th>#</th>
                       <th>Products</th>
                       <th>Batch</th>
-                      <th>Stock Quanity</th>
-                      <th>Quanity</th>
+                      <th>Expiry Date</th>
+                      <th>Current Qty</th>
+                      <th>Quantity</th>
                       <th>Price</th>
                       <th>Line Total</th>
                       <th>Action</th>
@@ -71,6 +72,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -207,18 +209,21 @@
                 <i class="dripicons-document-edit"></i>
             </button>
         </td>
+        <td width="10%">
+            <input type="text" class="form-control expiry_date text-center"  value="` + data.productArr.batch.date  + `" name="expiry_date[]" step="any" readonly/>
+        </td>
         <td class="stockQty">
-        <input type="number" class="form-control stockQty" id="stockQty" min="1" value="` + data.productArr.currentQty + `" step="any" readonly/>
+        <input type="number" class="form-control text-center stockQty" id="stockQty" min="1" value="` + data.productArr.currentQty + `" step="any" readonly/>
         </td>
         <td class="transferQty">
-        <input type="number" class="form-control transferQty" id="transferQty" min="1" onkeyup="do_calculation()" name="transferQty[]" value="1" step="any" required/>
+        <input type="number" class="form-control text-center transferQty" id="transferQty" min="1" onkeyup="do_calculation()" name="transferQty[]" value="1" step="any" required/>
         </td>
         <td class="purchase_price">
-        <input type="number" class="form-control purchase_price price" id="purchase_price" onkeyup="do_calculation()" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
+        <input type="number" class="form-control text-end purchase_price price" id="purchase_price" onkeyup="do_calculation()" value="` + data.productArr.price + `"  name="purchase_price[]" step="any" required/>
         <input type="hidden" id="total_rate" class="total_rate" name=total_rate[] value="` + (data.productArr.quantity * data.productArr.price) + `"/>
         </td>
         <td class="line_total">
-        <input type="number" class="form-control line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
+        <input type="number" class="form-control text-end line_total" value="0" id="line_total"  name="line_total[]" step="any" readonly/>
         </td>
         <td> <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button> </td>
         <input type="hidden" class="hidden_total" name="total" value="0">

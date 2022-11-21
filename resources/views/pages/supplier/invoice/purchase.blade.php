@@ -69,14 +69,12 @@
                                                 <input type="text" class="form-control" onkeyup="do_calculation()" name="freight" id="freight" value="{{ isset($purchaseM) ? $purchaseM->freight : ''  }}">
                                             </div>
                                             <div class="mb-3 col-md-12">
-                                                @if(!isset($purchaseM))
                                                 <label class="form-label" for="_products_select">Product</label>
                                                 <select class="select2 form-control _products_select" id="_products_select" name="product_id">
                                                 </select>
                                                 @error('product_id')
                                                 <span class="text-danger">{{$message}}</span>
                                                 @enderror
-                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-4"></div>
@@ -109,15 +107,15 @@
                                 <th>Item</th>
                                 <th>Batch No</th>
                                 <th>Exp. Date</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Total Rate</th>
-                                <th>Discount %</th>
-                                <th>Discount Amount</th>
-                                <th>Sale Tax</th>
-                                <th>Adv. Tax</th>
-                                <th>Line Total</th>
-                                <th>Action</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Total Rate</th>
+                                <th class="text-center">Discount %</th>
+                                <th class="text-end">Discount Amount</th>
+                                <th class="text-center">Sale Tax</th>
+                                <th class="text-center">Adv. Tax</th>
+                                <th class="text-end">Line Total</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <?php $granttotal = 0; ?>
@@ -146,27 +144,29 @@
                                     <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="{{ $purchase->qty }}" step="any" required />
                                 </td>
                                 <td class="purchase_price">
-                                    <input type="number" class="form-control purchase_price" style="text-align:center" onKeyup="do_calculation()" value="{{ $purchase->price }}" name="purchase_price[]" step="any" required />
+                                    <input type="number" class="form-control text-end purchase_price" style="text-align:center" onKeyup="do_calculation()" value="{{ $purchase->price }}" name="purchase_price[]" step="any" required />
                                 </td>
                                 <td class="total_price">
-                                    <input type="number" class="form-control total_price" style="text-align:right" value="{{  $purchase->qty * $purchase->price }}" name="total_price[]" step="any" readonly />
+                                    <input type="number" class="form-control text-end total_price" style="text-align:right" value="{{  $purchase->qty * $purchase->price }}" name="total_price[]" step="any" readonly />
                                 </td>
                                 <td class="purchase_discount">
-                                    <input type="number" class="form-control purchase_discount" onKeyup="do_calculation()" value="{{ $purchase->discount }}" name="purchase_discount[]" step="any" />
+                                    <input type="number" class="form-control text-center purchase_discount" onKeyup="do_calculation()" value="{{ $purchase->discount }}" name="purchase_discount[]" step="any" />
                                 </td>
                                 <td class="after_discount">
-                                    <input type="number" class="form-control after_discount" style="text-align:right" value="{{ $purchase->after_discount  }}" name="after_discount[]" step="any" readonly />
+                                    <input type="number" class="form-control text-end after_discount" style="text-align:right" value="{{ $purchase->after_discount  }}" name="after_discount[]" step="any" readonly />
                                 </td>
                                 <td class="sale_tax_value">
-                                    <input type="number" class="form-control sale_tax_value" onKeyup="do_calculation()" value="{{ $purchase->sales_tax }}" name="sale_tax_value[]" step="any" />
+                                    <input type="number" class="form-control text-center sale_tax_value" onKeyup="do_calculation()" value="{{ $purchase->sales_tax }}" name="sale_tax_value[]" step="any" />
                                 </td>
                                 <td class="adv_tax_value">
-                                    <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="{{ $purchase->adv_tax }}" name="adv_tax_value[]" step="any" />
+                                    <input type="number" class="form-control text-center adv_tax_value" onKeyup="do_calculation()" value="{{ $purchase->adv_tax }}" name="adv_tax_value[]" step="any" />
                                 </td>
                                 <td class="line_total">
                                     <input type="number" class="form-control line_total" style="text-align:right" value="{{ $purchase->line_total }}" name="line_total[]" step="any" readonly />
                                 </td>
-                                <td></td>
+                                <td>
+                                    <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>
+                                </td>
                             </tr>
                             <?php $counter++;
                             $row_id++;
@@ -249,7 +249,7 @@
                 };
             },
             processResults: function(data, params) {
-                console.log(data);
+                // console.log(data);
                 return {
                     results: data.items,
                 };
@@ -260,7 +260,7 @@
         minimumInputLength: 2,
     });
     //////////////////***************************************
-    var row_id = 1;
+    var row_id = $('table.order-list').children('tbody').find('tr').length;
     var count = 1;
     var product_count = 1;
     $("._products_select").select2({
@@ -293,7 +293,8 @@
                 id: id
             },
             success: function(data) {
-                // console.log(data);
+                 // console.log(data);
+                ++row_id;
                 var table_body = $("table.order-list tbody");
                 var new_row = `<tr class="table_append_rows" id="table_append_rows_` + row_id + `">
         <td class="product_count">` + product_count + ` </td>
@@ -309,22 +310,22 @@
         <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
         </td>
         <td class="purchase_price">
-        <input type="number" class="form-control purchase_price" style="text-align:center" onKeyup="do_calculation()" value="` + data.purchase_price + `"  name="purchase_price[]" step="any" required/>
+        <input type="number" class="form-control text-end purchase_price" style="text-align:center" onKeyup="do_calculation()" value="` + data.trade_price + `"  name="purchase_price[]" step="any" required/>
         </td>
         <td class="total_price">
         <input type="number" class="form-control total_price" style="text-align:right" value=""  name="total_price[]" step="any" readonly/>
         </td>
         <td class="purchase_discount">
-        <input type="number" class="form-control purchase_discount" onKeyup="do_calculation()" value="` + data.purchase_discount + `"  name="purchase_discount[]" step="any"/>
+        <input type="number" class="form-control text-center purchase_discount" onKeyup="do_calculation()" value="` + data.purchase_discount + `"  name="purchase_discount[]" step="any"/>
         </td>
         <td class="after_discount">
-        <input type="number" class="form-control after_discount" style="text-align:right" value="` + (data.purchase_price - data.purchase_discount) + `"  name="after_discount[]" step="any" readonly/>
+        <input type="number" class="form-control text-end after_discount" style="text-align:right" value="` + (data.purchase_price - data.purchase_discount) + `"  name="after_discount[]" step="any" readonly/>
         </td>
         <td class="sale_tax_value">
-        <input type="number" class="form-control sale_tax_value" onKeyup="do_calculation()" value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
+        <input type="number" class="form-control text-center sale_tax_value" onKeyup="do_calculation()" value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
         </td>
         <td class="adv_tax_value">
-        <input type="number" class="form-control adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
+        <input type="number" class="form-control text-center adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
         <td class="line_total">
         <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
@@ -338,7 +339,6 @@
                 table_body.append(new_row);
                 $("._products_select").val('');
                 product_count++;
-                row_id++;
                 do_calculation();
             }
         });

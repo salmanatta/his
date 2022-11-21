@@ -104,68 +104,34 @@ class PurchaseController extends Controller
         $branch_id=$request->input('branch_id');
         foreach($rows as $key=>$row)
         {
-            $purchase_price = $request->input('purchase_price')[$key];
-            $after_discount = $request->input('after_discount')[$key];
-            $purchase_discount = $request->input('purchase_discount')[$key];
-            $quanity = $request->input('quanity')[$key];
-            $product_id=$request->input('product_id')[$key];
-            $product_name=$request->input('product_name')[$key];
-            $line_total=$request->input('line_total')[$key];
-            // $bonus=$request->input('sale_tax_value')[$key];
-
-            $batch = Batch::where('batch_no',$request->batch)
-                            ->where('date',$request->expiry_date)
+            $batch = Batch::where('batch_no',$request->batch[$key])
+                            ->where('date',$request->expiry_date[$key])
                             ->where('branch_id',auth()->user()->branch_id)
-                            ->get();
-              if($batch->isEmpty())
+                            ->first();
+              if(!isset($batch))
               {
-                $batchName  = $request->input('batch')[$key];
-                $expriyDate = $request->input('expiry_date')[$key];
                 $tansID = Batch::create([
-                    'batch_no'  => $batchName,
-                    'date'      => $expriyDate,
+                    'batch_no'  => $request->input('batch')[$key],
+                    'date'      => $request->input('expiry_date')[$key],
                     'branch_id' => auth()->user()->branch_id,
                 ]);
                 $batch_id = $tansID->id;
               }else{
-                $batch = $batch->first();
                 $batch_id = $batch->id;
               }
-
             PurchaseInvoiceDetail::create([
-                        'product_id'     =>$product_id,
-                        'item'           =>$product_name,
-                        'qty'            =>$quanity,
-                        'price'          =>$purchase_price,
-                        'discount'       =>$purchase_discount,
-                        'after_discount' =>$after_discount,
-                        'purchase_invoice_detail_id'=>$purchase_invoice_detail_id,
-                        'line_total'     =>$line_total,
-                        'sales_tax'      =>$request->input('sale_tax_value')[$key],
-                        'adv_tax'        =>$request->input('adv_tax_value')[$key],
-                        'batch_id'       =>$batch_id,
+                'product_id'                => $request->input('product_id')[$key],
+                'item'                      => $request->input('product_name')[$key],
+                'qty'                       => $request->input('quanity')[$key],
+                'price'                     => $request->input('purchase_price')[$key],
+                'discount'                  => $request->input('purchase_discount')[$key],
+                'after_discount'            => $request->input('after_discount')[$key],
+                'purchase_invoice_detail_id'=> $purchase_invoice_detail_id,
+                'line_total'                => $request->input('line_total')[$key],
+                'sales_tax'                 => $request->input('sale_tax_value')[$key],
+                'adv_tax'                   => $request->input('adv_tax_value')[$key],
+                'batch_id'                  => $batch_id,
              ]);
-            // if($request->inv_status == 'Post')
-            // {
-            //     $stock = Stock::where('product_id',$product_id)
-            //                ->where('batch_id',$batch_id)
-            //                ->where('branch_id',$branch_id)
-            //                ->get();
-            //     if($stock->isEmpty())
-            //     {
-            //         Stock::create([
-            //             'product_id' =>$product_id,
-            //             'quantity'   =>$quanity*-1,
-            //             'price'      =>$purchase_price,
-            //             'batch_id'   =>$batch_id,
-            //             'branch_id'  =>$branch_id,
-            //         ]);
-            //     }else{
-            //         $stock = $stock->first();
-            //         $stock->quantity -= $quanity;
-            //         $stock->save();
-            //     }
-            // }
         }
     }
         return back()->with('success',"Data Added Successfully!");
@@ -277,6 +243,24 @@ class PurchaseController extends Controller
         }
         $rows = $request->product_id;
         $inv_total = 0;
+
+        /*
+         *  var old = master->childs();
+         *  for (i in old){
+         *         check= request.id[].find(i);
+         *          if(check!=true){
+         *                  delete(i)
+         *             }
+         *  }
+         *
+         * */
+
+        $checks = PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$PurchaseInvoice->id)->get();
+        foreach ($checks as $check){
+            if (!in_array($check->id,$request->id)){
+                 $check->delete();
+            }
+        }
         foreach ($rows as $key => $row) {
             if(!empty($request->id[$key])){
                 $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);

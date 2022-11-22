@@ -14,8 +14,10 @@ use App\Http\Controllers\Controller;
 use App\Models\products\Product;
 use function PHPUnit\Framework\isNull;
 use Carbon\Carbon;
+use App\Traits\InsertPurchaseDetail;
 class PurchaseController extends Controller
 {
+    use InsertPurchaseDetail;
     /**
      * Display a listing of the resource.
      *
@@ -119,19 +121,19 @@ class PurchaseController extends Controller
               }else{
                 $batch_id = $batch->id;
               }
-            PurchaseInvoiceDetail::create([
+              $this->store_purchase_detail([
                 'product_id'                => $request->input('product_id')[$key],
                 'item'                      => $request->input('product_name')[$key],
                 'qty'                       => $request->input('quanity')[$key],
                 'price'                     => $request->input('purchase_price')[$key],
                 'discount'                  => $request->input('purchase_discount')[$key],
                 'after_discount'            => $request->input('after_discount')[$key],
-                'purchase_invoice_detail_id'=> $purchase_invoice_detail_id,
+                'masterId'                  => $purchase_invoice_detail_id,
                 'line_total'                => $request->input('line_total')[$key],
                 'sales_tax'                 => $request->input('sale_tax_value')[$key],
                 'adv_tax'                   => $request->input('adv_tax_value')[$key],
                 'batch_id'                  => $batch_id,
-             ]);
+              ]);
         }
     }
         return back()->with('success',"Data Added Successfully!");
@@ -243,18 +245,6 @@ class PurchaseController extends Controller
         }
         $rows = $request->product_id;
         $inv_total = 0;
-
-        /*
-         *  var old = master->childs();
-         *  for (i in old){
-         *         check= request.id[].find(i);
-         *          if(check!=true){
-         *                  delete(i)
-         *             }
-         *  }
-         *
-         * */
-
         $checks = PurchaseInvoiceDetail::where('purchase_invoice_detail_id',$PurchaseInvoice->id)->get();
         foreach ($checks as $check){
             if (!in_array($check->id,$request->id)){
@@ -264,6 +254,7 @@ class PurchaseController extends Controller
         foreach ($rows as $key => $row) {
             if(!empty($request->id[$key])){
                 $purchaseDetail = PurchaseInvoiceDetail::find($request->id[$key]);
+                $old_qty = $purchaseDetail->qty;
                 $purchaseDetail->qty            = $request->quanity[$key];
                 $purchaseDetail->price          = $request->purchase_price[$key];
                 $purchaseDetail->discount       = $request->purchase_discount[$key];
@@ -272,26 +263,57 @@ class PurchaseController extends Controller
                 $purchaseDetail->sales_tax      = $request->sale_tax_value[$key];
                 $purchaseDetail->adv_tax        = $request->adv_tax_value[$key];
                 $purchaseDetail->save();
-                $inv_total += $request->line_total[$key];
-                if($request->has('update-post')){
-                    $stock = Stock::where('product_id',$request->product_id[$key])
-                                ->where('batch_id',$request->batch_id[$key])
-                                ->where('branch_id',$request->branch_id)
-                                ->first();
+            }else{
+                $this->store_purchase_detail([
+                    'product_id'                => $request->product_id[$key],
+                    'item'                      => $request->product_name[$key],
+                    'qty'                       => $request->quanity[$key],
+                    'price'                     => $request->purchase_price[$key],
+                    'discount'                  => $request->purchase_discount[$key],
+                    'after_discount'            => $request->after_discount[$key],
+                    'masterId'                  => $PurchaseInvoice->id,
+                    'line_total'                => $request->line_total[$key],
+                    'sales_tax'                 => $request->sale_tax_value[$key],
+                    'adv_tax'                   => $request->adv_tax_value[$key],
+                    'batch_id'                  => $batch_id,
+                ]);
 
-                    if($stock == null){
-                        $newStock = new Stock();
-                        $newStock-> product_id  = $request->product_id[$key];
-                        if($request->trans_type == 'PURCHASE'){
-                            $newStock->quantity     = $request->quanity[$key];
-                        }else{
-                            $newStock->quantity     = $request->quanity[$key]*-1;
-                        }
-                        $newStock->price        = $request->purchase_price[$key];
-                        $newStock->batch_id     = $request->batch_id[$key];
-                        $newStock->branch_id    = $request->branch_id;
-                        $newStock->save();
 
+            }
+            $inv_total += $request->line_total[$key];
+            $batch = Batch::where('batch_no',$request->batch[$key])
+                ->where('date',$request->expiry_date[$key])
+                ->where('branch_id',auth()->user()->branch_id)
+                ->first();
+                if(!isset($batch))
+                {
+                    $tansID = Batch::create([
+                        'batch_no'  => $request->input('batch')[$key],
+                        'date'      => $request->input('expiry_date')[$key],
+                        'branch_id' => auth()->user()->branch_id,
+                    ]);
+                    $batch_id = $tansID->id;
+                }else{
+                    $batch_id = $batch->id;
+                }
+
+             if($request->has('update-post')){
+                $stock = Stock::where('product_id',$request->product_id[$key])
+                            ->where('batch_id',$request->batch_id[$key])
+                            ->where('branch_id',$request->branch_id)
+                            ->first();
+                if(!isset($stock)){
+                    $newStock = new Stock();
+                    $newStock-> product_id  = $request->product_id[$key];
+                    if($request->trans_type == 'PURCHASE'){
+                        $newStock->quantity     += $request->quanity[$key];
+                    }else{
+                        $newStock->quantity     -= $request->quanity[$key];
+                    }
+                    $newStock->price        = $request->purchase_price[$key];
+                    $newStock->batch_id     = $request->batch_id[$key];
+                    $newStock->branch_id    = $request->branch_id;
+                    $newStock->save();
                     }else{
                         if($request->trans_type == 'PURCHASE'){
                             $stock->quantity += $request->quanity[$key];
@@ -302,7 +324,6 @@ class PurchaseController extends Controller
                     }
                 }
             }
-        }
         $purchaseM->total = $inv_total;
         $purchaseM->save();
         if($request->has('update-post')){

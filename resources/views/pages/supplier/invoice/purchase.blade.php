@@ -130,6 +130,7 @@
                                 <td>{{ $counter }}</td>
                                 <td class="name">
                                     {{ $purchase->product->name }}
+                                    <input type="hidden" name="product_name[]" value="{{ $purchase->product->name }}">
                                     <input type="hidden" name="id[]" value="{{ $purchase->id }}">
                                     <input type="hidden" name="product_id[]" value="{{ $purchase->product_id }}" />
                                 </td>
@@ -336,6 +337,7 @@
         <input type="hidden" class="hidden_total" name="total">
         </td>
         </tr>`;
+
                 table_body.append(new_row);
                 $("._products_select").val('');
                 product_count++;
@@ -346,6 +348,9 @@
     $(document).on('click', '.delete_row', function() {
         $(this).closest('tr').remove();
         do_calculation();
+        // var totalPrice = parseFloat($('table.order-list').children("tfoot").children("tr").find("._tfootTotal").text());
+        // console.log(totalPrice);
+        // $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").text(parseFloat(totalPrice - data.trade_price).toFixed(2));
     });
 
     function do_calculation() {

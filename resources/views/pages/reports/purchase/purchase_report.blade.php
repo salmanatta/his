@@ -49,7 +49,7 @@
                                         <select class="form-control select2" name="supplier_id" id="supplier_id">
                                             <option value="" >-- Select Supplier --</option>
                                             @foreach($suppliers as $supplier)
-                                                <option value="{{ $supplier->id }}" >{{ $supplier->name }}</option>
+                                                <option value="{{ $supplier->id }}" {{ isset($_GET['supplier_id']) ? ($_GET['supplier_id'] == $supplier->id ? 'selected' : '') : ''  }}>{{ $supplier->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -64,8 +64,8 @@
                                     </div>
                                     <div class="col-8">
                                         <select class="form-control" name="trans_type" id="trans_type">
-                                            <option value="PURCHASE">Purchase</option>
-                                            <option value="PURCHASE RETURN">Purchase Return</option>
+                                            <option value="PURCHASE" {{ isset($_GET['trans_type']) ? ($_GET['trans_type'] == 'PURCHASE' ? 'selected' : '') : ''  }}>Purchase</option>
+                                            <option value="PURCHASE RETURN" {{ isset($_GET['trans_type']) ? ($_GET['trans_type'] == 'PURCHASE RETURN' ? 'selected' : '') : ''  }}>Purchase Return</option>
                                         </select>
                                     </div>
                                 </div>

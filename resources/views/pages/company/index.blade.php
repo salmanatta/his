@@ -17,7 +17,7 @@
                         <thead class="table-light">
                         <tr>
                             <th class="align-middle">#</th>
-                            <th class="align-middle">company Name</th>
+                            <th class="align-middle">Company Name</th>
                             <th class="align-middle">Email</th>
                             <th class="align-middle">Phone</th>
                             <th class="align-middle">Fax</th>
@@ -27,8 +27,8 @@
                         </thead>
                         <tbody>
                         @foreach($companies as $company)
-                            <tr data-id="{{$company->id}}">
-                                <td>{{$loop->iteration}} </td>
+                            <tr>
+                                <td class="text-center"><b>{{ $company->id }}</b> </td>
                                 <td>{{$company->name}}</td>
                                 <td>{{$company->email}}</td>
                                 <td>{{$company->phone}}</td>

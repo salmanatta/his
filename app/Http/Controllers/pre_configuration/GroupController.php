@@ -60,7 +60,7 @@ class GroupController extends Controller
     public function edit($id)
     {
         $data['group']=Group::find($id);
-       return view('pages.pre_configuration.group.edit',$data);
+       return view('pages.pre_configuration.group.create',$data);
     }
 
     /**

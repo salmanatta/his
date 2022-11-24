@@ -65,9 +65,9 @@
                                     <div class="mb-3 ">
                                         <label for="formrow-inputZip" class="form-label">Status </label><br>
                                         <input type="radio" id="validationCustom02" value="1" name="isActive"
-                                               required checked @if($company->isActive==1) {{'checked'}} @endif >&nbsp;Active&nbsp;&nbsp;
+                                               required {{ isset($company) ? $company->isActive == 1 ? 'checked' : '' : '' }}>&nbsp;Active&nbsp;&nbsp;
                                         <input type="radio" id="validationCustom02" value="0" name="isActive"
-                                               required @if($company->isActive==0) {{'checked'}} @endif>&nbsp;InActive
+                                               required {{ isset($company) ? $company->isActive == 0 ? 'checked' : '' : '' }}>&nbsp;InActive
                                     </div>
                                 </div>
                             </div>
@@ -86,10 +86,11 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 @if(isset($company))
-                                <button type="submit" class="btn btn-warning w-md">Update</button>
+                                    <button type="submit" class="btn btn-warning me-1">Update</button>
                                 @else
-                                <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                    <button type="submit" class="btn btn-success me-1">Save</button>
                                 @endif
+                                <a class="btn btn-danger mx-0" href="{{ route('companies.index') }}">Exit</a>
 
                             </div>
                         </form>

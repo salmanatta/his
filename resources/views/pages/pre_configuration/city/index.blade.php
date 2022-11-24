@@ -2,7 +2,7 @@
 @section('content')
 
 <!-- Modal -->
-    
+
     <!-- end modal -->
 
 <div class="row">
@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="card-body">
 
-                   
+
                    <!-- <h4 class="card-title">City Details</h4> -->
                     <div class="col-sm-12">
                             <div class="text-sm-end">
@@ -22,40 +22,38 @@
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="align-middle" width="10%"> City Code</th>
-                                    <th class="align-middle" width="60%">City Name</th>
-                                    <th class="align-middle" width="60%">Branch Name</th>
-                                    <th class="align-middle" width="20%">Action</th>
+                                    <th class="text-center" width="10%"> City ID</th>
+                                    <th class="align-middle" width="45%">City Name</th>
+                                    <th class="align-middle" width="40%">Branch Name</th>
+                                    <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($cities as $citys)
-                                
+                                @foreach($cities as $city)
                                 <tr>
-                                   
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">{{$citys->city_id}}</a> </td>
-                                    <td>{{$citys->name}}</td>
-                                    <td>{{$citys->branch->name}}</td>
-                                    <td>
-                                        <div class="d-flex gap-3">
-                                             <a data-bs-toggle="modal"  class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"  data-city_id="{{$citys->id}}" data-city_name="{{$citys->name}}" data-branch_name="{{$citys->branch->name}}" data-city_code="{{$citys->city_id}}">
-                                            View Details
-                                        </a>
-                                       
-                                        <a href="{{route('cities.edit',$citys->id)}}"  class="text-success editbtn"><i
+                                    <td class="text-center"><b>{{$city->city_id}}</b> </td>
+                                    <td>{{$city->name}}</td>
+                                    <td>{{$city->branch->name}}</td>
+                                    <td class="text-center">
+{{--                                        <div class="d-flex gap-3">--}}
+{{--                                             <a data-bs-toggle="modal"  class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"  data-city_id="{{$citys->id}}" data-city_name="{{$citys->name}}" data-branch_name="{{$citys->branch->name}}" data-city_code="{{$citys->city_id}}">--}}
+{{--                                            View Details--}}
+{{--                                        </a>--}}
+
+                                        <a href="{{route('cities.edit',$city->id)}}"  class="text-success editbtn"><i
                                                     class="mdi mdi-pencil font-size-18"></i></a>
-                                            <!-- <a  href="{{route('cities.destroy',$citys->id)}}" class="text-danger"><i
+                                            <!-- <a  href="{{route('cities.destroy',$city->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                                     <form method="post" action='{{route("cities.destroy",$citys->id) }}'>
-                                          {{csrf_field()}}
-                                          {{method_field('DELETE')}}
-                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                        </form>
-                                        </div>
+{{--                                                     <form method="post" action='{{route("cities.destroy",$citys->id) }}'>--}}
+{{--                                          {{csrf_field()}}--}}
+{{--                                          {{method_field('DELETE')}}--}}
+{{--                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>--}}
+{{--                                        </form>--}}
+{{--                                        </div>--}}
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                         </table>
@@ -81,7 +79,7 @@
                         <tr> <th> City Code</th><td> : <span class="m_city_code"> </span>   </td></tr>
                         <tr> <th> City Name </th><td> : <span class="m_city_name"> </span>     </td>  </tr>
                         <tr> <th> Branch Name </th><td> : <span class="m_branch_name"> </span>     </td>  </tr>
-                        
+
                     </table>
                     <br>
                     <br>
@@ -93,7 +91,7 @@
         </div>
     </div>
 
- 
+
 
 
 
@@ -101,9 +99,9 @@
     @push('script')
     <script>
         $(document).ready(function(){
-           
+
             $(document).on('click','.detail_view_button',function(){
-               
+
                $('.m_city_code').text($(this).data('city_code'));
                $('.m_city_name').text($(this).data('city_name'));
                $('.m_branch_name').text($(this).data('branch_name'));

@@ -28,7 +28,7 @@ class CityController extends Controller
      */
     public function create()
     {
-        $data['branchs'] = Branch::where('isActive', 1)->get();
+        $data['branches'] = Branch::where('isActive', 1)->get();
         return view('pages.pre_configuration.city.create', $data);
     }
 
@@ -45,7 +45,7 @@ class CityController extends Controller
             'city_id'=>'required',
             'name'=>'required',
         ],
-        [   
+        [
             'city_id.required'=> 'Please select City ID, Thank You.',
             'name.required'=> 'Please enter city name, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',
@@ -85,7 +85,7 @@ class CityController extends Controller
     {
         $data['city'] = City::find($id);
         $data['branches'] = Branch::where('isActive', 1)->get();
-        return view('pages.pre_configuration.city.edit', $data);
+        return view('pages.pre_configuration.city.create', $data);
 
     }
 
@@ -104,7 +104,7 @@ class CityController extends Controller
             'city_id'=>'required',
             'name'=>'required',
         ],
-        [   
+        [
             'city_id.required'=> 'Please select City ID, Thank You.',
             'name.required'=> 'Please enter city name, Thank You.',
             'branch_id.required' => 'Please select any Branch, Thank You.',

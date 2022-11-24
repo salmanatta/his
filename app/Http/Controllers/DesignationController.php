@@ -14,7 +14,7 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        $data['designations']=Designation::all();
+        $data['designations']=Designation::orderBy('id', 'DESC')->get();
        return view('pages.pre_configuration.designation.index',$data);
     }
 
@@ -38,7 +38,7 @@ class DesignationController extends Controller
     {
          $input=$request->all();
       $createDesignation=Designation::create($input);
-      
+
         return redirect()->route('designations.index')->with('success','Data Added Successfully!');
     }
 
@@ -62,7 +62,7 @@ class DesignationController extends Controller
     public function edit($id)
     {
         $data['designation']=Designation::find($id);
-       return view('pages.pre_configuration.designation.edit',$data);
+       return view('pages.pre_configuration.designation.create',$data);
     }
 
     /**

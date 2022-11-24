@@ -89,7 +89,7 @@ class BranchController extends Controller
         $data['companies'] = Company::all();
         $data['regions'] = Region::all();
         $data['branch'] = Branch::find($id);
-        return view('pages.pre_configuration.branch.edit', $data);
+        return view('pages.pre_configuration.branch.create', $data);
     }
 
     /**

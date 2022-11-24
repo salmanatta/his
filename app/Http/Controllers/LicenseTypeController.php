@@ -61,7 +61,7 @@ class LicenseTypeController extends Controller
     public function edit($id)
     {
         $data['license']=LicenseType::find($id);
-          return view('pages.License.edit',$data);
+          return view('pages.License.create',$data);
     }
 
     /**

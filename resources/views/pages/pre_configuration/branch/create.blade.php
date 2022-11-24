@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3 ">
-                                        <label for="formrow-inputZip" class="form-label">Status </label><br>
+                                        <label for="inputZip" class="form-label">Status </label><br>
                                         <input type="radio" id="validationCustom02" value="1" name="isActive"
                                                required checked>&nbsp;Active&nbsp;&nbsp;
                                         <input type="radio" id="validationCustom02" value="0" name="isActive"
@@ -63,7 +63,12 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary w-md">Submit</button>
+                                @if(isset($branch))
+                                    <button type="submit" class="btn btn-warning me-1">Update</button>
+                                @else
+                                    <button type="submit" class="btn btn-success me-1">Save</button>
+                                @endif
+                                <a class="btn btn-danger mx-0" href="{{ route('branches.index') }}">Exit</a>
                             </div>
                         </form>
                     </div>

@@ -181,21 +181,15 @@
                             <a href="{{route('branches.index')}}" class="dropdown-item" key="t-saas">Branch </a>
                             <a href="{{route('cities.index')}}" class="dropdown-item" key="t-default">City </a>
                             <a href="{{route('regions.index')}}" class="dropdown-item" key="t-saas">Region </a>
-                            <a href="{{route('groups.index')}}" class="dropdown-item" key=" t-default">Group </a>
-                            <a href="{{route('designations.index')}}" class="dropdown-item"
-                               key="t-saas">Designation </a>
+                            <a href="{{route('groups.index')}}" class="dropdown-item" key=" t-default">Customer Group </a>
+                            <a href="{{route('designations.index')}}" class="dropdown-item" key="t-saas">Designation </a>
                             <a href="{{route('employees.index')}}" class="dropdown-item" key="t-saas">Employee </a>
-                            <a href="{{route('license_types.index')}}" class="dropdown-item" key="t-saas">License
-                                Type </a>
-                            <a href="{{route('product_types.index')}}" class="dropdown-item" key="t-saas">Product
-                                Type </a>
-                            <a href="{{route('product_categories.index')}}" class="dropdown-item" key="t-saas">Product
-                                Category </a>
-                            <a href="{{route('product_groups.index')}}" class="dropdown-item" key=" t-default">Product
-                                Group </a>
+                            <a href="{{route('license_types.index')}}" class="dropdown-item" key="t-saas">License Type </a>
+                            <a href="{{route('product_types.index')}}" class="dropdown-item" key="t-saas">Product Type </a>
+                            <a href="{{route('product_categories.index')}}" class="dropdown-item" key="t-saas">Product Category </a>
+                            <a href="{{route('product_groups.index')}}" class="dropdown-item" key=" t-default">Product Group </a>
                             <a href="{{url('general')}}" class="dropdown-item" key=" t-default">Define Product Rule</a>
-                            <a href="{{url('apply-rule')}}" class="dropdown-item" key=" t-default">Apply Product
-                                Rule</a>
+                            <a href="{{url('apply-rule')}}" class="dropdown-item" key=" t-default">Apply Product Rule</a>
                             <a href="{{route('customers.index')}}" class="dropdown-item" key="t-saas">Customer </a>
                             <a href="{{route('suppliers.index')}}" class="dropdown-item" key="t-saas">Supplier </a>
                             <a href="{{route('products.index')}}" class="dropdown-item" key="t-saas">Product </a>
@@ -253,8 +247,6 @@
                                 Product Transfer </a>
                         </div>
                     </li>
-
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
                             <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Adjustment</span>
@@ -262,9 +254,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
                             <a href="{{url('stock-adjustment')}}" class="dropdown-item" key="t-saas">Stock Adjustment </a>
-                            <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Adjustment Approval </a>
-{{--                            <a href="{{url('receive-product-transfer')}}" class="dropdown-item" key="t-saas">Receive--}}
-{{--                                Product Transfer </a>--}}
+                            <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Stock Adjustment Approval </a>
+                            <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Batch Adjustment</a>
                         </div>
                     </li>
 

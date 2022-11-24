@@ -19,41 +19,39 @@
                         </div><!-- end col-->
 
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                        
+
                             <thead class="table-light">
                                 <tr>
-                                   
-                                    <th class="align-middle" width="20%"> ID</th>
-                                    <th class="align-middle" width="50%">Licence Type</th>
-                                    <th class="align-middle" width="30%">Action</th>
+
+                                    <th class="text-center" width="10%"> ID</th>
+                                    <th class="align-middle" width="85%">Licence Type</th>
+                                    <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($license_types as $license)
                                 <tr>
-                                    
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">{{$license->id}}</a> </td>
+                                    <td class="text-center"><b>{{$license->id}}</b> </td>
                                     <td>{{$license->name}}</td>
-                                    <td>
-                                        
-                                        <div class="d-flex gap-3">
-                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-license_id="{{$license->id}}" data-licence_name="{{$license->name}}">
-                                            View Details
-                                        </a>
+                                    <td class="text-center">
+{{--                                        <div class="d-flex gap-3">--}}
+{{--                                        <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-license_id="{{$license->id}}" data-licence_name="{{$license->name}}">--}}
+{{--                                            View Details--}}
+{{--                                        </a>--}}
                                             <a  class="text-success" href="{{route('license_types.edit',$license->id)}}"><i
                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                             <!-- <a  href="{{route('licenses.destroy',$license->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                                     <form method="post" action='{{route("license_types.destroy",$license->id) }}'>
-                                          {{csrf_field()}}
-                                          {{method_field('DELETE')}}
-                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                        </form>
-                                        </div>
+{{--                                                     <form method="post" action='{{route("license_types.destroy",$license->id) }}'>--}}
+{{--                                          {{csrf_field()}}--}}
+{{--                                          {{method_field('DELETE')}}--}}
+{{--                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>--}}
+{{--                                        </form>--}}
+{{--                                        </div>--}}
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                          </table>
@@ -67,7 +65,7 @@
     </div> <!-- end row -->
     <!-- end row -->
     <!-- end row -->
-  
+
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -94,9 +92,9 @@
     @push('script')
     <script>
         $(document).ready(function(){
-           
+
             $(document).on('click','.detail_view_button',function(){
-               
+
                $('.m_license_id').text($(this).data('license_id'));
                $('.m_licence_name').text($(this).data('licence_name'));
             });

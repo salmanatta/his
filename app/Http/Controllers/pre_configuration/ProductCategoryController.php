@@ -58,9 +58,9 @@ class ProductCategoryController extends Controller
      */
     public function edit($id)
     {
-       
+
         $data['product_category']=ProductCategory::find($id);
-         return view('pages.pre_configuration.product_category.edit',$data);
+         return view('pages.pre_configuration.product_category.create',$data);
     }
 
     /**

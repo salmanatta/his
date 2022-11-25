@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">branch Details</h4>
+                    <h4 class="card-title">Branch List</h4>
                     <div class="col-sm-12">
                         <div class="text-sm-end">
                             <a type="button"

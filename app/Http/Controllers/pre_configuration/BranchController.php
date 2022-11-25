@@ -103,7 +103,7 @@ class BranchController extends Controller
     {
         $city = Branch::find($id);
         $city->name = $request->input('name');
-        // $city->region_id=$request->input('region_id');
+        $city->branch_code = $request->input('branch_code');
         $city->isActive = $request->input('isActive');
         $city->save();
         $this->logsAction(["action" => "Update", "remarks" => "Branch id " . $id]);

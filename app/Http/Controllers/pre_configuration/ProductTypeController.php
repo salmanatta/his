@@ -59,7 +59,7 @@ class ProductTypeController extends Controller
     public function edit($id)
     {
          $data['product_type']=ProductType::find($id);
-         return view('pages.pre_configuration.product_type.edit',$data);
+         return view('pages.pre_configuration.product_type.create',$data);
     }
 
     /**

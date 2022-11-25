@@ -6,14 +6,19 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Branch Form </h4>
+                        <h4 class="card-title mb-4">Add New Branch </h4>
+                        @if(isset($branch))
+                        <form  class="" method="post" action="{{route('branches.update',$branch->id)}}">
+                            @method('PATCH')
+                        @else
                         <form class="" method="post" action="{{route('branches.store')}}" enctype="multipart/form-data">
+                        @endif
                             @csrf
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
-                                        <label for="formrow-inputCity" class="form-label">Branch Id</label>
-                                        <input type="number" name="branch_code" class="form-control"
+                                        <label for="branch_code" class="form-label">Branch Id</label>
+                                        <input type="number" name="branch_code" value="{{ isset($branch) ? $branch->branch_code : old('branch_code') }}" class="form-control"
                                                placeholder="Enter Branch ID" id="validationCustom01" required>
                                     </div>
                                 </div>
@@ -21,9 +26,9 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
-                                        <label for="formrow-inputCity" class="form-label">Name</label>
+                                        <label for="name" class="form-label">Name</label>
                                         <input type="text" placeholder="Enter Branch Name" name="name"
-                                               class="form-control" id="validationCustom01" required>
+                                               class="form-control" value="{{ isset($branch) ? $branch->name : old('name') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -35,12 +40,13 @@
                                                 class="form-select select2">Company
                                             <option selected disabled="" value="">Choose Company</option>
                                             @foreach($companies as $company)
-                                                <option value="{{$company->id}}">{{$company->name}}</option>
+                                                <option value="{{$company->id}}" {{ isset($branch) ? $branch->company_id == $company->id ? 'selected' : '' : '' }}>{{$company->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            @if(!isset($branch))
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
@@ -51,14 +57,15 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3 ">
                                         <label for="inputZip" class="form-label">Status </label><br>
-                                        <input type="radio" id="validationCustom02" value="1" name="isActive"
-                                               required checked>&nbsp;Active&nbsp;&nbsp;
+                                        <input type="radio"  value="1" name="isActive"
+                                               required {{ isset($branch) ? $branch->isActive == 1 ? 'checked' : '' : '' }}>&nbsp;Active&nbsp;&nbsp;
                                         <input type="radio" id="validationCustom02" value="0" name="isActive"
-                                               required>&nbsp;InActive
+                                               required {{ isset($branch) ? $branch->isActive == 0 ? 'checked' : '' : '' }}>&nbsp;InActive
                                     </div>
                                 </div>
                             </div>

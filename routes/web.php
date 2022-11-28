@@ -165,10 +165,11 @@ Route::post('applyStore', 'App\Http\Controllers\GeneralController@applyStore')->
 Route::get('general', 'App\Http\Controllers\GeneralController@defineRule')->name('defineRule');
 
 Route::post('generalBonus', 'App\Http\Controllers\GeneralController@generalBonus')->name('generalBonus');
+Route::post('general-bonus-update/{id}',[GeneralController::class,'general_bonus_update'])->name('general-bonus-update');
 Route::post('create-genernal-bonus',[GeneralController::class,'storeBonus'])->name('create-genernal-bonus')->middleware('auth');
-
 Route::post('generalDiscount', 'App\Http\Controllers\GeneralController@generalDiscount')->name('generalDiscount');
 
+Route::post('general-discount-update',[GeneralController::class,'general_discount_update'])->middleware('auth');
 Route::get('showGeneralBonus',[GeneralController::class,"showGeneralBonus"])->middleware('auth');
 Route::get('showGeneralDiscount',[GeneralController::class,"showGeneralDiscount"])->middleware('auth');
 Route::post('insertProductBonus',[GeneralController::class,'insertProductBonus'])->middleware('auth');

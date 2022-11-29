@@ -7,7 +7,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Region Preview </h4>
-
                     <div class="row">
                     <!-- <div class="card-body">
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -142,7 +141,6 @@
                                                         @endif
                                                     </li>
                                                     @endforeach
-
                                         </ul>
                                     </li>
                                 @endforeach

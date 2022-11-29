@@ -14,25 +14,24 @@
                         </div><!-- end col-->
 
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                        
+
                             <thead class="table-light">
                                 <tr>
-                                    
+
                                     <!-- <th class="align-middle"> ID</th> -->
                                     <th class="align-middle" width="15%">Region Code</th>
                                     <th class="align-middle" width="40%">Region Name</th>
-                                 
                                     <th class="align-middle">Parent Region</th>
                                     <th class="align-middle">Status</th>
                                     <th class="align-middle">City</th>
-                                     
+
                                     <th class="align-middle" width="20%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($regions as $region)
                                 <tr>
-                                    
+
                                     <!-- <td><a href="javascript: void(0);" class="text-body fw-bold">$region->id</a> </td> -->
                                     <td>{{$region->region_code}}</td>
                                     <td>{{$region->name}}</td>
@@ -45,7 +44,7 @@
                                     <td><span class="badge bg-danger font-size-12"> InActive</span></td>
                                     @endif
                                     <td>{{$region->belong_cities->name}}</td>
-                                     
+
                                     <td>
                                         <div class="d-flex gap-3">
                                              <a href="#" class="btn btn-primary btn-sm detail_view_button" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" data-region_code="{{$region->region_code}}" data-region_name="{{$region->name}}" data-city_name="{{$region->belong_cities->name}}" data-region_status="{{$region->isActive}}">
@@ -64,7 +63,7 @@
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                          </table>
@@ -80,7 +79,7 @@
     <!-- end row -->
      <!-- Modal -->
 
-    
+
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -94,7 +93,7 @@
                         <tr> <th> Region name </th><td> : <span class="m_region_name"> </span>     </td>  </tr>
                         <tr> <th> City   </th><td> : <span class="m_city_name"> </span>     </td>  </tr>
                         <tr> <th> Status   </th><td> : <span class="m_region_status"> </span>     </td>  </tr>
-                         
+
                     </table>
                     <br>
                     <br>
@@ -110,9 +109,9 @@
     @push('script')
     <script>
         $(document).ready(function(){
-           
+
             $(document).on('click','.detail_view_button',function(){
-               
+
                $('.m_region_code').text($(this).data('region_code'));
                $('.m_region_name').text($(this).data('region_name'));
                $('.m_city_name').text($(this).data('city_name'));

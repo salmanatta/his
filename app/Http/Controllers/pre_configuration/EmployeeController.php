@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\pre_configuration;
 use App\Http\Controllers\Controller;
+use App\Models\EmployeeSupplier;
+use App\Models\purchases\Supplier;
 use Illuminate\Http\Request;
 use App\Models\employee\Employee;
 use App\Models\Designation;
 use App\Models\city\City;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
@@ -107,8 +110,13 @@ class EmployeeController extends Controller
         $data['employee']=Employee::find($id);
         $data['cities']=City::all();
         $data['designations']=Designation::all();
+        $data['manager'] = Employee::where('designation_id',2)->where('branch_id',auth()->user()->branch_id)->get();
+//        $data['suppliers'] = Supplier::all();
+        $data['suppliers'] = DB::table('suppliers')->leftJoin('employee_suppliers','suppliers.id','=','employee_suppliers.supplier_id')
+            ->select('suppliers.id','employee_suppliers.supplier_id','suppliers.name')
+            ->get();
 
-        return view('pages.pre_configuration.employee.edit',$data);
+        return view('pages.pre_configuration.employee.create',$data);
     }
 
     /**
@@ -121,7 +129,9 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $employee=Employee::find($id);
-         $employee->update($request->all());
+         $employee->update($request->except('createUser'));
+//        $employee->update($request->all())->except('createUser');
+
          return redirect()->route('employees.index')->with('info','Data Updated Successfully!');
 
     }
@@ -136,6 +146,25 @@ class EmployeeController extends Controller
     {
          Employee::find($id)->delete();
         return redirect()->route('employees.index')->with('success','Data Deleted Successfully!');
+    }
 
+    public function employee_supplier_store(Request $request)
+    {
+        EmployeeSupplier::create([
+            'employee_id' => $request->employee_id,
+            'supplier_id' => $request->id,
+            'batch_id' => auth()->user()->branch_id,
+        ]);
+        return $request;
+    }
+
+    public function employee_supplier_delete(Request $request)
+    {
+        $empSup = EmployeeSupplier::where('employee_id',$request->employee_id)
+            ->where('supplier_id',$request->id)
+            ->where('batch_id',auth()->user()->branch_id)
+            ->first();
+        $empSup->delete();
+        return 1;
     }
 }

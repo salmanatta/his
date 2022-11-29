@@ -29,6 +29,7 @@ use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseInvoice;
 use App\Http\Controllers\StockAdjustmentsController;
+use App\Http\Controllers\pre_configuration\EmployeeController;
 // use App\Http\Controllers\PurchaseController;
 // use App\Http\Controllers\PurchaseInvoice;
 // use App\Http\Controllers\SupplierController;
@@ -127,6 +128,10 @@ Route::get('all_regions_report', 'App\Http\Controllers\pre_configuration\RegionC
 
 Route::resource('regions', 'App\Http\Controllers\pre_configuration\RegionController')->middleware('auth');
 Route::resource('employees', 'App\Http\Controllers\pre_configuration\EmployeeController')->middleware('auth');
+
+Route::post('employee-supplier',[EmployeeController::class,"employee_supplier_store"])->middleware('auth');
+Route::post('employee-supplier-delete',[EmployeeController::class,'employee_supplier_delete'])->middleware('auth');
+
 Route::resource('customers', 'App\Http\Controllers\CustomerController')->middleware('auth');
 Route::resource('suppliers', 'App\Http\Controllers\SupplierController')->middleware('auth');
 Route::get("/get-all-suppliers",[SupplierController::class,"getAllSupliers"])->middleware('auth');
@@ -160,9 +165,9 @@ Route::get('/roles/attached/permissions', [RoleController::class, "rolesAttached
 /*----------  End cities  Resource Route  ----------*/
 
 // ======================use for define Rules Product Bonus and Discount======
-Route::get('apply-rule', 'App\Http\Controllers\GeneralController@applyRule')->name('applyRule');
+Route::get('apply-rule', 'App\Http\Controllers\GeneralController@applyRule')->name('applyRule')->middleware('auth');
 Route::post('applyStore', 'App\Http\Controllers\GeneralController@applyStore')->name('applyStore');
-Route::get('general', 'App\Http\Controllers\GeneralController@defineRule')->name('defineRule');
+Route::get('general', 'App\Http\Controllers\GeneralController@defineRule')->name('defineRule')->middleware('auth');
 
 Route::post('generalBonus', 'App\Http\Controllers\GeneralController@generalBonus')->name('generalBonus');
 Route::post('general-bonus-update/{id}',[GeneralController::class,'general_bonus_update'])->name('general-bonus-update');

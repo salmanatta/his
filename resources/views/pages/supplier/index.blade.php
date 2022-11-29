@@ -14,55 +14,52 @@
                         </div><!-- end col-->
 
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                        
+
                            <thead class="table-light">
-                                
+
                                     <th class="align-middle"> Supplier ID</th>
                                     <th class="align-middle">supplier Name</th>
                                     <th class="align-middle">Address</th>
                                     <th class="align-middle">City</th>
-                                   
                                     <th class="align-middle">Phone</th>
-                                    
-                                    <th class="align-middle">Status </th> 
+                                    <th class="align-middle">Status </th>
                                     <th class="align-middle">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($suppliers as $supplier)
                                 <tr>
-                                   
+
                                     <td><a href="javascript: void(0);" class="text-body fw-bold">{{$supplier->supplier_id}}</a> </td>
                                     <td>{{$supplier->name}}</td>
                                     <td>{{$supplier->address}}</td>
-                                    <td>{{$supplier->get_supplier_city->name}}</td>
-                                   
+                                    <td>{{ !is_null($supplier->get_supplier_city->name) }}</td>
                                     <td>{{$supplier->phone}}</td>
                                     <td>{{($supplier->isActive==1) ? 'Active' : 'InActive'}}</td>
                                     <td>
-                                        <div class="d-flex gap-3">
-                                             <a data-bs-toggle="modal" class="btn btn-primary btn-sm detail_view_button"
-                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"
-                                        data-supplier_id="{{$supplier->id}}" data-supplier_name="{{$supplier->name}}"
-                                        data-address="{{$supplier->address}}"
-                                        data-phone="{{$supplier->phone}}"
-                                        data-city="{{$supplier->get_supplier_city->name}}" data-status="{{$supplier->status}}">
-                                        View Details
+{{--                                        <div class="d-flex gap-3">--}}
+{{--                                             <a data-bs-toggle="modal" class="btn btn-primary btn-sm detail_view_button"--}}
+{{--                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"--}}
+{{--                                        data-supplier_id="{{$supplier->id}}" data-supplier_name="{{$supplier->name}}"--}}
+{{--                                        data-address="{{$supplier->address}}"--}}
+{{--                                        data-phone="{{$supplier->phone}}"--}}
+{{--                                        data-city="{{$supplier->get_supplier_city->name}}" data-status="{{$supplier->status}}">--}}
+{{--                                        View Details--}}
                                     </a>
                                             <a href="{{route('suppliers.edit',$supplier->id)}}" class="text-success"><i
                                                     class="mdi mdi-pencil font-size-18"></i></a>
                                             <!-- <a  href="{{route('suppliers.destroy',$supplier->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                                     <form method="post" action='{{route("suppliers.destroy",$supplier->id) }}'>
-                                          {{csrf_field()}}
-                                          {{method_field('DELETE')}}
-                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                        </form>
-                                        </div>
+{{--                                                     <form method="post" action='{{route("suppliers.destroy",$supplier->id) }}'>--}}
+{{--                                          {{csrf_field()}}--}}
+{{--                                          {{method_field('DELETE')}}--}}
+{{--                                          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>--}}
+{{--                                        </form>--}}
+{{--                                        </div>--}}
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
 
                             </tbody>
                          </table>
@@ -77,7 +74,7 @@
     <!-- end row -->
     <!-- end row -->
      <!-- Modal -->
-    
+
 
 
 <!-- Modal -->
@@ -147,7 +144,7 @@
                else
                 status='<span class="badge bg-danger font-size-12"> InActive</span>';
                 $('.m_status').html(status);
-               
+
             });
         });
 </script>

@@ -58,14 +58,13 @@ class GeneralController extends Controller
   }
     public function general_bonus_update(Request  $request)
     {
-    //      dd($request->all());
-          $bonus = GeneralBonus::find($request->id);
-          $bonus->bonus = $request->bonus;
-          $bonus->quantity = $request->quantity;
-          $bonus->start_date = $request->start_date;
-          $bonus->end_date = $request->end_date;
-          $bonus->save();
-          return $bonus;
+      $bonus = GeneralBonus::find($request->id);
+      $bonus->bonus = $request->bonus;
+      $bonus->quantity = $request->quantity;
+      $bonus->start_date = $request->start_date;
+      $bonus->end_date = $request->end_date;
+      $bonus->save();
+      return $bonus;
     }
    public function general_discount_update(Request $request)
    {

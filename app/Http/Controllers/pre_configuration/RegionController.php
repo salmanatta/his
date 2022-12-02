@@ -30,12 +30,15 @@ class RegionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {        
+    {
         $cities  = City::all();
         $treeCities  = City::all();
-        $treeRegions = Region::whereNull('region_id')->get();
-        $regions = Region::all();
-        return view('pages.pre_configuration.region.create', compact('cities','regions','treeCities','treeRegions'));
+        $regions = Region::whereNull('region_id')->get();
+//        $regions = Region::all();
+
+//        return view('pages.pre_configuration.region.create', compact('cities','regions','treeCities'));
+
+        return view('pages.pre_configuration.region.region');
     }
 
     /**
@@ -134,11 +137,11 @@ class RegionController extends Controller
 
 
      public function all_regions_report()
-    { 
+    {
         $citys = City::all();
         $regions = Region::whereNull('region_id')->get();
         // $data['regions']=Region::with('belong_to_region')->get();
-        // dd($citys); 
+        // dd($citys);
        return view('pages/reports/city_wise_regions',compact('citys','regions'));
     }
 }

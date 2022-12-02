@@ -77,6 +77,9 @@ Route::get('/', function () {
 
 });
 
+Route::get('get-data/{id}' , [\App\Http\Controllers\pre_configuration\CityController::class , 'getData']);
+Route::post('save-region' , [\App\Http\Controllers\pre_configuration\CityController::class , 'saveRegion']);
+
 // ===================start restore backup to ====================================
 Route::get('backup', function () {
     return view('backup_folder.backup'); //this is actualy dash

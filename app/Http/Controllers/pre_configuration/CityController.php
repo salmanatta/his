@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Pharmacy\LogController as LogTable;
 use App\Models\branch\Branch;
 use App\Models\city\City;
+use App\Models\region\Region;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -139,5 +140,22 @@ class CityController extends Controller
     public function logsAction($data)
     {
         LogTable::store(["action" => $data["action"], "remarks" => $data['remarks'], "action_date" => date("Y-m-d"), "action_time" => date("H:i:s"), "user_id" => auth()->user()->id]);
+    }
+
+    public function getData($id) {
+        return response()->json([
+            'data' => Region::where('region_id' , $id)->get()
+        ]);
+    }
+
+    public function saveRegion(Request $request) {
+        $region = new Region();
+        $region->name = $request->name;
+        $region->region_code = 1;
+        $region->region_id = $request->region;
+        $region->isActive = 1;
+        $region->city_id =1;
+        $region->level_no = 1;
+        $region->save();
     }
 }

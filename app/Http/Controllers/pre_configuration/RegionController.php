@@ -134,8 +134,6 @@ class RegionController extends Controller
     {
         LogTable::store(["action" => $data["action"], "remarks" => $data['remarks'], "action_date" => date("Y-m-d"), "action_time" => date("H:i:s"), "user_id" => auth()->user()->id]);
     }
-
-
      public function all_regions_report()
     {
         $citys = City::all();
@@ -143,6 +141,21 @@ class RegionController extends Controller
         // $data['regions']=Region::with('belong_to_region')->get();
         // dd($citys);
        return view('pages/reports/city_wise_regions',compact('citys','regions'));
+    }
+    public function getData($id) {
+        return response()->json([
+            'data' => Region::where('region_id' , $id)->get()
+        ]);
+    }
+    public function saveRegion(Request $request) {
+        $region = new Region();
+        $region->name = $request->name;
+        $region->region_code = $region->code;
+        $region->region_id = $request->region;
+        $region->isActive = 1;
+//        $region->city_id =1;
+        $region->level_no = $region->level_no;
+        $region->save();
     }
 }
 

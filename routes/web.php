@@ -10,6 +10,7 @@ use App\Http\Controllers\pre_configuration\UserController;
 use App\Http\Controllers\pre_configuration\RoleController;
 use App\Http\Controllers\pre_configuration\BranchController;
 use App\Http\Controllers\pre_configuration\ProductController;
+use App\Http\Controllers\pre_configuration\RegionController;
 use App\Http\Controllers\Stock;
 use App\Models\sales\Customer;
 use Illuminate\Support\Facades\Auth;
@@ -77,8 +78,9 @@ Route::get('/', function () {
 
 });
 
-Route::get('get-data/{id}' , [\App\Http\Controllers\pre_configuration\CityController::class , 'getData']);
-Route::post('save-region' , [\App\Http\Controllers\pre_configuration\CityController::class , 'saveRegion']);
+Route::get('get-data/{id}' , [RegionController::class , 'getData']);
+Route::post('save-region' , [RegionController::class , 'saveRegion']);
+Route::get('get-master-region/{id}',[EmployeeController::class,'getMasterRegion']);
 
 // ===================start restore backup to ====================================
 Route::get('backup', function () {

@@ -171,49 +171,9 @@
 {{--                                    <li class="nav-item"><a class="nav-link" href="#tab-3" data-bs-toggle="tab" role="tab" aria-selected="false">Messages</a></li>--}}
                                 </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="tab-1" role="tabpanel">
-                                        <br>
-                                        <h4 class="tab-title">Select Suppliers</h4>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <form action=""></form>
-                                                <table class="table table-bordered dt-responsive no-footer"id="datatable-buttons">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th class="text-center">Action</th>
-                                                            <th>Supplier Name</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($suppliers as $supplier)
+                                    @include('pages.pre_configuration.employee.tab-pages.supplier')
+                                    @include('pages.pre_configuration.employee.tab-pages.region')
 
-                                                        <tr>
-                                                            <td class="text-center">
-                                                                <input type="checkbox" name="activeCheck" {{ isset($supplier->supplier_id) ? 'checked' : '' }} id="activeCheck_{{ $supplier->id }}" onclick="getSupplier({{ $supplier->id }})">
-                                                                <input type="hidden" name="supplier_id" id="supplier_id" value="supplier_id">
-                                                                <input type="hidden" name="employee_id" id="employee_id" value="{{ $employee->id }}">
-                                                            </td>
-                                                            <td>{{ $supplier->name }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
-                                                <br>
-                                                <div class="d-flex justify-content-end">
-                                                    <button type="submit" class="btn btn-primary me-1">Save</button>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tab-2" role="tabpanel">
-                                        <br>
-                                        <h4 class="tab-title">Another one</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor tellus eget condimentum rhoncus. Aenean massa. Cum sociis natoque
-                                            penatibus et magnis neque dis parturient montes, nascetur ridiculus mus.</p>
-                                        <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate
-                                            eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</p>
-                                    </div>
 {{--                                    <div class="tab-pane" id="tab-3" role="tabpanel">--}}
 {{--                                        <h4 class="tab-title">One more</h4>--}}
 {{--                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor tellus eget condimentum rhoncus. Aenean massa. Cum sociis natoque--}}
@@ -237,7 +197,7 @@
     });
 
     $('#designation_id').change(function(){
-        console.log($('#designation_id').val());
+        // console.log($('#designation_id').val());
          var desgID = $('#designation_id').val();
          if (desgID == 1){
              $('#reportedDiv').show();
@@ -287,5 +247,19 @@
             });
         }
     };
+    $('#selectRegion').change(function(){
+        console.log($('#selectRegion').val())
+
+        $.ajax({
+            method: 'get',
+            url: "{{ url('get-master-region')}}/"+$('#selectRegion').val(),
+            success: function (data) {
+                console.log(data);
+                // data.data.forEach((i,v) => {
+                //     $(".data-list").append("<button onclick='getList("+i.id+" , "+i.region_id+")' class='btn btn-default get-children'>"+i.name+"</button><br>");
+                // });
+            },
+        });
+    });
     </script>
 @endpush

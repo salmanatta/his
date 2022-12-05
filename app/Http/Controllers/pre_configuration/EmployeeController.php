@@ -3,6 +3,7 @@ namespace App\Http\Controllers\pre_configuration;
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeSupplier;
 use App\Models\purchases\Supplier;
+use App\Models\region\Region;
 use Illuminate\Http\Request;
 use App\Models\employee\Employee;
 use App\Models\Designation;
@@ -115,7 +116,7 @@ class EmployeeController extends Controller
         $data['suppliers'] = DB::table('suppliers')->leftJoin('employee_suppliers','suppliers.id','=','employee_suppliers.supplier_id')
             ->select('suppliers.id','employee_suppliers.supplier_id','suppliers.name')
             ->get();
-
+        $data['regions'] = Region::where('region_id','0')->get();
         return view('pages.pre_configuration.employee.create',$data);
     }
 
@@ -166,5 +167,10 @@ class EmployeeController extends Controller
             ->first();
         $empSup->delete();
         return 1;
+    }
+    public function getMasterRegion($id)
+    {
+        $regions = Region::with('childrenRegion')->where('region_id',$id)->get();
+        return $regions;
     }
 }

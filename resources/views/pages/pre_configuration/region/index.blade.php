@@ -33,7 +33,7 @@
                                 <td class="text-center">{{$region->region_code}}</td>
                                 <td>{{$region->name}}</td>
                                 <td>{{ $region->belong_to_region->name ?? '' }} </td>
-                                <td>{{$region->belong_cities->name}}</td>
+                                <td>{{isset($region->belong_cities->name) ? $region->belong_cities->name : ''}}</td>
                                 @if($region->isActive==1)
                                     <td><span class="badge bg-success font-size-12"> Active</span></td>
                                 @else

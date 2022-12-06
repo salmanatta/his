@@ -9,8 +9,15 @@ class Batch extends Model
 {
     use HasFactory;
      protected $guarded = [];
+    protected $appends = ['sumQty'];
     public function stocks()
     {
-        return $this->hasMany(Stock::class);
+        return $this->hasMany(Stock::class,'batch_id','id');
     }
+
+    public function getSumQtyAttribute()
+    {
+        return $this->stocks()->sum('quantity');
+    }
+
 }

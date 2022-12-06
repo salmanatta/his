@@ -27,12 +27,14 @@ class Region extends Model
     {
         return $this->belongsTo(City::class,'city_id');
     }
+
      public function childrenRegion()
     {
-        return $this->hasMany(Self::class, 'region_id');
+        return $this->hasMany(Self::class, 'region_id')->with('childrenRegion');
     }
+
     public function childrenRecursive()
     {
-       return $this->childrenRegion()->with('childrenRecursive');
+       return $this->childrenRegion()->with('childrenRecursive')->where('level_no',0);
     }
 }

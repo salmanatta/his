@@ -150,11 +150,11 @@ class RegionController extends Controller
     public function saveRegion(Request $request) {
         $region = new Region();
         $region->name = $request->name;
-        $region->region_code = $region->code;
+        $region->region_code = $request->code;
         $region->region_id = $request->region;
         $region->isActive = 1;
 //        $region->city_id =1;
-        $region->level_no = $region->level_no;
+        $region->level_no = $request->level_no;
         $region->save();
     }
 }

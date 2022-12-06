@@ -60,7 +60,10 @@
             })
 
             $(".saveRegion").on("click" , function() {
-                // alert($("body .regionName").val());
+                // alert($("body .regionCode").val());
+                // console.log($(".regionName").val());
+                // console.log($(".regionCode").val());
+                // console.log($(".level_no").val());
                 var token = $("meta[name='csrf-token']").attr("content");
                 $.ajax({
                     method: 'post',
@@ -73,6 +76,7 @@
                         _token: token,
                     },
                     success: function (data) {
+                        // console.log(data);
                         $(".regionName").val('');
                         $(".regionCode").val('');
                         $(".level_no").val('');

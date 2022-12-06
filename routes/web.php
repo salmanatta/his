@@ -248,7 +248,6 @@ Route::post("/purchase/return",[PurchaseController::class,"pruchaseReturnInsert"
 Route::get("view-purchase-invoice/{id}",[PurchaseController::class,"viewPurchaseInvoice"])->middleware("auth");
 
 // ===================== Product Purchase Side======
-
 // Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
 // Route::GET("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
 
@@ -294,7 +293,9 @@ Route::get('stock-adjustment/{id}',[StockAdjustmentsController::class,'view_stoc
 Route::post('stock-adjustment/{id}',[StockAdjustmentsController::class,'update_stock_adjustment'])->middleware('auth');
 
 // ============== End Stock Adjustment ==========
-
+// ============== Batch Adjustment ============
+Route::get('batch-adjustment',[StockAdjustmentsController::class,'batch_adjustment'])->middleware('auth');
+// ============== End Batch Adjustment ============
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');

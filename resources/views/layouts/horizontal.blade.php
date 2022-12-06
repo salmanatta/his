@@ -255,7 +255,7 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
                             <a href="{{url('stock-adjustment')}}" class="dropdown-item" key="t-saas">Stock Adjustment </a>
                             <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Stock Adjustment Approval </a>
-                            <a href="{{url('adjustment-approval')}}" class="dropdown-item" key="t-saas">Batch Adjustment</a>
+                            <a href="{{url('batch-adjustment')}}" class="dropdown-item" key="t-saas">Batch Adjustment</a>
                         </div>
                     </li>
 

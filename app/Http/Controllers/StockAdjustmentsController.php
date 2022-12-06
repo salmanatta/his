@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Batch;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -128,4 +129,11 @@ class StockAdjustmentsController extends Controller
         return back()->with('info',"Data Updated Successfully!");
     }
 
+    public function batch_adjustment()
+    {
+        $batches = Batch::where('branch_id',auth()->user()->branch_id)
+            ->where('date','>=',Carbon::now())
+            ->get();
+        return view('pages.stock-adjustment.batch_adjustment',compact('batches'));
+    }
 }

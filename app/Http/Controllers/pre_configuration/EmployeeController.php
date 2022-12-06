@@ -136,7 +136,6 @@ class EmployeeController extends Controller
          return redirect()->route('employees.index')->with('info','Data Updated Successfully!');
 
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -170,7 +169,13 @@ class EmployeeController extends Controller
     }
     public function getMasterRegion($id)
     {
-        $regions = Region::with('childrenRegion')->where('region_id',$id)->get();
+        $regions = Region::where('id',$id)->with('childrenRegion')->get();
+
+//
+//        $regions = Region::with('childrenRecursive')
+//            ->where('region_id',$id)
+////            ->where('level_no','=',0)
+//            ->first()->childrenRecursive;
         return $regions;
     }
 }

@@ -1,20 +1,18 @@
-
-
  public function backup_database()
     {
         $mysqlHostName      = env('DB_HOST');
         $mysqlUserName      = env('DB_USERNAME');
-        $mysqlPassword      = env('DB_PASSWORD'); 
-        $DbName             = env('DB_DATABASE'); 
+        $mysqlPassword      = env('DB_PASSWORD');
+        $DbName             = env('DB_DATABASE');
         $backup_name        = "backup.sql";
         $tables             = array("users", "villages", "migrations", "failed_jobs", "password_resets"); //here your tables...
-    
+
         $connect = new \PDO("mysql:host=$mysqlHostName;dbname=$DbName;charset=utf8", "$mysqlUserName", "$mysqlPassword",array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         $get_all_table_query = "SHOW TABLES";
         $statement = $connect->prepare($get_all_table_query);
         $statement->execute();
         $result = $statement->fetchAll();
-    
+
         $output = '';
         foreach($tables as $table)
         {
@@ -22,7 +20,7 @@
             $statement = $connect->prepare($show_table_query);
             $statement->execute();
             $show_table_result = $statement->fetchAll();
-    
+
             foreach($show_table_result as $show_table_row)
             {
                 $output .= "\n\n" . $show_table_row["Create Table"] . ";\n\n";
@@ -31,7 +29,7 @@
             $statement = $connect->prepare($select_query);
             $statement->execute();
             $total_row = $statement->rowCount();
-    
+
             for($count=0; $count<$total_row; $count++)
             {
                 $single_result = $statement->fetch(\PDO::FETCH_ASSOC);

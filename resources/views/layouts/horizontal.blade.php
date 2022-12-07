@@ -1,23 +1,25 @@
 <header id="page-topbar">
     <div class="navbar-header">
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
             <!-- LOGO -->
+
             <div class="navbar-brand-box">
-                <a href="{{url('/')}}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="{{ URL::asset ('/assets/images/logo.svg') }}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ URL::asset ('/assets/images/logo-dark.png') }}" alt="" height="17">
-                    </span>
-                </a>
+{{--                <a href="{{url('/')}}" class="logo logo-dark">--}}
+{{--                    <span class="logo-sm">--}}
+{{--                        <img src="{{ URL::asset ('/assets/images/logo.svg') }}" alt="" height="22">--}}
+{{--                    </span>--}}
+{{--                    <span class="logo-lg">--}}
+{{--                        <img src="{{ URL::asset ('/assets/images/logo-dark.png') }}" alt="" height="17">--}}
+{{--                    </span>--}}
+{{--                </a>--}}
                 <a href="{{url('/')}}" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="{{ URL::asset ('/assets/images/logo-light.svg') }}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ URL::asset ('/assets/images/logo-light.png') }}" alt="" height="19">
-                    </span>
+{{--                    <span class="logo-sm">--}}
+{{--                        <img src="{{ URL::asset ('/assets/images/logo-light.svg') }}" alt="" height="22">--}}
+{{--                    </span>--}}
+{{--                    <span class="logo-lg">--}}
+{{--                        <img src="{{ URL::asset ('/assets/images/logo-light.png') }}" alt="" height="19">--}}
+{{--                    </span>--}}
+                   <h3 class="mt-2" style="color:white">Haroon Enterprise</h3>
                 </a>
             </div>
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
@@ -48,9 +50,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="@lang('translation.Search')"
                                        aria-label="Search input">
-
                                 <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                                s
                             </div>
                         </div>
                     </form>
@@ -348,6 +348,7 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
+                            <a href="{{url('sales-target')}}" class="dropdown-item" key="t-default">Sale Target</a>
                             <a href="{{url('backup')}}" class="dropdown-item" key="t-default">Full Backup</a>
                             <a href="{{url('list-backups')}}" class="dropdown-item" key="t-saas">Restore</a>
                             <div class="dropdown">

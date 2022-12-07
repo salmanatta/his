@@ -295,6 +295,7 @@ Route::post('stock-adjustment/{id}',[StockAdjustmentsController::class,'update_s
 // ============== End Stock Adjustment ==========
 // ============== Batch Adjustment ============
 Route::get('batch-adjustment',[StockAdjustmentsController::class,'batch_adjustment'])->middleware('auth');
+Route::post('batch-update/{id}',[StockAdjustmentsController::class,'batch_update'])->middleware('auth');
 // ============== End Batch Adjustment ============
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

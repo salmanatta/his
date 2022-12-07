@@ -8,7 +8,7 @@
                         <div class="col-12">
                             <div class="text-primary p-3">
                                 <h5 class="text-primary">Welcome Back !</h5>
-                                <p>Skote Dashboard</p>
+                                <p>Haroon Enterprise</p>
                             </div>
                         </div>
                         <div class="col-5 align-self-start">

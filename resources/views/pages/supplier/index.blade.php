@@ -33,7 +33,7 @@
                                     <td><a href="javascript: void(0);" class="text-body fw-bold">{{$supplier->supplier_id}}</a> </td>
                                     <td>{{$supplier->name}}</td>
                                     <td>{{$supplier->address}}</td>
-                                    <td>{{ !is_null($supplier->get_supplier_city->name) }}</td>
+                                    <td>{{ isset($supplier->get_supplier_city->name) ? $supplier->get_supplier_city->name : '' }}</td>
                                     <td>{{$supplier->phone}}</td>
                                     <td>{{($supplier->isActive==1) ? 'Active' : 'InActive'}}</td>
                                     <td>

@@ -129,11 +129,30 @@ class StockAdjustmentsController extends Controller
         return back()->with('info',"Data Updated Successfully!");
     }
 
-    public function batch_adjustment()
+    public function batch_adjustment(Request $request)
     {
-        $batches = Batch::where('branch_id',auth()->user()->branch_id)
-            ->where('date','>=',Carbon::now())
-            ->get();
-        return view('pages.stock-adjustment.batch_adjustment',compact('batches'));
+        if(count($request->all()) > 0){
+            $batches = Batch::where('branch_id',auth()->user()->branch_id)
+                ->whereBetween('date',[$request->from_date,$request->to_date])->get();
+            return view('pages.stock-adjustment.batch_adjustment',compact('batches'));
+        }else{
+//            $batches = Batch::where('branch_id',auth()->user()->branch_id)
+//                ->where('date','>=',Carbon::now())
+//                ->get();
+            return view('pages.stock-adjustment.batch_adjustment');
+        }
+
+
+
+    }
+
+    public function batch_update(Request $request,$id)
+    {
+        $batch = Batch::find($id);
+        $batch->batch_no = $request->batch_no;
+        $batch->date =  $request->batch_date;
+        $batch->save();
+        return $batch;
+
     }
 }

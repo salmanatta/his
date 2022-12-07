@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>  | Pharmacy</title>
+    <title> Haroon | Pharmacy</title>
     <link href="{{asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/app.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css">
-    
+
 
     <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="{{asset('assets/images/favicon.ico')}}" rel="shortcut icon">
@@ -23,7 +23,7 @@
     <link href="{{asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/app.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
-    <title>Document</title>
+{{--    <title>Document</title>--}}
 </head>
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="">
     @include('template.main-header')

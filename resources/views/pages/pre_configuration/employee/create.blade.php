@@ -209,11 +209,8 @@
     // ============ Employee Supplier =====
     function getSupplier(id)
     {
-
         // console.log($( "#activeCheck_"+id ).prop("checked", true));
         if ($("#activeCheck_"+id).is(':checked')){
-
-
             var token = $("meta[name='csrf-token']").attr("content");
             $.ajax({
                 method: 'post',
@@ -230,7 +227,6 @@
             });
         }else
         {
-            console.log('Un-Checked');
             var token = $("meta[name='csrf-token']").attr("content");
             $.ajax({
                 method: 'post',
@@ -248,13 +244,23 @@
         }
     };
     $('#selectRegion').change(function(){
-        console.log($('#selectRegion').val())
-
+        $('.region_data').empty();
         $.ajax({
             method: 'get',
             url: "{{ url('get-master-region')}}/"+$('#selectRegion').val(),
             success: function (data) {
-                console.log(data);
+                    // console.log(data);
+                for (var i=0 ;i< data.length;i++){
+                    // console.log(data[i]);
+                    $('.region_data').append('<tr>' +
+                        '<td class="text-center">' +
+                        '<input type="checkbox" name="activeCheck" id="activeCheck_'+data[i].id +'">' +
+                        '<input type="hidden" name="supplier_id" id="supplier_id" value="'+ data[i].id+ '">'+
+                        '</td>' +
+                        '<td>'+ data[i].name +'</td>'+
+                        '</tr>');
+                }
+
                 // data.data.forEach((i,v) => {
                 //     $(".data-list").append("<button onclick='getList("+i.id+" , "+i.region_id+")' class='btn btn-default get-children'>"+i.name+"</button><br>");
                 // });

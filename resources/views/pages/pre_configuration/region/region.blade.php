@@ -7,6 +7,7 @@
         <div>
             <button class="btn btn-primary add" data-id="0" style="float:right" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">Add Record</button>
             <button class="btn btn-warning prev" id="0" style="float:left">Previous</button>
+            <input type="text" class="parentId">
             <br>
             <br>
             <br>
@@ -60,10 +61,6 @@
             })
 
             $(".saveRegion").on("click" , function() {
-                // alert($("body .regionCode").val());
-                // console.log($(".regionName").val());
-                // console.log($(".regionCode").val());
-                // console.log($(".level_no").val());
                 var token = $("meta[name='csrf-token']").attr("content");
                 $.ajax({
                     method: 'post',
@@ -73,10 +70,10 @@
                         'name': $(".regionName").val(),
                         'code' : $(".regionCode").val(),
                         'level_no' : $(".level_no").val(),
+                        'parent' : $(".parentId").val(),
                         _token: token,
                     },
                     success: function (data) {
-                        // console.log(data);
                         $(".regionName").val('');
                         $(".regionCode").val('');
                         $(".level_no").val('');
@@ -87,6 +84,13 @@
         });
 
         function getList(id , region_id) {
+
+            if (region_id == 0 || region_id == null) {
+                $(".parentId").val(id);
+            }
+            if (id == 0) {
+                $(".parentId").val(null);
+            }
             $(".add").attr('data-id' , id);
             if (region_id != undefined && region_id != -1) {
                 list.push(region_id);

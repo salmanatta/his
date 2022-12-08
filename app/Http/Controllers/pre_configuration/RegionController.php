@@ -153,8 +153,8 @@ class RegionController extends Controller
         $region->region_code = $request->code;
         $region->region_id = $request->region;
         $region->isActive = 1;
-//        $region->city_id =1;
         $region->level_no = $request->level_no;
+        $region->main_region_id = $request->parent;
         $region->save();
     }
 }

@@ -169,7 +169,7 @@ class EmployeeController extends Controller
     }
     public function getMasterRegion($id)
     {
-        $regions = Region::where('id',$id)->with('childrenRegion')->get();
+        $regions = Region::where('main_region_id',$id)->where('level_no',0)->get();
 
 //
 //        $regions = Region::with('childrenRecursive')

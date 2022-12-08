@@ -3,7 +3,6 @@
     <h4 class="tab-title">Select Suppliers</h4>
     <div class="row">
         <div class="col-6">
-            <form action=""></form>
             <table class="table table-bordered dt-responsive no-footer"id="datatable-buttons">
                 <thead class="table-light">
                 <tr>
@@ -13,7 +12,6 @@
                 </thead>
                 <tbody>
                 @foreach($suppliers as $supplier)
-
                     <tr>
                         <td class="text-center">
                             <input type="checkbox" name="activeCheck" {{ isset($supplier->supplier_id) ? 'checked' : '' }} id="activeCheck_{{ $supplier->id }}" onclick="getSupplier({{ $supplier->id }})">
@@ -25,11 +23,6 @@
                 @endforeach
                 </tbody>
             </table>
-            <br>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary me-1">Save</button>
-            </div>
-
         </div>
     </div>
 </div>

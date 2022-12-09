@@ -5,6 +5,7 @@
         <h4 class="card-title">Region Entry</h4>
 
         <div>
+            <ul class="breadcrumb"></ul>
             <button class="btn btn-primary add" data-id="0" style="float:right" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">Add Record</button>
             <button class="btn btn-warning prev" id="0" style="float:left">Previous</button>
             <input type="text" class="parentId">
@@ -52,11 +53,14 @@
 @push('script')
     <script>
         const list = [];
+        const names = [];
         $( document ).ready(function() {
 
             getList(0 , 0);
             $(".prev").on("click" , function() {
                 id = list.pop();
+                names.pop();
+                breadcumb();
                 getList(id,-1);
             })
 
@@ -83,8 +87,18 @@
             })
         });
 
-        function getList(id , region_id) {
+        function breadcumb() {
+            $(".breadcrumb").empty();
+            names.forEach((i,v) => {
+                $(".breadcrumb").append("<li class='breadcrumb-item'>"+i+"</li>");
+            });
+        }
 
+        function getList(id , region_id, name = null) {
+            if (name != null) {
+                names.push(name);
+                breadcumb();
+            }
             if (region_id == 0 || region_id == null) {
                 $(".parentId").val(id);
             }
@@ -102,7 +116,7 @@
                 url: "{{ url('get-data')}}/" + id,
                 success: function (data) {
                     data.data.forEach((i,v) => {
-                        $(".data-list").append("<button onclick='getList("+i.id+" , "+i.region_id+")' class='btn btn-default get-children'>"+i.name+"</button><br>");
+                        $(".data-list").append("<button onclick='getList("+i.id+" , "+i.region_id+", `"+i.name+"`)' class='btn btn-default get-children'>"+i.name+"</button><br>");
                     });
                 },
             });

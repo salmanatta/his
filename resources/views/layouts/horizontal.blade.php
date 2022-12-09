@@ -19,7 +19,7 @@
 {{--                    <span class="logo-lg">--}}
 {{--                        <img src="{{ URL::asset ('/assets/images/logo-light.png') }}" alt="" height="19">--}}
 {{--                    </span>--}}
-                   <h3 class="mt-2" style="color:white">Haroon Enterprise</h3>
+                   <h3 class="mt-2" style="color:white">Haroon Enterprises</h3>
                 </a>
             </div>
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"

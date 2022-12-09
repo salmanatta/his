@@ -194,6 +194,7 @@
     <script>
     $(document).ready(function (){
        $('#reportedDiv').hide();
+        console.log($('.nav-link'));
     });
 
     $('#designation_id').change(function(){

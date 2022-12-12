@@ -91,13 +91,15 @@ class CompanyController extends Controller
 //        $this->logsAction(["action" => "Update", "remarks" => "Company id " . $id]);
 
         $company = Company::find($id);
-//        $company->logo = $request->logo->store('/', ['disk' => 'company']);
-        $company->name = $request->name;
-        $company->email = $request->email;
-        $company->phone = $request->phone;
-        $company->fax = $request->fax;
-        $company->address = $request->address;
-        $company->isActive = $request->isActive;
+        $company->name      = $request->name;
+        $company->email     = $request->email;
+        $company->phone     = $request->phone;
+        $company->fax       = $request->fax;
+        $company->address   = $request->address;
+        $company->isActive  = $request->isActive;
+        if ($request->file('logo')) {
+            $company->logo      = $request->logo->store('/', ['disk' => 'company']);
+        }
         $company->save();
 
 

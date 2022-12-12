@@ -6,18 +6,20 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Licence Form </h4>
+
                             @if(isset($license))
+                                <h4 class="card-title mb-4"> Edit License </h4>
                             <form method="post" action="{{ route('license_types.update',$license->id) }}">
                                 @method('PATCH')
                             @else
+                                 <h4 class="card-title mb-4">Add New License </h4>
                             <form method="post" action="{{route('license_types.store')}}">
                             @endif
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Licence Name</label>
+                                            <label for="name" class="form-label">License Name</label>
                                             <input type="text" name="name" value="{{ isset($license) ? $license->name : '' }}" class="form-control"
                                                    required>
                                         </div>

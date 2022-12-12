@@ -7,11 +7,13 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Add New Customer Group</h4>
+
                             @if(isset($group))
+                                <h4 class="card-title mb-4">Edit Customer Group</h4>
                             <form class="" method="post" action="{{ route('groups.update',$group->id) }}">
                                 @method('PATCH')
                             @else
+                                <h4 class="card-title mb-4">Add New Customer Group</h4>
                             <form class="" method="post" action="{{route('groups.store')}}">
                             @endif
                                 @csrf

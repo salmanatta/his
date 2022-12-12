@@ -7,11 +7,13 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Product Category Form </h4>
+
                             @if(isset($product_category))
+                                <h4 class="card-title mb-4">Edit Product Category </h4>
                              <form  class="" method="post" action="{{route('product_categories.update',$product_category->id)}}">
                                  @method('PATCH')
                             @else
+                                 <h4 class="card-title mb-4">Add New Product Category </h4>
                             <form class="" method="post" action="{{route('product_categories.store')}}">
                             @endif
                                 @csrf

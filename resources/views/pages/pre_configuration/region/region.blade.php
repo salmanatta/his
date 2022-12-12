@@ -8,7 +8,7 @@
             <ul class="breadcrumb"></ul>
             <button class="btn btn-primary add" data-id="0" style="float:right" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg">Add Record</button>
             <button class="btn btn-warning prev" id="0" style="float:left">Previous</button>
-            <input type="text" class="parentId">
+            <input type="hidden" class="parentId">
             <br>
             <br>
             <br>
@@ -90,7 +90,7 @@
         function breadcumb() {
             $(".breadcrumb").empty();
             names.forEach((i,v) => {
-                $(".breadcrumb").append("<li class='breadcrumb-item'>"+i+"</li>");
+                $(".breadcrumb").append("<li class='breadcrumb-item' style='font-weight: bold'>"+i+"</li>");
             });
         }
 

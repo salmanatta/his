@@ -8,13 +8,13 @@
                     <div class="card-body">
                         <h4 class="card-title mb-4">Company Form </h4>
                         @if(isset($company))
-                        <form  class="" method="post" action="{{route('companies.update',$company->id)}}">
+                        <form  class="" method="post" action="{{route('companies.update',$company->id)}}" enctype="multipart/form-data">
                             @method("PATCH")
                         @else
                         <form method="POST" action="{{route('companies.store')}}" enctype="multipart/form-data">
                         @endif
                             @csrf
-                            @if(!isset($company))
+{{--                            @if(!isset($company))--}}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
@@ -24,7 +24,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
+{{--                            @endif--}}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">

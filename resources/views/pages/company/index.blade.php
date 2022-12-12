@@ -22,6 +22,7 @@
                             <th class="align-middle">Phone</th>
                             <th class="align-middle">Fax</th>
                             <th class="text-center">Status</th>
+                            <th class="text-center">Company Logo</th>
                             <th class="text-center">Action</th>
                         </tr>
                         </thead>
@@ -40,6 +41,11 @@
                                     <td class="text-center">
                                         <span class="badge bg-danger font-size-12"> InActive</span></td>
                                 @endif
+                                <td class="text-center">
+                                    <img
+                                        src="{!! url('storage/app/public/company').'/'.$company->logo !!}"
+                                        style="width: 50px;height: 50px" alt="Company Logo">
+                                </td>
                                 <td class="text-center">
                                     <a href="{{route('companies.edit',$company->id)}}" class="text-success editbtn">
                                         <i class="mdi mdi-pencil font-size-18"></i>

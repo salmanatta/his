@@ -9,9 +9,11 @@
                         <div class="card-body">
                             <h4 class="card-title mb-4">Designation Form </h4>
                             @if(isset($designation))
+                                    <h4 class="card-title mb-4">Edit Designation </h4>
                                 <form class="" method="post" action="{{ route('designations.update',$designation->id) }}">
                                     @method('PATCH')
                             @else
+                                  <h4 class="card-title mb-4">Add New Designation </h4>
                             <form class="" method="post" action="{{route('designations.store')}}">
                             @endif
                                 @csrf

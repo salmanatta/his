@@ -179,7 +179,7 @@
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
                             <a href="{{route('companies.index')}}" class="dropdown-item" key="t-saas">Company </a>
                             <a href="{{route('branches.index')}}" class="dropdown-item" key="t-saas">Branch </a>
-                            <a href="{{route('cities.index')}}" class="dropdown-item" key="t-default">City </a>
+{{--                            <a href="{{route('cities.index')}}" class="dropdown-item" key="t-default">City </a>--}}
                             <a href="{{route('regions.index')}}" class="dropdown-item" key="t-saas">Region </a>
                             <a href="{{route('groups.index')}}" class="dropdown-item" key=" t-default">Customer Group </a>
                             <a href="{{route('designations.index')}}" class="dropdown-item" key="t-saas">Designation </a>

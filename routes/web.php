@@ -36,6 +36,7 @@ use App\Http\Controllers\pre_configuration\EmployeeController;
 // use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\SalesTargetController;
 //use App\Models\sales\Customer;
 
 //use app\Models\sales\Customer;
@@ -136,6 +137,8 @@ Route::resource('employees', 'App\Http\Controllers\pre_configuration\EmployeeCon
 
 Route::post('employee-supplier',[EmployeeController::class,"employee_supplier_store"])->middleware('auth');
 Route::post('employee-supplier-delete',[EmployeeController::class,'employee_supplier_delete'])->middleware('auth');
+
+Route::post('employee-region',[EmployeeController::class,'employee_region_store'])->middleware('auth');
 
 Route::resource('customers', 'App\Http\Controllers\CustomerController')->middleware('auth');
 Route::resource('suppliers', 'App\Http\Controllers\SupplierController')->middleware('auth');
@@ -297,6 +300,9 @@ Route::post('stock-adjustment/{id}',[StockAdjustmentsController::class,'update_s
 Route::get('batch-adjustment',[StockAdjustmentsController::class,'batch_adjustment'])->middleware('auth');
 Route::post('batch-update/{id}',[StockAdjustmentsController::class,'batch_update'])->middleware('auth');
 // ============== End Batch Adjustment ============
+// ============= Sales Target ==============
+Route::get('sales-target',[SalesTargetController::class,'sales_target'])->middleware('auth');
+// ============= End Sales Target ===========
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');

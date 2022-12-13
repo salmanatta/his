@@ -22,47 +22,47 @@
                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                         <thead class="table-light">
                         <tr>
-                            <th class="align-middle"> ID</th>
+                            <th class="text-center"> ID</th>
                             <th class="align-middle">Employee Name</th>
                             <th class="align-middle">Contact</th>
                             <th class="align-middle">Fax</th>
                             <th class="align-middle">Email</th>
                             <!-- <th class="align-middle">Payment Method</th>
                             <th class="align-middle">View Details</th> -->
-                            <th class="align-middle">Action</th>
+                            <th class="text-center"">Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($employees as $employee)
                             <tr>
 
-                                <td><a href="javascript: void(0);" class="text-body fw-bold">{{$employee->id}}</a></td>
+                                <td class="text-center">{{$employee->id}}</td>
                                 <td>{{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}</td>
                                 <td>{{$employee->phone_off}}</td>
                                 <td>{{$employee->fax}}</td>
                                 <td>{{$employee->email}}</td>
-                                <td>
+                                <td class="text-center">
 
-                                    <div class="d-flex gap-3">
-                                        <a href="#" class="btn btn-primary btn-sm detail_view_button"
-                                           data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"
-                                           data-employee_id="{{$employee->id}}"
-                                           data-employee_name="{{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}"
-                                           data-phone_off="{{$employee->phone_off}}" data-fax="{{$employee->fax}}"
-                                           data-email="{{$employee->email}}">
-                                            View Details
-                                        </a>
+{{--                                    <div class="d-flex gap-3">--}}
+{{--                                        <a href="#" class="btn btn-primary btn-sm detail_view_button"--}}
+{{--                                           data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"--}}
+{{--                                           data-employee_id="{{$employee->id}}"--}}
+{{--                                           data-employee_name="{{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}"--}}
+{{--                                           data-phone_off="{{$employee->phone_off}}" data-fax="{{$employee->fax}}"--}}
+{{--                                           data-email="{{$employee->email}}">--}}
+{{--                                            View Details--}}
+{{--                                        </a>--}}
                                         <a href="{{route('employees.edit',$employee->id)}}" class="text-success"><i
                                                 class="mdi mdi-pencil font-size-18"></i></a>
                                     <!-- <a  href="{{route('employees.destroy',$employee->id)}}" class="text-danger"><i
                                                     class="mdi mdi-delete font-size-18"></i></a> -->
-                                        <form method="post" action='{{route("employees.destroy",$employee->id) }}'>
-                                            {{csrf_field()}}
-                                            {{method_field('DELETE')}}
-                                            <button type="submit" class="btn btn-sm btn-danger"><i
-                                                    class="fa fa-trash"></i></button>
-                                        </form>
-                                    </div>
+{{--                                        <form method="post" action='{{route("employees.destroy",$employee->id) }}'>--}}
+{{--                                            {{csrf_field()}}--}}
+{{--                                            {{method_field('DELETE')}}--}}
+{{--                                            <button type="submit" class="btn btn-sm btn-danger"><i--}}
+{{--                                                    class="fa fa-trash"></i></button>--}}
+{{--                                        </form>--}}
+{{--                                    </div>--}}
                                 </td>
                             </tr>
                         @endforeach

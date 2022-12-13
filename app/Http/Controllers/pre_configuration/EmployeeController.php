@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\pre_configuration;
 use App\Http\Controllers\Controller;
+use App\Models\EmployeeRegions;
 use App\Models\EmployeeSupplier;
 use App\Models\purchases\Supplier;
 use App\Models\region\Region;
@@ -169,13 +170,26 @@ class EmployeeController extends Controller
     }
     public function getMasterRegion($id)
     {
-        $regions = Region::where('main_region_id',$id)->where('level_no',0)->get();
-
-//
-//        $regions = Region::with('childrenRecursive')
-//            ->where('region_id',$id)
-////            ->where('level_no','=',0)
-//            ->first()->childrenRecursive;
+//        $regions = Region::where('main_region_id',$id)->where('level_no',0)->get();
+          $regions = DB::table('regions')->leftJoin('employee_regions','regions.id','=','employee_regions.region_id')
+              ->where('main_region_id',$id)->where('level_no',0)
+              ->select('regions.id','employee_regions.region_id','regions.name')->get();
         return $regions;
+    }
+
+    public function employee_region_store(Request $request)
+    {
+        if ($request->type == 'insert') {
+            EmployeeRegions::create([
+                'employee_id' => $request->employee_id,
+                'region_id'   => $request->id,
+                'branch_id'   => auth()->user()->branch_id,
+            ]);
+            return 1;
+        }else{
+            $empReg = EmployeeRegions::where('region_id',$request->id)->where('employee_id',$request->employee_id)->where('branch_id',auth()->user()->branch_id)->first();
+            $empReg->delete();
+            return 0;
+        }
     }
 }

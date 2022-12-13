@@ -194,7 +194,6 @@
     <script>
     $(document).ready(function (){
        $('#reportedDiv').hide();
-        console.log($('.nav-link'));
     });
 
     $('#designation_id').change(function(){
@@ -255,8 +254,9 @@
                     // console.log(data[i]);
                     $('.region_data').append('<tr>' +
                         '<td class="text-center">' +
-                        '<input type="checkbox" name="activeCheck" id="activeCheck_'+data[i].id +'">' +
+                        '<input type="checkbox" name="activeCheck" '+ (data[i].region_id != null && data[i].region_id != "" ? 'checked' : '' )+' onclick="getRegion('+ data[i].id +')" id="regionCheck_'+data[i].id +'">' +
                         '<input type="hidden" name="supplier_id" id="supplier_id" value="'+ data[i].id+ '">'+
+                        '<input type="hidden" name="regionEmp_id" id="regionEmp_id" value="'+ {{$employee->id }} +'">'+
                         '</td>' +
                         '<td>'+ data[i].name +'</td>'+
                         '</tr>');
@@ -268,5 +268,41 @@
             },
         });
     });
+    function getRegion(id)
+    {
+        if ($("#regionCheck_"+id).is(':checked')) {
+            var token = $("meta[name='csrf-token']").attr("content");
+            $.ajax({
+                method: 'post',
+                url: "{{ url('employee-region')}}",
+                data: {
+                    'id': id,
+                    'employee_id': $('#regionEmp_id').val(),
+                    'type' : 'insert',
+                    _token: token,
+                },
+                success: function (data) {
+                    console.log(data);
+                    // location.reload(true);
+                },
+            });
+        }else {
+            var token = $("meta[name='csrf-token']").attr("content");
+            $.ajax({
+                method: 'post',
+                url: "{{ url('employee-region')}}",
+                data: {
+                    'id': id,
+                    'employee_id': $('#regionEmp_id').val(),
+                    'type' : 'delete',
+                    _token: token,
+                },
+                success: function (data) {
+                    console.log(data);
+                    // location.reload(true);
+                },
+            });
+        }
+    }
     </script>
 @endpush

@@ -12,6 +12,7 @@ use App\Models\ProductInfo;
 use App\Models\products\Product;
 use App\Models\ProductType;
 use App\Models\purchases\Supplier;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 // use App\Http\Requests\StoreProductRequest;
 use App\Http\Controllers\Pharmacy\LogController as LogTable;
@@ -215,5 +216,14 @@ class ProductController extends Controller
     {
         $group = ProductGroup::where('supplier_id',$id)->get();
         return response()->json($group);
+    }
+    public function get_group_product($id)
+    {
+        $product = Stock::whereHas('product' , function ($q) use ($id) {
+            $q->where('group_id',$id);
+        })->with(['product' => function($q) use ($id){
+            $q->where('group_id',$id);
+        }])->get();
+        return response()->json($product);
     }
 }

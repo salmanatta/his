@@ -6,9 +6,11 @@
             <label for="RegionName" class="form-label">Select Region</label>
             <select name="RegionName" id="selectRegion" class="form-select">
                 <option value="">-- Select Region --</option>
+                @if(isset($regions))
                 @foreach($regions as $region)
                     <option value="{{ $region->id }}">{{ $region->name }}</option>
                 @endforeach
+                @endif
             </select>
         </div>
     </div>
@@ -23,14 +25,6 @@
                 </tr>
                 </thead>
                 <tbody class="region_data">
-{{--                    <tr>--}}
-{{--                        <td class="text-center">--}}
-{{--                            <input type="checkbox" name="activeCheck" {{ isset($supplier->supplier_id) ? 'checked' : '' }} id="activeCheck_{{ $supplier->id }}" onclick="getSupplier({{ $supplier->id }})">--}}
-{{--                            <input type="hidden" name="supplier_id" id="supplier_id" value="supplier_id">--}}
-{{--                            <input type="hidden" name="employee_id" id="employee_id" value="{{ $employee->id }}">--}}
-{{--                        </td>--}}
-{{--                        <td>{{ $supplier->name }}</td>--}}
-{{--                    </tr>--}}
                 </tbody>
             </table>
         </div>

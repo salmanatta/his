@@ -3,6 +3,7 @@
 namespace App\Models\products;
 
 use App\Models\ProductGroup;
+use App\Models\purchases\Supplier;
 use App\Models\Stock;
 use App\Models\ProductType;
 use App\Models\ProductBonus;
@@ -49,6 +50,11 @@ class Product extends Model
     public function group()
     {
         return $this->belongsTo(ProductGroup::class,'group_id','id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class,'supplier_id','id');
     }
 
     public function productType()

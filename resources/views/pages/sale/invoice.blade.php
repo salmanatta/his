@@ -9,301 +9,304 @@
                     @if(isset($sale))
                         <form method="post" action="{{route('sale_invoices.update',$sale->id)}}">
                             @method('PATCH')
-                            @else
-                                <form method="post" action="{{route('sale_invoices.store')}}">
-                                    @endif
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="d-flex justify-content-between">
-                                                @if(isset($sale))
-                                                    @if($sale->trans_type == 'SALE' )
-                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
-                                                    @else
-                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Return
-                                                            Detail</h4>
-                                                    @endif
+                    @else
+                        <form method="post" action="{{route('sale_invoices.store')}}">
+                    @endif
+                            @csrf
+                            <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-between">
+                                            @if(isset($sale))
+                                                @if($sale->trans_type == 'SALE' )
+                                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
                                                 @else
-                                                    @if($transType == 'SALE')
-                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
-                                                    @else
-                                                        <h4 class="card-title mb-4 text-center">Sale Invoice Return
-                                                            Detail</h4>
-                                                    @endif
+                                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return
+                                                        Detail</h4>
                                                 @endif
+                                            @else
+                                                @if($transType == 'SALE')
+                                                    <h4 class="card-title mb-4 text-center">Sale Invoice Detail</h4>
+                                                @else
+                                                    <h4 class="card-title mb-4 text-center">Sale Invoice Return
+                                                        Detail</h4>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <h3>
+                                                    <b>
+                                                        <label class="form-label" for="invStatus"
+                                                               style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
+                                                    </b>
+                                                </h3>
+                                                </p>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-12 d-flex justify-content-center">
-                                                    <h3>
-                                                        <b>
-                                                            <label class="form-label" for="invStatus"
-                                                                   style="color:red">{{ isset($sale) ? $sale->inv_status : 'Un-Post' }}</label>
-                                                        </b>
-                                                    </h3>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <div class="col-md-12 mb-3">
-                                                                <div class="_invoice_header">
-                                                                    <p class="">
-                                                            <span>
-                                                                <label class="form-label"
-                                                                       for="Customer">Invoice Date</label>
-                                                                <input type="text" name="invoice_date"
-                                                                       value="{{ isset($sale)? date('d/m/Y', strtotime($sale->invoice_date)) : date('m/d/Y') }}"
-                                                                       id="fiveDays" class="form-control">
-                                                            </span>
-                                                                    </p>
-                                                                    <input type="hidden" name="trans_type"
-                                                                           value="{{ isset($sale) ? $sale->trans_type : $transType }}">
-                                                                </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="_invoice_header">
+                                                                <p class="">
+                                                        <span>
+                                                            <label class="form-label"
+                                                                   for="Customer">Invoice Date</label>
+                                                            <input type="text" name="invoice_date"
+                                                                   value="{{ isset($sale)? date('d/m/Y', strtotime($sale->invoice_date)) : date('m/d/Y') }}"
+                                                                   id="fiveDays" class="form-control">
+                                                        </span>
+                                                                </p>
+                                                                <input type="hidden" name="trans_type"
+                                                                       value="{{ isset($sale) ? $sale->trans_type : $transType }}">
                                                             </div>
-                                                            <div class="col-12 mb-3">
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            <label class="form-label"
+                                                                   for="salesman">Salesman</label>
+                                                            <select class="form-control select2" id="salesman"
+                                                                    name="salesman">
+                                                                <option disabled selected> Select Salesman</option>
+                                                                @foreach($salesman as $saleman)
+                                                                    <option
+                                                                        value="{{ $saleman->id }}" {{ isset($sale) ? ($sale->salesman_id == $saleman->id ? 'selected' : '' ) : '' }}>{{ $saleman->first_name.' '.$saleman->last_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('product_id')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            @if(!isset($customer))
                                                                 <label class="form-label"
-                                                                       for="salesman">Salesman</label>
-                                                                <select class="form-control select2" id="salesman"
-                                                                        name="salesman">
-                                                                    <option disabled selected> Select Salesman</option>
-                                                                    @foreach($salesman as $saleman)
-                                                                        <option
-                                                                            value="{{ $saleman->id }}" {{ isset($sale) ? ($sale->salesman_id == $saleman->id ? 'selected' : '' ) : '' }}>{{ $saleman->first_name.' '.$saleman->last_name }}</option>
-                                                                    @endforeach
+                                                                       for="description">Product</label>
+                                                                <select
+                                                                    class="select2 form-control _products_select"
+                                                                    id="_products_select" name="product_id">
                                                                 </select>
                                                                 @error('product_id')
                                                                 <span class="text-danger">{{$message}}</span>
                                                                 @enderror
-                                                            </div>
-                                                            <div class="col-12 mb-3">
-                                                                @if(!isset($customer))
-                                                                    <label class="form-label"
-                                                                           for="description">Product</label>
-                                                                    <select
-                                                                        class="select2 form-control _products_select"
-                                                                        id="_products_select" name="product_id">
-                                                                    </select>
-                                                                    @error('product_id')
-                                                                    <span class="text-danger">{{$message}}</span>
-                                                                    @enderror
-                                                                @endif
-                                                            </div>
+                                                            @endif
                                                         </div>
-                                                        <div class="col-4"></div>
-                                                        <div class="col-4">
-                                                            <div class="col-12 mb-3">
-                                                                <label class="form-label" for="Customer">Customer
-                                                                    Name</label>
-                                                                <input type="hidden" name="filer"
-                                                                       value="{{ isset($customer) ? $customer->isfiler : ''  }}"
-                                                                       id="filer">
-                                                                @if(isset($customer))
-                                                                    <input type="text" class="form-control" name=""
-                                                                           value="{{ isset($customer) ? $customer->name : '' }}"
-                                                                           readonly>
-                                                                @else
-                                                                    <select
-                                                                        class="select2 form-control _customers_select"
-                                                                        name="customer_id"
-                                                                        selected="{{ isset($customer) ? 'selected' : '' }}">
-                                                                    </select>
-                                                                    @error('customer_id')
-                                                                    <span class="text-danger">{{$message}}</span>
-                                                                    @enderror
-                                                                @endif
+                                                    </div>
+                                                    <div class="col-4"></div>
+                                                    <div class="col-4">
+                                                        <div class="col-12 mb-3">
+                                                            <label class="form-label" for="Customer">Customer
+                                                                Name</label>
+                                                            <input type="hidden" name="filer"
+                                                                   value="{{ isset($customer) ? $customer->isfiler : ''  }}"
+                                                                   id="filer">
+                                                            @if(isset($customer))
+                                                                <input type="text" class="form-control" name=""
+                                                                       value="{{ isset($customer) ? $customer->name : '' }}"
+                                                                       readonly>
+                                                            @else
+                                                                <select
+                                                                    class="select2 form-control _customers_select"
+                                                                    name="customer_id"
+                                                                    selected="{{ isset($customer) ? 'selected' : '' }}">
+                                                                </select>
+                                                                @error('customer_id')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                                @enderror
+                                                            @endif
 
-                                                            </div>
-                                                            <div class="col-12 mb-3">
-                                                                <label class="form-label"
-                                                                       for="description">Description</label>
-                                                                <textarea placeholder="description" name="description"
-                                                                          rows="5"
-                                                                          class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
-                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            <label class="form-label"
+                                                                   for="description">Description</label>
+                                                            <textarea placeholder="description" name="description"
+                                                                      rows="5"
+                                                                      class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table mb-0 order-list _saleTable">
-                                                    <thead>
-                                                    <tr>
-                                                        <th scope="row">#</th>
-                                                        <th scope="row">Products</th>
-                                                        <th scope="row">Batch</th>
-                                                        <th scope="row">Stock Quantity</th>
-                                                        <th scope="row">Quantity</th>
-                                                        <th scope="row">Bonus</th>
-                                                        <th scope="row">Price</th>
-                                                        <th scope="row">Sales Tax</th>
-                                                        <th scope="row">Advance Tax</th>
-                                                        <th scope="row">Advance Tax value</th>
-                                                        <th scope="row">Allow Discount</th>
-                                                        <th scope="row">Discount %</th>
-                                                        <th scope="row">Discount Amount</th>
-                                                        <th scope="row">Line Total</th>
-                                                        <!-- <th scope="row">Action</th> -->
-                                                    </tr>
-                                                    </thead>
-                                                    <?php $granttotal = 0; ?>
-                                                    <tbody>
-                                                    @if(isset($saleDetail))
-                                                        <?php $counter = 1;
-                                                        $row_id = 1;
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table mb-0 order-list _saleTable">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="row">#</th>
+                                                    <th scope="row">Products</th>
+                                                    <th scope="row">Batch</th>
+                                                    <th scope="row">Stock Quantity</th>
+                                                    <th scope="row">Quantity</th>
+                                                    <th scope="row">Bonus</th>
+                                                    <th scope="row">Price</th>
+                                                    <th scope="row">Sales Tax</th>
+                                                    <th scope="row">Advance Tax</th>
+                                                    <th scope="row">Advance Tax value</th>
+                                                    <th scope="row">Allow Discount</th>
+                                                    <th scope="row">Discount %</th>
+                                                    <th scope="row">Discount Amount</th>
+                                                    <th scope="row">Line Total</th>
+                                                    <!-- <th scope="row">Action</th> -->
+                                                </tr>
+                                                </thead>
+                                                <?php $granttotal = 0; ?>
+                                                <tbody>
+                                                @if(isset($saleDetail))
+                                                    <?php $counter = 1;
+                                                    $row_id = 1;
+                                                    ?>
+                                                    @foreach($saleDetail as $saleD)
+                                                        <tr onkeyup="calc(id.valueOf())" class="table_append_rows"
+                                                            id="table_append_rows_{{$row_id}}">
+                                                            <td>{{ $counter }}</td>
+                                                            <td>{{ $saleD->product->name }}
+                                                                <input type="hidden" class="product_id"
+                                                                       name="product_id[]"
+                                                                       value="{{ $saleD->product_id }}"/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <button type="button" data-bs-toggle="modal"
+                                                                        class="btn btn-primary btn-sm edit_modal batch_no_id"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target=".bs-example-modal-lg"
+                                                                        data-product_id="{{ $saleD->product_id }}"> {{ $saleD->batch->batch_no }}
+                                                                    <i class="dripicons-document-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center all_qty"
+                                                                       min="1" value="" step="any" disabled/>
+                                                            </td>
+                                                            <td class="qty" width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center qty_sale"
+                                                                       min="1" name="quanity[]"
+                                                                       value="{{ $saleD->qty }}" step="any"
+                                                                       required/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center bouns"
+                                                                       value="{{ $saleD->bonus }}" name="bouns[]"
+                                                                       step="any"/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-end purchase_price price"
+                                                                       value="{{ $saleD->price }}"
+                                                                       name="purchase_price[]" step="any" required/>
+                                                                <input type="hidden" class="total_rate"
+                                                                       name=total_rate[]
+                                                                       value="{{  $saleD->price * $saleD->qty }}"/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center sales_tax"
+                                                                       value="{{ $saleD->sales_tax }}"
+                                                                       name="sales_tax[]" step="any" required/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center adv_tax"
+                                                                       value="{{ $saleD->adv_tax }}"
+                                                                       name="adv_tax[]" step="any" required/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-end adv_tax_value"
+                                                                       value="{{ $saleD->adv_tax_value }}"
+                                                                       name="adv_tax_value[]" step="any" required/>
+                                                            </td>
+                                                            <td width='3%'>
+                                                                <input
+                                                                    class="form-control form-check-input discount-check"
+                                                                    type="checkbox" name="discount_check[]">
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-center discount"
+                                                                       value="{{ $saleD->discount }}"
+                                                                       name="purchase_discount[]" step="any"
+                                                                       readonly/>
+                                                            </td>
+                                                            <td width='7%'>
+                                                                <input type="number"
+                                                                       class="form-control text-end after_discount"
+                                                                       value="{{ $saleD->after_discount }}"
+                                                                       name="after_discount[]" step="any" readonly/>
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                       class="form-control text-end line_total"
+                                                                       value="{{ $saleD->line_total }}"
+                                                                       name="line_total[]" step="any" readonly/>
+                                                                <input type="hidden" class="hidden_total"
+                                                                       name="total" value="0">
+                                                                <input type="hidden" class="table_batch_id"
+                                                                       name="table_batch_id[]"
+                                                                       value="{{ $saleD->batch_id }}">
+                                                                <input type="hidden" name="id[]"
+                                                                       value="{{ $saleD->id }}">
+                                                            </td>
+                                                            <!-- <td>
+                                                                <button type="button" class="delete_row btn btn-sm btn-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td> -->
+                                                        </tr>
+                                                        <?php $counter++;
+                                                        $row_id++;
+                                                        $granttotal += $saleD->line_total;
                                                         ?>
-                                                        @foreach($saleDetail as $saleD)
-                                                            <tr onkeyup="calc(id.valueOf())" class="table_append_rows"
-                                                                id="table_append_rows_{{$row_id}}">
-                                                                <td>{{ $counter }}</td>
-                                                                <td>{{ $saleD->product->name }}
-                                                                    <input type="hidden" class="product_id"
-                                                                           name="product_id[]"
-                                                                           value="{{ $saleD->product_id }}"/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <button type="button" data-bs-toggle="modal"
-                                                                            class="btn btn-primary btn-sm edit_modal batch_no_id"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target=".bs-example-modal-lg"
-                                                                            data-product_id="{{ $saleD->product_id }}"> {{ $saleD->batch->batch_no }}
-                                                                        <i class="dripicons-document-edit"></i>
-                                                                    </button>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number" class="form-control text-center all_qty"
-                                                                           min="1" value="" step="any" disabled/>
-                                                                </td>
-                                                                <td class="qty" width='7%'>
-                                                                    <input type="number" class="form-control text-center qty_sale"
-                                                                           min="1" name="quanity[]"
-                                                                           value="{{ $saleD->qty }}" step="any"
-                                                                           required/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number" class="form-control text-center bouns"
-                                                                           value="{{ $saleD->bonus }}" name="bouns[]"
-                                                                           step="any"/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number"
-                                                                           class="form-control text-end purchase_price price"
-                                                                           value="{{ $saleD->price }}"
-                                                                           name="purchase_price[]" step="any" required/>
-                                                                    <input type="hidden" class="total_rate"
-                                                                           name=total_rate[]
-                                                                           value="{{  $saleD->price * $saleD->qty }}"/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number" class="form-control text-center sales_tax"
-                                                                           value="{{ $saleD->sales_tax }}"
-                                                                           name="sales_tax[]" step="any" required/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number" class="form-control text-center adv_tax"
-                                                                           value="{{ $saleD->adv_tax }}"
-                                                                           name="adv_tax[]" step="any" required/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number"
-                                                                           class="form-control text-end adv_tax_value"
-                                                                           value="{{ $saleD->adv_tax_value }}"
-                                                                           name="adv_tax_value[]" step="any" required/>
-                                                                </td>
-                                                                <td width='3%'>
-                                                                    <input
-                                                                        class="form-control form-check-input discount-check"
-                                                                        type="checkbox" name="discount_check[]">
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number" class="form-control text-center discount"
-                                                                           value="{{ $saleD->discount }}"
-                                                                           name="purchase_discount[]" step="any"
-                                                                           readonly/>
-                                                                </td>
-                                                                <td width='7%'>
-                                                                    <input type="number"
-                                                                           class="form-control text-end after_discount"
-                                                                           value="{{ $saleD->after_discount }}"
-                                                                           name="after_discount[]" step="any" readonly/>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="number" class="form-control text-end line_total"
-                                                                           value="{{ $saleD->line_total }}"
-                                                                           name="line_total[]" step="any" readonly/>
-                                                                    <input type="hidden" class="hidden_total"
-                                                                           name="total" value="0">
-                                                                    <input type="hidden" class="table_batch_id"
-                                                                           name="table_batch_id[]"
-                                                                           value="{{ $saleD->batch_id }}">
-                                                                    <input type="hidden" name="id[]"
-                                                                           value="{{ $saleD->id }}">
-                                                                </td>
-                                                                <!-- <td>
-                                                                    <button type="button" class="delete_row btn btn-sm btn-danger">
-                                                                        <i class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </td> -->
-                                                            </tr>
-                                                            <?php $counter++;
-                                                            $row_id++;
-                                                            $granttotal += $saleD->line_total;
-                                                            ?>
-                                                        @endforeach
-                                                    @endif
-                                                    </tbody>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td style="width:10%;text-align:right">Grand Total</td>
-                                                        <td style="width:8%;text-align:right"
-                                                            class="_tfootTotal"> {{ $granttotal }}</td>
-                                                    </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
+                                                    @endforeach
+                                                @endif
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="width:10%;text-align:right">Grand Total</td>
+                                                    <td style="width:8%;text-align:right"
+                                                        class="_tfootTotal"> {{ $granttotal }}</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="d-flex justify-content-end">
-                                            @if(isset(($sale)))
-                                                <button type="submit" class="btn btn-primary me-1" name="update">
-                                                    Update
-                                                </button>
-                                                <button type="submit" class="btn btn-warning me-1" name="update-post">
-                                                    Update & Post
-                                                </button>
-                                                <a class="btn btn-danger mx-0" href="{{ url('purchaseSale') }}">Exit</a>
-                                            @else
-                                                <button type="submit" class="btn btn-success me-1">Save</button>
-                                                <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
-                                            @endif
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex justify-content-end">
+                                        @if(isset(($sale)))
+                                            <button type="submit" class="btn btn-primary me-1" name="update">
+                                                Update
+                                            </button>
+                                            <button type="submit" class="btn btn-warning me-1" name="update-post">
+                                                Update & Post
+                                            </button>
+                                            <a class="btn btn-danger mx-0" href="{{ url('purchaseSale') }}">Exit</a>
+                                        @else
+                                            <button type="submit" class="btn btn-success me-1">Save</button>
+                                            <a class="btn btn-danger mx-0" href="{{ url('/') }}">Exit</a>
+                                        @endif
                                     </div>
-
+                                </div>
                         </form>
                 </div>
-                <!-- end card body -->
             </div>
-            <!-- end card -->
         </div>
-        <!-- end col -->
     </div>
 
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"

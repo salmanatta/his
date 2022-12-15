@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\employee\Employee;
+use App\Models\purchases\Supplier;
 use Illuminate\Http\Request;
 
 class SalesTargetController extends Controller
 {
     public function sales_target()
     {
-//        $employees = Employee::all();
-//        return view('pages.pre_configuration.employee.index',compact('employees'));
-        return view('pages.sales-target.salesgit sta_target');
+        $suppliers = Supplier::all();
+        return view('pages.sales-target.sales_target',compact('suppliers'));
+    }
+    public function sales_target_store(Request $request)
+    {
+        dd($request->all());
     }
 }

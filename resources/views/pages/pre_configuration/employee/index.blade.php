@@ -24,25 +24,25 @@
                         <tr>
                             <th class="text-center"> ID</th>
                             <th class="align-middle">Employee Name</th>
+                            <th class="align-middle">Designation</th>
                             <th class="align-middle">Contact</th>
                             <th class="align-middle">Fax</th>
                             <th class="align-middle">Email</th>
                             <!-- <th class="align-middle">Payment Method</th>
                             <th class="align-middle">View Details</th> -->
-                            <th class="text-center"">Action</th>
+                            <th class="text-center">Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($employees as $employee)
                             <tr>
-
                                 <td class="text-center">{{$employee->id}}</td>
                                 <td>{{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}</td>
+                                <td>{{$employee->designation->title}}</td>
                                 <td>{{$employee->phone_off}}</td>
                                 <td>{{$employee->fax}}</td>
                                 <td>{{$employee->email}}</td>
                                 <td class="text-center">
-
 {{--                                    <div class="d-flex gap-3">--}}
 {{--                                        <a href="#" class="btn btn-primary btn-sm detail_view_button"--}}
 {{--                                           data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg"--}}

@@ -11,16 +11,18 @@
                 </tr>
                 </thead>
                 <tbody>
+                @if(isset($suppliers))
                 @foreach($suppliers as $supplier)
                     <tr>
                         <td class="text-center">
-                            <input type="checkbox" name="activeCheck" {{ isset($supplier->supplier_id) ? 'checked' : '' }} id="activeCheck_{{ $supplier->id }}" onclick="getSupplier({{ $supplier->id }})">
+                            <input type="checkbox" name="activeCheck" {{ \App\Models\EmployeeSupplier::whereEmployeeId($employee->id)->whereSupplierId($supplier->id)->count() ? 'checked' : '' }} id="activeCheck_{{ $supplier->id }}" onclick="getSupplier({{ $supplier->id }})">
                             <input type="hidden" name="supplier_id" id="supplier_id" value="supplier_id">
                             <input type="hidden" name="employee_id" id="employee_id" value="{{ $employee->id }}">
                         </td>
                         <td>{{ $supplier->name }}</td>
                     </tr>
                 @endforeach
+                @endif
                 </tbody>
             </table>
         </div>

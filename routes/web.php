@@ -81,7 +81,7 @@ Route::get('/', function () {
 
 Route::get('get-data/{id}' , [RegionController::class , 'getData']);
 Route::post('save-region' , [RegionController::class , 'saveRegion']);
-Route::get('get-master-region/{id}',[EmployeeController::class,'getMasterRegion']);
+Route::get('get-master-region/{id}/{emp}',[EmployeeController::class,'getMasterRegion']);
 
 // ===================start restore backup to ====================================
 Route::get('backup', function () {
@@ -107,6 +107,7 @@ Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 // ==============work on product ====================
 Route::get('getProduct/{id}', 'App\Http\Controllers\pre_configuration\ProductController@getProduct')->name('getProduct')->middleware('auth');
 Route::get('getSupplierGroup/{id}',[ProductController::class,'get_supplier_group']);
+Route::get('getGroupProduct/{id}',[ProductController::class,'get_group_product']);
 
 Route::post('infoFind', 'App\Http\Controllers\ProductInfoController@infoFind')->name('infoFind');
 Route::post('discountFind', 'App\Http\Controllers\ProductInfoController@discountFind')->name('discountFind');
@@ -302,6 +303,7 @@ Route::post('batch-update/{id}',[StockAdjustmentsController::class,'batch_update
 // ============== End Batch Adjustment ============
 // ============= Sales Target ==============
 Route::get('sales-target',[SalesTargetController::class,'sales_target'])->middleware('auth');
+Route::post('sales-target',[SalesTargetController::class,'sales_target_store'])->middleware('auth');
 // ============= End Sales Target ===========
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

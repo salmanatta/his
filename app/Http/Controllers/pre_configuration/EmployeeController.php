@@ -87,7 +87,8 @@ class EmployeeController extends Controller
             $user->employee_id         = $employee->id;
             $user->save();
         }
-        return redirect()->route('employees.index')->with('success','Data Added Successfully!');
+
+        return redirect()->route('employees.edit' , $employee->id)->with('success','Data Added Successfully!');
     }
 
     /**
@@ -114,9 +115,8 @@ class EmployeeController extends Controller
         $data['designations']=Designation::all();
         $data['manager'] = Employee::where('designation_id',2)->where('branch_id',auth()->user()->branch_id)->get();
 //        $data['suppliers'] = Supplier::all();
-        $data['suppliers'] = DB::table('suppliers')->leftJoin('employee_suppliers','suppliers.id','=','employee_suppliers.supplier_id')
-            ->select('suppliers.id','employee_suppliers.supplier_id','suppliers.name')
-            ->get();
+        $data['suppliers'] = Supplier::all();
+//            DB::select(DB::raw('select s.id SUP_ID , s.name , es.employee_id , es.supplier_id , e.id , e.first_name from suppliers s left join employee_suppliers es on s.id = es.supplier_id left join employees e on e.id = es.employee_id where e.id = '.$id.' or 1=1'));
         $data['regions'] = Region::where('region_id','0')->get();
         return view('pages.pre_configuration.employee.create',$data);
     }
@@ -168,13 +168,17 @@ class EmployeeController extends Controller
         $empSup->delete();
         return 1;
     }
-    public function getMasterRegion($id)
+    public function getMasterRegion($id,$emp)
     {
-//        $regions = Region::where('main_region_id',$id)->where('level_no',0)->get();
-          $regions = DB::table('regions')->leftJoin('employee_regions','regions.id','=','employee_regions.region_id')
-              ->where('main_region_id',$id)->where('level_no',0)
-              ->select('regions.id','employee_regions.region_id','regions.name')->get();
-        return $regions;
+        $regions = Region::where('main_region_id',$id)->where('level_no',0)->get();
+        $arr = [];
+        foreach($regions as $region) {
+            $arr[] = ['region_id' => $region->id , 'region_name' => $region->name , 'exists' => EmployeeRegions::whereEmployeeId($emp)->whereRegionId($region->id)->count() ? 1 : 0];
+        }
+//          $regions = DB::table('regions')->leftJoin('employee_regions','regions.id','=','employee_regions.region_id')
+//              ->where('main_region_id',$id)->where('level_no',0)
+//              ->select('regions.id','employee_regions.region_id','regions.name')->get();
+        return $arr;
     }
 
     public function employee_region_store(Request $request)

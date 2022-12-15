@@ -30,9 +30,9 @@
                 </div>
                 <table class="table table-bordered dt-responsive nowrap w-100">
                     <thead class="table-light">
-                    <th class="text-center""> Code #</th>
+                    <th class="text-center"> Code #</th>
                     <th class="align-middle">Product Name</th>
-                    <th class="align-middle">Short Name</th>
+                    <th class="align-middle">Supplier</th>
                     <th class="align-middle">Group</th>
                     <th class="align-middle">Packet</th>
                     <th class="align-middle">Comp Artd No</th>
@@ -44,7 +44,7 @@
                         <tr>
                             <td class="text-center">{{$product->product_code}}</td>
                             <td>{{$product->name}}</td>
-                            <td>{{$product->short_name}}</td>
+                            <td>{{isset($product->supplier->name) ? $product->supplier->name : '' }}</td>
                             <td>{{isset($product->group->name) ? $product->group->name : '' }}</td>
                             <td>{{$product->packet}}</td>
                             <td>{{$product->comp_artd_no}}</td>

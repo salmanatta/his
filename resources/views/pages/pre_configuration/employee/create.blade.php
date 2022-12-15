@@ -162,7 +162,7 @@
                             <a class="btn btn-danger mx-0" href="{{ route('employees.index') }}">Exit</a>
                         </div>
                     </form>
-                    @if(isset($employee))
+{{--                    @if(isset($employee))--}}
                             {{-- ======== Tab Pages ========--}}
                             <div class="tab">
                                 <ul class="nav nav-tabs" role="tablist">
@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                         {{-- ======= End Tab Pages ======--}}
-                        @endif
+{{--                        @endif--}}
                 </div>
             </div>
         </div>
@@ -245,20 +245,24 @@
     };
     $('#selectRegion').change(function(){
         $('.region_data').empty();
+        // (data[i].region_id != null && data[i].region_id != "" ? 'checked' : '' )
+        {{--var regid = {{ \App\Models\EmployeeRegions:: }}--}}
         $.ajax({
             method: 'get',
-            url: "{{ url('get-master-region')}}/"+$('#selectRegion').val(),
+            url: "{{ url('get-master-region')}}/"+$('#selectRegion').val()+"/"+{{ isset($employee->id) ? $employee->id : '' }},
             success: function (data) {
                     // console.log(data);
                 for (var i=0 ;i< data.length;i++){
+                    console.log(data[i]);
                     // console.log(data[i]);
+
                     $('.region_data').append('<tr>' +
                         '<td class="text-center">' +
-                        '<input type="checkbox" name="activeCheck" '+ (data[i].region_id != null && data[i].region_id != "" ? 'checked' : '' )+' onclick="getRegion('+ data[i].id +')" id="regionCheck_'+data[i].id +'">' +
-                        '<input type="hidden" name="supplier_id" id="supplier_id" value="'+ data[i].id+ '">'+
-                        '<input type="hidden" name="regionEmp_id" id="regionEmp_id" value="'+ {{$employee->id }} +'">'+
+                        '<input type="checkbox" name="activeCheck" '+(data[i].exists == 1 ? 'checked' : '')+' onclick="getRegion('+ data[i].region_id +')" id="regionCheck_'+data[i].region_id +'">' +
+                        '<input type="hidden" name="supplier_id" id="supplier_id" value="'+ data[i].region_id+ '">'+
+                        '<input type="hidden" name="regionEmp_id" id="regionEmp_id" value="'+ {{ isset($employee->id) ? $employee->id : '' }} +'">'+
                         '</td>' +
-                        '<td>'+ data[i].name +'</td>'+
+                        '<td>'+ data[i].region_name +'</td>'+
                         '</tr>');
                 }
 

@@ -25,20 +25,22 @@
                                                            for="Customer">Target Start Date</label>
                                                     <input type="date" name="start_date"
                                                            value="{{ isset($sale)? date('d/m/Y', strtotime($sale->invoice_date)) : date('m/d/Y') }}"
-                                                            class="form-control">
+                                                            class="form-control" required>
+                                                    <input type="hidden" name="branch_id" value="{{ auth()->user()->branch_id }}">
+                                                    <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <label class="form-label"
                                                            for="Customer">Target End Date</label>
                                                     <input type="date" name="end_date"
                                                            value="{{ isset($sale)? date('d/m/Y', strtotime($sale->invoice_date)) : date('m/d/Y') }}"
-                                                           class="form-control">
+                                                           class="form-control" required>
                                                 </div>
                                                 <div class="col-md-12 mb-3">
                                                     <label class="form-label"
                                                            for="Customer">Supplier</label>
                                                     <select class="form-control select2" id="supplier"
-                                                            name="supplier">
+                                                            name="supplier_id" required>
                                                         <option disabled selected> Select Supplier</option>
                                                         @foreach($suppliers as $data)
                                                             <option

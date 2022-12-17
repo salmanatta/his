@@ -4,7 +4,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Employee Registration </h4>
+                    <h4 class="card-title mb-4">Employee Registration123 </h4>
                     @if(isset($employee))
                     <form  class="" method="post" action="{{route('employees.update',$employee->id)}}">
                         @method('PATCH')
@@ -128,10 +128,10 @@
                             <div class="col-md-2" id="reportedDiv">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Reported to</label>
-                                    <select id="reported_to" wname="reported_to" class="form-select select2">
+                                    <select id="reported_to" name="reported_to" class="form-select select2">
                                         <option selected disabled="" value=""> -- Select Manager --</option>
                                         @foreach($manager as $mgr)
-                                            <option value="{{$mgr->id}}">{{$mgr->first_name.' '.$mgr->last_name}}</option>
+                                            <option value="{{$mgr->id}}" {{ isset($employee) ? $employee->reported_to == $mgr->id ? 'selected' : '' : '' }}>{{$mgr->first_name.' '.$mgr->last_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -193,7 +193,12 @@
 @push('script')
     <script>
     $(document).ready(function (){
-       $('#reportedDiv').hide();
+
+        var desgID = $('#designation_id').val();
+        if (desgID != 1) {
+            $('#reportedDiv').hide();
+        }
+
     });
 
     $('#designation_id').change(function(){
@@ -249,7 +254,7 @@
         {{--var regid = {{ \App\Models\EmployeeRegions:: }}--}}
         $.ajax({
             method: 'get',
-            url: "{{ url('get-master-region')}}/"+$('#selectRegion').val()+"/"+{{ isset($employee->id) ? $employee->id : '' }},
+            url: "{{ url('get-master-region')}}/"+$('#selectRegion').val()+"/"+{{ isset($employee->id) ? $employee->id : '0' }},
             success: function (data) {
                     // console.log(data);
                 for (var i=0 ;i< data.length;i++){

@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SalesTargetDetail extends Model
+class SupplierDiscount extends Model
 {
-    protected $guarded = [];
     use HasFactory;
 }

@@ -145,6 +145,7 @@
                                               id="adress">{{ isset($employee) ? $employee->address : old('address') }}</textarea>
                                 </div>
                             </div>
+                            @if(!isset($employee))
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <label for="formrow-inputZip" class="form-label">Create User </label><br>
@@ -152,6 +153,7 @@
                                     <input type="radio" value="0" name="createUser" required checked>&nbsp;No
                                 </div>
                             </div>
+                            @endif
                         </div>
                         <div class="d-flex justify-content-end">
                             @if(isset($employee))

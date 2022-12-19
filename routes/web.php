@@ -232,8 +232,6 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 //     Route::get("test-role",[SaleInvoiceController::class,"testRole"]);
 
 // });
-
-
 Route::get("get_all_prod",[StoreController::class,"getAllProducts"])->middleware("auth");;
 Route::get("get_prod",[StoreController::class,"getProducts"])->middleware("auth");
 Route::get('getStock', 'App\Http\Controllers\StoreController@getStock')->name('getStock');
@@ -242,7 +240,6 @@ Route::get('productGet', 'App\Http\Controllers\StoreController@productGet')->nam
 Route::post('transferProduct', 'App\Http\Controllers\StoreController@transferProduct')->name('transferProduct');
 Route::put('transferProductUpdate/{id}', 'App\Http\Controllers\StoreController@transferProductUpdate')->name('transferProduct.Update');
 /*----------  End Store Transfer  Resource Route  ----------*/
-
 
 // ===================== Product Purchase Side======
 Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
@@ -302,9 +299,14 @@ Route::get('batch-adjustment',[StockAdjustmentsController::class,'batch_adjustme
 Route::post('batch-update/{id}',[StockAdjustmentsController::class,'batch_update'])->middleware('auth');
 // ============== End Batch Adjustment ============
 // ============= Sales Target ==============
+
 Route::get('sales-target',[SalesTargetController::class,'sales_target'])->middleware('auth');
 Route::post('sales-target',[SalesTargetController::class,'sales_target_store'])->middleware('auth');
+Route::get('sales-target-grid',[SalesTargetController::class,'sales_target_grid'])->middleware('auth');
 // ============= End Sales Target ===========
+// ============= Supplier Discount =========
+Route::get('supplier-discount',[GeneralController::class,'supplier_discount'])->middleware('auth');
+// ============= End Supplier Discount =========
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');

@@ -45,6 +45,7 @@
                     <form action="" id="discountFormId" method="POST">
                         @csrf
                         Discount % <input type="number" class="form-control" name="discount">
+                        Amount <input type="number" class="form-control" name="amount">
                         Start Date <input type="date" name="start_date" class="form-control">
                         End Date<input type="date" name="end_date" class="form-control">
                         <br><br>
@@ -133,6 +134,7 @@
                             <thead class="table-light">
                             <tr>
                                 <th class="text-center"> #</th>
+                                <th class="text-center">Amount</th>
                                 <th class="text-center">Discount</th>
                                 <th class="text-center">Start Date</th>
                                 <th class="text-center">End Date</th>
@@ -143,6 +145,9 @@
                             @foreach($discounts as $value)
                                 <tr data-id="{{$value->id}}">
                                     <td class="text-center"><b>{{$value->id}}</b></td>
+                                    <td>
+                                        <input type="number" class="form-control text-center" style="border: 0px none;background: white" id="amount_{{$value->id}}" name="amount" value="{{$value->amount}}" disabled>
+                                    </td>
                                     <td>
                                         <input type="number" class="form-control text-center" style="border: 0px none;background: white" id="discount_{{$value->id}}" name="discount" value="{{$value->discount}}" disabled>
                                     </td>
@@ -210,6 +215,7 @@
         function enableTextFeilDiscount(id)
         {
             $('#discount_'+id).prop("disabled", false);
+            $('#amount_'+id).prop("disabled", false);
             $('#start_date_'+id).prop("disabled", false);
             $('#end_date_'+id).prop("disabled", false);
             $('#edit_discount_'+id).hide();
@@ -226,6 +232,7 @@
                     'discount': $('#discount_'+id).val(),
                     'start_date' : $('#start_date_'+id).val(),
                     'end_date' : $('#end_date_'+id).val(),
+                    'amount' : $('#amount_'+id).val(),
                     _token: token,
                 },
                 success: function (data) {
@@ -304,6 +311,7 @@
                     $.each(data, function (index, value) {
                         html += `<tr>
                                  <td class="text-center"><b>`+ value.id +`</b> </td>
+                                 <td ><input type="number" class="form-control text-center" style="border: 0px none;background: white" id="amount_`+value.id +`" name="amount" value="`+value.amount +`" disabled></td>
                                  <td ><input type="number" class="form-control text-center" style="border: 0px none;background: white" id="discount_`+value.id +`" name="discount" value="`+value.discount +`" disabled></td>
                                  <td><input type="date" class="form-control text-center" style="border: 0px none;background: white" id="start_date_`+ value.id +`" name="start_date" value="`+ value.start_date +`" disabled></td>
                                  <td><input type="date" class="form-control text-center" style="border: 0px none;background: white" id="end_date_`+ value.id +`" name="end_date" value="`+ value.end_date + `" disabled></td>

@@ -305,7 +305,10 @@ Route::post('sales-target',[SalesTargetController::class,'sales_target_store'])-
 Route::get('sales-target-grid',[SalesTargetController::class,'sales_target_grid'])->middleware('auth');
 // ============= End Sales Target ===========
 // ============= Supplier Discount =========
+Route::get('supplier-discount-grid',[GeneralController::class,'supplier_discount_grid'])->middleware('auth');
 Route::get('supplier-discount',[GeneralController::class,'supplier_discount'])->middleware('auth');
+Route::post('supplier-discount-create',[GeneralController::class,'supplier_discount_create'])->middleware('auth');
+Route::get('supplier-discount-edit/{id}',[GeneralController::class,'supplier_discount_edit'])->middleware('auth');
 // ============= End Supplier Discount =========
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

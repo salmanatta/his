@@ -8,6 +8,8 @@ use App\Models\CalendarSetup;
 //use Barryvdh\DomPDF\PDF;
 use App\Models\PurchaseInvoice;
 use App\Models\PurchaseInvoiceDetail;
+use App\Models\purchases\Supplier;
+use App\Models\SupplierDiscount;
 use Illuminate\Http\Request;
 use App\Models\GeneralBonus;
 use App\Models\products\Product;
@@ -258,9 +260,48 @@ class GeneralController extends Controller
         return $pdf->stream("abc.pdf", array("Attachment" => 0)); // 0 to open in browser, 1 to download
     }
 
+    public function supplier_discount_grid()
+    {
+        $supplier_discount = SupplierDiscount::all();
+        return view('general-rule.supplier_discount_grid',compact('supplier_discount'));
+    }
+
     public function supplier_discount()
     {
-        return view('general-rule.supplier_discount');
+        $suppliers = Supplier::all();
+        return view('general-rule.supplier-discount',compact('suppliers'));
+    }
+
+    public function supplier_discount_create(Request $request)
+    {
+        $this->validate($request,
+            [
+                'supplier_id' => 'required',
+                'amount'      => 'required',
+                'start_date'  => 'required',
+                'end_date'    => 'required',
+            ],
+            [
+                'supplier_id.required' => 'Please select Supplier Name.',
+                'amount.required' => 'Please enter Amount.',
+                'start_date.required' => 'Please select Start Date.',
+                'end_date.required' => 'Please select End Date.',
+            ]);
+
+        $supplierDiscount = new SupplierDiscount();
+        $supplierDiscount->supplier_id = $request->supplier_id;
+        $supplierDiscount->amount      = $request->amount;
+        $supplierDiscount->start_date  = $request->start_date;
+        $supplierDiscount->end_date    = $request->end_date;
+        $supplierDiscount->save();
+        return redirect('supplier-discount-grid')->with('success', "Data Added Successfully!");
+    }
+
+    public function supplier_discount_edit($id)
+    {
+        $supplierDiscount = SupplierDiscount::find($id);
+        $suppliers = Supplier::all();
+        return view('general-rule.supplier-discount',compact('suppliers','supplierDiscount'));
     }
 
 }

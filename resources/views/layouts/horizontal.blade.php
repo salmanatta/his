@@ -189,7 +189,7 @@
                             <a href="{{route('product_categories.index')}}" class="dropdown-item" key="t-saas">Product Category </a>
                             <a href="{{route('product_groups.index')}}" class="dropdown-item" key=" t-default">Product Group </a>
                             <a href="{{url('general')}}" class="dropdown-item" key=" t-default">Define Product Rule</a>
-                            <a href="{{url('supplier-discount')}}" class="dropdown-item" key=" t-default">Supplier Discount</a>
+                            <a href="{{ url('supplier-discount-grid') }}" class="dropdown-item" key=" t-default">Supplier Discount</a>
                             <a href="{{url('apply-rule')}}" class="dropdown-item" key=" t-default">Apply Product Rule</a>
                             <a href="{{route('customers.index')}}" class="dropdown-item" key="t-saas">Customer </a>
                             <a href="{{route('suppliers.index')}}" class="dropdown-item" key="t-saas">Supplier </a>

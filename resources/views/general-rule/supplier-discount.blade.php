@@ -8,12 +8,12 @@
                         <div class="card-body">
                             <h4 class="card-title mb-4"> Supplier Discount </h4>
                             @if(isset($supplierDiscount))
-                                <form method="post" action="{{ route('license_types.update',$license->id) }}">
+                                <form method="post" action="{{ url('supplier-discount-update',$supplierDiscount->id) }}">
                                     @method('PATCH')
-                                    @else
-                                        <form method="post" action="{{ url('supplier-discount-create')}}">
-                                            @endif
-                                            @csrf
+                            @else
+                                <form method="post" action="{{ url('supplier-discount-create')}}">
+                            @endif
+                                        @csrf
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="mb-3">
@@ -21,7 +21,7 @@
                                                         <select name="supplier_id" class="form-select select2" >
                                                         <option disabled selected> -- Select Supplier -- </option>
                                                             @foreach($suppliers as $supplier)
-                                                                <option value="{{ $supplier->id }}" >{{ $supplier->name }}</option>
+                                                                <option value="{{ $supplier->id }}" {{ isset($supplierDiscount) ? $supplierDiscount->supplier_id == $supplier->id ? 'selected' : '' : '' }} >{{ $supplier->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         @error('supplier_id')
@@ -47,7 +47,7 @@
                                                     <div class="mb-3">
                                                         <label for="name" class="form-label">Start Date</label>
                                                         <input type="date" name="start_date"
-                                                               value="{{ isset($supplierDiscount) ? $license->start_date : old('start_date') }}"
+                                                               value="{{ isset($supplierDiscount) ? $supplierDiscount->start_date : old('start_date') }}"
                                                                class="form-control">
                                                         @error('start_date')
                                                         <span class="text-danger">{{$message}}</span>
@@ -69,7 +69,7 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-end">
-                                                @if(isset($license))
+                                                @if(isset($supplierDiscount))
                                                     <button type="submit" class="btn btn-warning me-1">Update</button>
                                                 @else
                                                     <button type="submit" class="btn btn-success me-1">Save</button>

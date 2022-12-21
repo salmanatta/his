@@ -164,17 +164,12 @@ class PurchaseController extends Controller
             $todate = Carbon::now();
             $todate = date('Y-m-d', strtotime($todate));
         }
-
-        //return $purchaseData;
         return view('pages.reports.purchase.purchase_report', compact('suppliers'));
-
     }
 
     public function unstokePurchaseReport(Request $request)
     {
-
         return view('pages.reports.purchase.unstokepurchase_report');
-
     }
 
     public function searchPurchaseReport(Request $request)
@@ -210,7 +205,6 @@ class PurchaseController extends Controller
 
     public function unstokePurchaseDetail(Request $request, $id)
     {
-
         $purchase = PurchaseInvoice::where('id', $id)->with('supplier', 'branch', 'user')->first();
         $purchase_details = PurchaseInvoiceDetail::where('purchase_invoice_detail_id', $id)->get();
         return view('pages.reports.purchase.purchase_details', compact('purchase', 'purchase_details'));
@@ -344,6 +338,7 @@ class PurchaseController extends Controller
             return back()->with('info', "Data Updated Successfully!");
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -399,5 +394,13 @@ class PurchaseController extends Controller
         } else {
             return view('pages.reports.purchase.supplier-wise-purchase', compact('suppliers'));
         }
+    }
+
+    public function purchase_adjustment($id)
+    {
+        $purchase = PurchaseInvoice::where('id', $id)->with('supplier', 'branch', 'user')->first();
+        $purchase_details = PurchaseInvoiceDetail::where('purchase_invoice_detail_id', $id)->get();
+        return view('pages.reports.purchase.purchase_adjustment', compact('purchase', 'purchase_details'));
+
     }
 }

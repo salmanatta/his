@@ -241,7 +241,7 @@ Route::post('transferProduct', 'App\Http\Controllers\StoreController@transferPro
 Route::put('transferProductUpdate/{id}', 'App\Http\Controllers\StoreController@transferProductUpdate')->name('transferProduct.Update');
 /*----------  End Store Transfer  Resource Route  ----------*/
 
-// ===================== Product Purchase Side======
+// ===================== Product Purchase Side ======
 Route::resource('purchase_invoices', 'App\Http\Controllers\PurchaseController')->middleware('auth');
 Route::get("/purchase/invoice",[PurchaseController::class,"render"])->middleware("auth");
 Route::get("/purchase/return",[PurchaseController::class,"pruchaseReturn"])->middleware("auth");
@@ -268,6 +268,7 @@ Route::get('updatePurchaseStatus/{id}',[PurchaseController::class,'updatePurchas
 Route::get('date-wise-stock-view',[ProductController::class,"date_wise_stock_view"])->middleware('auth');
 Route::get('date-wise-stock-data',[ProductController::class,'date_wise_stock_data'])->middleware('auth');
 Route::get('supplier-wise-purchase',[PurchaseController::class,'suppler_wise_purchase'])->middleware('auth');
+Route::get('purchase-adjustment/{id}',[PurchaseController::class,'purchase_adjustment'])->middleware('auth');
 
 // ==================End Reports =================
 // ================== Sale Reports ===============
@@ -309,6 +310,7 @@ Route::get('supplier-discount-grid',[GeneralController::class,'supplier_discount
 Route::get('supplier-discount',[GeneralController::class,'supplier_discount'])->middleware('auth');
 Route::post('supplier-discount-create',[GeneralController::class,'supplier_discount_create'])->middleware('auth');
 Route::get('supplier-discount-edit/{id}',[GeneralController::class,'supplier_discount_edit'])->middleware('auth');
+Route::patch('supplier-discount-update/{id}',[GeneralController::class,'supplier_discount_update'])->middleware('auth');
 // ============= End Supplier Discount =========
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');

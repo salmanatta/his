@@ -304,4 +304,15 @@ class GeneralController extends Controller
         return view('general-rule.supplier-discount',compact('suppliers','supplierDiscount'));
     }
 
+    public function supplier_discount_update(Request $request,$id)
+    {
+        $supplierDiscount = SupplierDiscount::find($id);
+        $supplierDiscount->supplier_id = $request->supplier_id;
+        $supplierDiscount->amount      = $request->amount;
+        $supplierDiscount->start_date  = $request->start_date;
+        $supplierDiscount->end_date    = $request->end_date;
+        $supplierDiscount->save();
+        return redirect('supplier-discount-grid')->with('info',"Data Updated Successfully!");
+    }
+
 }

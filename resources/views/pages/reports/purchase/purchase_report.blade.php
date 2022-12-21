@@ -5,7 +5,6 @@
             <h3> Purchase Invoice Approval</h3>
         </div>
         <br>
-
         <div class="row">
             <!-- <form method="get" id="add_form" action=""> -->
             <form method="GET" action="{{ url('purchaseReport') }}">
@@ -73,22 +72,12 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between d-print-none">
-                        <button type="submit" id="search"
-                                class="btn btn-primary search_btn float-left printBlock">
-                            Search
-                        </button>
-{{--                        <div class="pull-right btn-group btn-group-lg hidden-print printBlock">--}}
-{{--                            <a id="print" target="_blank" class="btn btn-info">--}}
-{{--                                <i class="fa fa-print"></i> Print--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
+                        <button type="submit" id="search" class="btn btn-primary search_btn float-left printBlock">Search</button>
                     </div>
                 </div>
             </form>
         </div>
         <!-- end page title -->
-
-
         <div class="card">
             <div class="card-body">
                 <div class="col-lg-12">
@@ -108,6 +97,7 @@
                             <th scope="col">Status</th>
                             <th scope="col">Edit</th>
                             <th scope="col">View</th>
+                            <th scope="col">P. Adjustment</th>
                         </tr>
                         </thead>
                         <tbody id="append_here">
@@ -129,8 +119,7 @@
                                     <td></td>
                                 @else
                                     <td style="text-align:center;">
-                                        <a href="{{ url('view-purchase-invoice/'.$data->id) }}"
-                                           class="fas fa-check"></a>
+                                        <a href="{{ url('view-purchase-invoice/'.$data->id) }}" class="fas fa-check"></a>
                                     </td>
                                 @endif
                                 <td>
@@ -139,6 +128,16 @@
                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
                                         Print Invoice </a>
                                 </td>
+                                @if($data->inv_status == 'Post')
+                                    <td style="text-align:center;">
+                                        <a href="{{ url('purchase-adjustment') . '/' . $data->id }}"
+                                           style="border-radius: 44px;"
+                                           class="btn btn-secondary btn-sm btn-rounded waves-effect waves-light d-print-none">
+                                            Adjust Invoice </a>
+                                    </td>
+                                @else
+                                    <td></td>
+                                @endif
                             </tr>
                         @endforeach
                         @endif

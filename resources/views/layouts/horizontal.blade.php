@@ -213,10 +213,11 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                            <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Purchase
-                                Invoice </a>
+                            <a href="{{url('/purchase/invoice')}}" class="dropdown-item" key="t-saas">Purchase Invoice
+                            </a>
                             <a href="{{url('/purchase/return')}}" class="dropdown-item" key="t-saas">Purchase Return
-                                Invoice </a>
+                                Invoice
+                            </a>
                             <a href="{{url('purchaseReport')}}" class="dropdown-item" key="t-form-elements">
                                 Purchase Invoice Approval
                             </a>

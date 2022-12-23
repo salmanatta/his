@@ -4,7 +4,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Employee Registration123 </h4>
+                    <h4 class="card-title mb-4">Employee Registration </h4>
                     @if(isset($employee))
                     <form  class="" method="post" action="{{route('employees.update',$employee->id)}}">
                         @method('PATCH')

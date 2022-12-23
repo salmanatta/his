@@ -54,19 +54,20 @@
                                                             </div>
                                                             <div class="mb-3 col-md-12">
                                                                 <label class="form-label" for="supplier">Supplier Name</label>
-                                                                @if(isset($purchaseM))
-                                                                    <input type="text" class="form-control" name="" value="{{ isset($purchaseM) ? $purchaseM->supplier->name : '' }}" readonly>
-                                                                @else
                                                                     <select class="select2 form-control _supplier_select" name="suplier_id" id="supplier">
+                                                                        <option value="" disabled selected>-- Select Supplier --</option>
+                                                                        @foreach($suppliers as $supplier)
+                                                                            <option value="{{ $supplier->id }}" {{ isset($purchaseM) ? $purchaseM->suplier_id == $supplier->id ? 'selected' : '' : ''  }}>{{ $supplier->name }}</option>
+                                                                        @endforeach
                                                                     </select>
                                                                     @error('suplier_id')
                                                                     <span class="text-danger">{{$message}}</span>
                                                                     @enderror
-                                                                @endif
+
                                                             </div>
                                                             <div class="mb-3 col-md-12">
                                                                 <label class="form-label" for="freight">Freight</label>
-                                                                <input type="text" class="form-control" onkeyup="do_calculation()" name="freight" id="freight" value="{{ isset($purchaseM) ? $purchaseM->freight : ''  }}">
+                                                                <input type="text" class="form-control" name="freight" id="freight" value="{{ isset($purchaseM) ? $purchaseM->freight : ''  }}">
                                                             </div>
                                                             <div class="mb-3 col-md-12">
                                                                 <label class="form-label" for="_products_select">Product</label>
@@ -83,12 +84,9 @@
                                                                 <label class="form-label" for="branch">Branch Name</label>
                                                                 <input type="text" class="form-control" name="" value="{{ isset($purchaseM) ? $purchaseM->branch->name : auth()->user()->branch->name }}" readonly>
                                                                 <input type="hidden" value="{{ isset($purchaseM) ? $purchaseM->branch->id : auth()->user()->branch_id  }}" name="branch_id">
-                                                                {{--                                                <select class="select2 form-control _branch_select" name="branch_id" id="branch">--}}
-                                                                {{--                                                </select>--}}
                                                                 @error('branch_id')
                                                                 <span class="text-danger">{{$message}}</span>
                                                                 @enderror
-
                                                             </div>
                                                             <div class="mb-3 col-md-12">
                                                                 <label class="form-label" for="description">Description</label>
@@ -100,7 +98,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="table  order-list _purchaseTable">
+                                    <table class="table order-list _purchaseTable">
                                         <thead>
                                         <tr>
                                             <th>#</th>
@@ -206,21 +204,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- end card body -->
                             </div>
-                            <!-- end card -->
                         </div>
-                        <!-- end col -->
                     </div>
                 </form>
-                <!-- end row -->
+
                 @endsection
                 @push('script')
                     <script>
-                        {{--$("._branch_select").select2({--}}
+                        //***********  Get all suppliers
+                        {{--$("._supplier_select").select2({--}}
                         {{--    ajax: {--}}
                         {{--        type: 'get',--}}
-                        {{--        url: "{{url('get-all-branches')}}",--}}
+                        {{--        url: "{{url('/get-all-suppliers')}}",--}}
                         {{--        dataType: 'json',--}}
                         {{--        data: function(params) {--}}
                         {{--            return {--}}
@@ -235,31 +231,9 @@
                         {{--        },--}}
                         {{--        cache: true--}}
                         {{--    },--}}
-                        {{--    placeholder: '-- Select Branch --',--}}
+                        {{--    placeholder: '-- Select Supplier --',--}}
                         {{--    minimumInputLength: 2,--}}
                         {{--});--}}
-                        //***********  Get all suppliers
-                        $("._supplier_select").select2({
-                            ajax: {
-                                type: 'get',
-                                url: "{{url('/get-all-suppliers')}}",
-                                dataType: 'json',
-                                data: function(params) {
-                                    return {
-                                        q: params.term,
-                                    };
-                                },
-                                processResults: function(data, params) {
-                                    // console.log(data);
-                                    return {
-                                        results: data.items,
-                                    };
-                                },
-                                cache: true
-                            },
-                            placeholder: '-- Select Supplier --',
-                            minimumInputLength: 2,
-                        });
                         //////////////////***************************************
                         var row_id = $('table.order-list').children('tbody').find('tr').length;
                         var count = 1;
@@ -285,6 +259,7 @@
                             placeholder: 'Search for a product',
                             minimumInputLength: 2,
                         }).on('change', function(data) {
+
                             var id = $(this).val();
                             // console.log(id);
                             $.ajax({
@@ -308,28 +283,28 @@
         <input type="date" class="form-control expiry_date" value="" name="expiry_date[]" step="any" required/>
         </td>
         <td class="quanity">
-        <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="1" step="any" required/>
+        <input type="number" class="form-control quanity" style="text-align:center" min="1" name="quanity[]" value="1" step="any" required/>
         </td>
         <td class="purchase_price">
-        <input type="number" class="form-control text-end purchase_price" style="text-align:center" onKeyup="do_calculation()" value="` + data.trade_price + `"  name="purchase_price[]" step="any" required/>
+        <input type="number" class="form-control text-end purchase_price" style="text-align:center" value="` + data.trade_price + `"  name="purchase_price[]" step="any" required/>
         </td>
         <td class="total_price">
-        <input type="number" class="form-control total_price" style="text-align:right" value=""  name="total_price[]" step="any" readonly/>
+        <input type="number" class="form-control total_price" style="text-align:right" value="`+ 1 * data.trade_price  +`"  name="total_price[]" step="any" readonly/>
         </td>
         <td class="purchase_discount">
-        <input type="number" class="form-control text-center purchase_discount" onKeyup="do_calculation()" value="` + data.purchase_discount + `"  name="purchase_discount[]" step="any"/>
+        <input type="number" class="form-control text-center purchase_discount"  value="` + data.purchase_discount + `"  name="purchase_discount[]" step="any"/>
         </td>
         <td class="after_discount">
         <input type="number" class="form-control text-end after_discount" style="text-align:right" value="` + (data.purchase_price - data.purchase_discount) + `"  name="after_discount[]" step="any" readonly/>
         </td>
         <td class="sale_tax_value">
-        <input type="number" class="form-control text-center sale_tax_value" onKeyup="do_calculation()" value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
+        <input type="number" class="form-control text-center sale_tax_value"  value="` + data.sale_tax_value + `"  name="sale_tax_value[]" step="any"/>
         </td>
         <td class="adv_tax_value">
-        <input type="number" class="form-control text-center adv_tax_value" onKeyup="do_calculation()" value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
+        <input type="number" class="form-control text-center adv_tax_value"  value="` + data.adv_tax_non_filer + `"  name="adv_tax_value[]" step="any"/>
         </td>
         <td class="line_total">
-        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.purchase_price) + `"  name="line_total[]" step="any" readonly/>
+        <input type="number" class="form-control line_total" style="text-align:right" value="` + (data.trade_price +  data.sale_tax_value + data.adv_tax_non_filer) + `"  name="line_total[]" step="any" readonly/>
         </td>
         <td>
         <button type="button" class="delete_row btn btn-sm btn-danger" ><i class="fa fa-trash"></i></button>
@@ -353,46 +328,83 @@
                             // $('table.order-list').children("tfoot").children("tr").find("._tfootTotal").text(parseFloat(totalPrice - data.trade_price).toFixed(2));
                         });
 
-                        function do_calculation() {
-                            var line_total = 0;
-                            var sub_total = 0;
-                            var grand_discount = 0;
-                            var total_qty = 0;
-                            var product_count = 1;
-                            var grand_subtotal = 0;
-                            var freight = parseFloat(document.getElementById('freight').value);
-                            if (isNaN(freight)) {
-                                freight = 0;
+                        $("body").on('keyup' ,'table.order-list' , function() {
+                            var salesTax = 0;
+                            var advTax = 0;
+                            var discount_after = 0;
+                            var total = $(this).children('tbody').find('tr').length;
+                            var childs = $('.order-list').children('tbody').find('tr');
+                            for(var i=0;i<total;i++){
+                                var c = childs[i];
+                                 var rowID = $(c).attr('id');
+                                var qty = parseInt($(this).find('#'+rowID).find('input.quanity').val())
+                                var price = parseFloat($(this).find('#'+rowID).find('input.purchase_price').val()).toFixed(2);
+                                $(this).find('#'+rowID).find('input.total_price').val(parseFloat(qty * price).toFixed(2));
+                                var total_price = parseFloat($(this).find('#'+rowID).find('input.total_price').val()).toFixed(2);
+                                if (! isNaN($(this).find('#'+rowID).find('input.purchase_discount').val())){
+                                    var purchase_discount = $(this).find('#'+rowID).find('input.purchase_discount').val();
+                                    $(this).find('#'+rowID).find('input.after_discount').val((total_price * purchase_discount / 100).toFixed(2));
+                                    discount_after = $(this).find('#'+rowID).find('input.after_discount').val();
+                                }
+                                if (! isNaN($(this).find('#'+rowID).find('input.sale_tax_value').val())){
+                                    salesTax = parseFloat($(this).find('#'+rowID).find('input.sale_tax_value').val()).toFixed(2);
+                                }
+                                if (! isNaN($(this).find('#'+rowID).find('input.adv_tax_value').val())){
+                                    advTax = parseFloat($(this).find('#'+rowID).find('input.adv_tax_value').val()).toFixed(2);
+                                }
+                                if (isNaN(salesTax))
+                                {
+                                    salesTax = 0;
+                                }
+                                if (isNaN(advTax))
+                                {
+                                    advTax  = 0;
+                                }
+                                $(this).find('#'+rowID).find('input.line_total').val(parseFloat(total_price)  + parseFloat(salesTax)  + parseFloat(advTax)  - parseFloat(discount_after));
+                                console.log(parseFloat($(this).find('#'+rowID).find('input.sale_tax_value').val()).toFixed(2));
                             }
-                            $('.table_append_rows').each(function() {
-                                $(this).find('.product_count').text(product_count);
-                                var quanity = $(this).find('.quanity').find('input').val();
-                                var purchase_price = $(this).find('.purchase_price').find('input').val();
-                                var total_price = parseFloat(purchase_price * quanity).toFixed(2);
-                                $(this).find(".total_price").val(total_price);
-                                var purchase_discount = $(this).find('.purchase_discount').find('input').val();
-                                var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val());
-                                var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val());
-                                var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2);
-                                $(this).find('.after_discount').val(price_after_discount);
-                                if (isNaN(sale_tax_value)) {
-                                    sale_tax_value = 0;
-                                }
-                                if (isNaN(adv_tax_value)) {
-                                    adv_tax_value = 0;
-                                }
-                                var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
-                                $(this).find('.sub_total').val(row_sub_total);
-                                $(this).find('.line_total').val(row_sub_total);
-                                grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
+                        });
 
-                                $(".hidden_total").val(grand_subtotal);
-                                $("._tfootTotal").text(grand_subtotal);
-                                $("input[name='total_qty']").val(total_qty);
-                                $("input[name='item']").val(product_count);
-                                product_count++;
-
-                            });
+                        function do_calculation() {
+                            var a = 0;
+                            // var line_total = 0;
+                            // var sub_total = 0;
+                            // var grand_discount = 0;
+                            // var total_qty = 0;
+                            // var product_count = 1;
+                            // var grand_subtotal = 0;
+                            // var freight = parseFloat(document.getElementById('freight').value);
+                            // if (isNaN(freight)) {
+                            //     freight = 0;
+                            // }
+                            // $('.table_append_rows').each(function() {
+                            //     $(this).find('.product_count').text(product_count);
+                            //     var quanity = $(this).find('.quanity').find('input').val();
+                            //     var purchase_price = $(this).find('.purchase_price').find('input').val();
+                            //     var total_price = parseFloat(purchase_price * quanity).toFixed(2);
+                            //     $(this).find(".total_price").val(total_price);
+                            //     var purchase_discount = $(this).find('.purchase_discount').find('input').val();
+                            //     var sale_tax_value = parseFloat($(this).find('.sale_tax_value').find('input').val());
+                            //     var adv_tax_value = parseFloat($(this).find('.adv_tax_value').find('input').val());
+                            //     var price_after_discount = parseFloat((total_price * purchase_discount) / 100).toFixed(2);
+                            //     $(this).find('.after_discount').val(price_after_discount);
+                            //     if (isNaN(sale_tax_value)) {
+                            //         sale_tax_value = 0;
+                            //     }
+                            //     if (isNaN(adv_tax_value)) {
+                            //         adv_tax_value = 0;
+                            //     }
+                            //     var row_sub_total = parseFloat(total_price - price_after_discount + sale_tax_value + adv_tax_value).toFixed(2);
+                            //     $(this).find('.sub_total').val(row_sub_total);
+                            //     $(this).find('.line_total').val(row_sub_total);
+                            //     grand_subtotal = (parseFloat(grand_subtotal) + parseFloat(row_sub_total)).toFixed(2);
+                            //
+                            //     $(".hidden_total").val(grand_subtotal);
+                            //     $("._tfootTotal").text(grand_subtotal);
+                            //     $("input[name='total_qty']").val(total_qty);
+                            //     $("input[name='item']").val(product_count);
+                            //     product_count++;
+                            // });
                         }
                         $("input[type='checkbox']").on("change", function() {
                             if ($(this).is(":checked"))
@@ -418,7 +430,6 @@
                                     });
                                 }
                             });
-
                             {{--console.log('here');--}}
                             {{--console.log( "<?php echo $transType; ?>");--}}
                             {{--$("#fiveDays").datepicker({--}}

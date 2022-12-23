@@ -265,17 +265,20 @@
     var count = 1;
     var product_count = 1;
     $("._products_select").select2({
+        // $('#supplier').val();
         ajax: {
             type: 'get',
-            url: "{{url('/get-all-products')}}",
+            url: "{{ url('/get-all-products') }}",
             dataType: 'json',
             data: function(params) {
                 return {
                     q: params.term,
+                    supplier : '123',
+
                 };
             },
             processResults: function(data, params) {
-                // console.log(data);
+                 console.log(data);
                 return {
                     results: data.items,
                 };
@@ -289,7 +292,7 @@
         // console.log(id);
         $.ajax({
             type: 'GET',
-            url: '{{url("get_purchase-product")}}',
+            url: '{{ url("get_purchase-product") }}',
             data: {
                 id: id
             },

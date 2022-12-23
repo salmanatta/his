@@ -375,7 +375,6 @@ class PurchaseController extends Controller
     {
         $purchaseM = PurchaseInvoice::find($id);
         $purchaseD = PurchaseInvoiceDetail::with('product', 'batch')->where('purchase_invoice_detail_id', $id)->get();
-
         return view("pages/supplier/invoice/purchase", compact('purchaseM', 'purchaseD'));
     }
 
@@ -398,9 +397,10 @@ class PurchaseController extends Controller
 
     public function purchase_adjustment($id)
     {
-        $purchase = PurchaseInvoice::where('id', $id)->with('supplier', 'branch', 'user')->first();
-        $purchase_details = PurchaseInvoiceDetail::where('purchase_invoice_detail_id', $id)->get();
-        return view('pages.reports.purchase.purchase_adjustment', compact('purchase', 'purchase_details'));
+        $purchaseM = PurchaseInvoice::find($id);
+        $purchaseD = PurchaseInvoiceDetail::with('product', 'batch')->where('purchase_invoice_detail_id', $id)->get();
+        $suppliers = Supplier::all();
+        return view('pages.reports.purchase.purchase_adjustment', compact('purchaseM', 'purchaseD','suppliers'));
 
     }
 }

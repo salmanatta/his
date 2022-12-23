@@ -19,7 +19,7 @@
 {{--                    <span class="logo-lg">--}}
 {{--                        <img src="{{ URL::asset ('/assets/images/logo-light.png') }}" alt="" height="19">--}}
 {{--                    </span>--}}
-                   <h3 class="mt-2" style="color:white">Haroon Enterprises</h3>
+                   <h3 class="mt-2" style="color:white">Haroon Enterprises - {{ auth()->user()->branch->name }}</h3>
                 </a>
             </div>
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
@@ -132,9 +132,9 @@
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user"
-                         src="{{ (Auth::user()->avatar !='') ? asset(Auth::user()->avatar) : asset('/images/avatar.jpg') }}"
-                         alt="Header Avatar">
+{{--                    <img class="rounded-circle header-profile-user"--}}
+{{--                         src="{{ (Auth::user()->avatar !='') ? asset(Auth::user()->avatar) : asset('/images/avatar.jpg') }}"--}}
+{{--                         alt="Header Avatar">--}}
                     <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ucfirst(Auth::user()->name)}}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>

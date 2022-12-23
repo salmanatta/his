@@ -120,7 +120,7 @@
                                     <option  value="1">Filer </option>
                                     <option  value="0">Non-Filer</option>
                                     <option  value="99">Exempted </option>
-                                    
+
                                 </select>
 
                                 <!-- <label for="formrow-inputZip" class="form-label">Allow In All Region </label><br>&nbsp;&nbsp;
@@ -192,17 +192,18 @@
                                         <input type="file" placeholder="certificate" id="certificate" width="8%" name="certificate[]" class="form-control  certificate" />
                                     </td>
                                     <td>
-                                        <label for="formrow-inputState" class="form-label">Income Tax</label>
-                                        <select name="filer[]" class="form-control select2">
-                                            <option value="" selected="">Select Income Tax</option>
+
+                                        <label for="filer" class="form-label">Income Tax</label>
+                                        <select name="filer[]" class="form-select">
+                                            <option value="" selected disabled> -- Select Income Tax -- </option>
                                             <option value="Yes">Filer</option>
                                             <option value="No">Non Filer</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <label for="formrow-inputState" class="form-label">Status</label>
-                                        <select name="status[]" class="form-control select2">
-                                            <option value="" selected="">Select Statu</option>
+                                        <label for="status" class="form-label">Status</label>
+                                        <select name="status[]" class="form-select">
+                                            <option value="" selected disabled >-- Select Status --</option>
                                             <option value="1">Verified</option>
                                             <option value="0">Non Verified</option>
                                         </select>

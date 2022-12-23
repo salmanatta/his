@@ -8,7 +8,7 @@
                         <div class="col-12">
                             <div class="text-primary p-3">
                                 <h5 class="text-primary">Welcome Back !</h5>
-                                <p>Haroon Enterprises</p>
+                                <p>Haroon Enterprises - {{ auth()->user()->branch->name }}</p>
                             </div>
                         </div>
                         <div class="col-5 align-self-start">

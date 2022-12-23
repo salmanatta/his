@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\region\Region;
 use Illuminate\Http\Request;
 use App\Models\purchases\Supplier;
 use App\Models\city\City;
@@ -17,7 +18,7 @@ class SupplierController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { 
+    {
         $data['suppliers']=Supplier::all();
         return view('pages.supplier.index',$data);
     }
@@ -39,8 +40,9 @@ class SupplierController extends Controller
     public function create()
     {
         // $data['distributators']=Distributor::all();
-        $data['employees']=Employee::all();
-        $data['cities']=City::all();
+//        $data['employees']=Employee::all();
+//        $data['cities']=City::all();
+        $data['cities'] = Region::where('region_id','0')->get();
         $data['groups']=Group::all();
         return view('pages.supplier.create',$data);
     }
@@ -76,13 +78,13 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $data['supplier']=Supplier::find($id);
+        $data['supplier']= Supplier::find($id);
         // $data['distributators']=Distributor::all();
-        $data['employees']=Employee::all();
-        $data['cities']=City::all();
+//        $data['employees']=Employee::all();
+        $data['cities'] = Region::where('region_id','0')->get();
         $data['groups']=Group::all();
 
-        return view('pages.supplier.edit',$data);
+        return view('pages.supplier.create',$data);
     }
 
     /**
@@ -108,7 +110,7 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         Supplier::find($id)->delete();
-       
+
         return redirect()->route('suppliers.index')->with('success','Data Deleted Successfully!');
     }
 }

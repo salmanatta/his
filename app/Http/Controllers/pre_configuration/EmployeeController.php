@@ -196,4 +196,18 @@ class EmployeeController extends Controller
             return 0;
         }
     }
+
+    public function get_employee_reported_to($id)
+    {
+        if ($id == 1){
+            $employees = Employee::where('designation_id',2)->get();
+            return response()->json($employees);
+        }elseif ($id == 4){
+            $employees = Employee::where('designation_id',3)->get();
+            return response()->json($employees);
+        }else{
+            return null;
+        }
+
+    }
 }

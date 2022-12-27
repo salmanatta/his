@@ -273,12 +273,12 @@
             data: function(params) {
                 return {
                     q: params.term,
-                    supplier : '123',
+                    supplier : $('#supplier').val(),
 
                 };
             },
             processResults: function(data, params) {
-                 console.log(data);
+                 // console.log(data);
                 return {
                     results: data.items,
                 };

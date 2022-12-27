@@ -54,12 +54,13 @@ class ProductController extends Controller
     public function getAllProducts(Request $request)
     {
         if (request()->has('q')) {
-            return $request;
 //            $product = Product::where('name', 'like', '%' . $request->q . '%')
                 $product = Product::where('name', 'like', $request->q . '%')
+                    ->where('supplier_id',$request->supplier)
+                    ->get();
                 // ->join('stocks', 'products.id', '=', 'stocks.product_id')
                 // ->select('products.*','stocks.batch_id')
-                ->get();
+
             $product = $product->map(function ($item, $key) {
                 return ['id' => $item['id'], 'text' => $item['name'] . ' - ' . $item['product_code']];
             });

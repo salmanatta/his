@@ -38,7 +38,7 @@ class SaleInvoiceController extends Controller
         // dd($maxID);
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';
-        $salesman = Employee::where('designation_id', '1')
+        $salesman = Employee::where('designation_id', '3')
             ->where('branch_id', auth()->user()->branch_id)
             ->get();
 
@@ -429,12 +429,15 @@ class SaleInvoiceController extends Controller
         return view('pages.reports.sale.customer-wise-sale', compact('customers', 'sale_Master'));
     }
 
-
-
-
     public function excel_test()
     {
         return Excel::download(new InvoicesExport, 'invoices.xlsx');
+    }
+
+    public function get_sales_deliveryman($id)
+    {
+        $delivery_man = Employee::where('reported_to',$id)->get();
+        return response()->json($delivery_man);
     }
 
 

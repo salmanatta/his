@@ -105,7 +105,7 @@
                                                                        readonly>
                                                             @else
                                                                 <select
-                                                                    class="select2 form-control _customers_select"
+                                                                    class="select2 form-select _customers_select"
                                                                     name="customer_id"
                                                                     selected="{{ isset($customer) ? 'selected' : '' }}">
                                                                 </select>
@@ -113,13 +113,20 @@
                                                                 <span class="text-danger">{{$message}}</span>
                                                                 @enderror
                                                             @endif
-
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            <label class="form-label" for="deliveryman">Delivery Man</label>
+                                                            <select class="form-select select2" name="deliveryman" id="deliveryman">
+                                                            </select>
+                                                            @error('deliveryman')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label"
                                                                    for="description">Description</label>
                                                             <textarea placeholder="description" name="description"
-                                                                      rows="5"
+                                                                      rows="1"
                                                                       class="form-control _description">{{ isset($sale) ? $sale->description : old('description') }}</textarea>
                                                         </div>
                                                     </div>
@@ -137,17 +144,17 @@
                                                     <th scope="row">#</th>
                                                     <th scope="row">Products</th>
                                                     <th scope="row">Batch</th>
-                                                    <th scope="row">Stock Quantity</th>
-                                                    <th scope="row">Quantity</th>
-                                                    <th scope="row">Bonus</th>
-                                                    <th scope="row">Price</th>
-                                                    <th scope="row">Sales Tax</th>
-                                                    <th scope="row">Advance Tax</th>
-                                                    <th scope="row">Advance Tax value</th>
+                                                    <th class="text-center">Stock Quantity</th>
+                                                    <th class="text-center">Quantity</th>
+                                                    <th class="text-center">Bonus</th>
+                                                    <th class="text-end">Price</th>
+                                                    <th class="text-center">Sales Tax</th>
+                                                    <th class="text-center">Advance Tax</th>
+                                                    <th class="text-end">Advance Tax value</th>
                                                     <th scope="row">Allow Discount</th>
-                                                    <th scope="row">Discount %</th>
-                                                    <th scope="row">Discount Amount</th>
-                                                    <th scope="row">Line Total</th>
+                                                    <th class="text-center">Discount %</th>
+                                                    <th class="text-end">Discount Amount</th>
+                                                    <th class="text-end">Line Total</th>
                                                     <!-- <th scope="row">Action</th> -->
                                                 </tr>
                                                 </thead>
@@ -340,6 +347,22 @@
 @endsection
 @push('script')
     <script>
+        $('#salesman').on('change',function ()
+        {
+            $.ajax({
+                method: 'get',
+                url: "{{ url('get-sales-deliveryman')}}/"+$('#salesman').val(),
+                success: function (data) {
+                    //console.log(data);
+                    $('#deliveryman').empty();
+                    var html = `<option selected disabled value="">-- Select Delivery Man --</option>`;
+                    for (var i=0 ;i< data.length;i++){
+                        html += `<option value="`+ data[i].id + `">`+ data[i].first_name + ' '+ data[i].last_name +`</option>`;
+                    }
+                    $('#deliveryman').append(html);
+                },
+            });
+        });
         //     function getBonus (product,qty){
         //     $.ajax({
         //         type: 'GET',

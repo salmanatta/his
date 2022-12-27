@@ -35,7 +35,7 @@
                                 <div class="mb-3">
                                     <label for="designation" class="form-label">Designation</label>
                                     <select id="designation_id" required="true" name="designation_id"
-                                            class="form-control select2">
+                                            class="form-control">
                                         <option selected disabled="" value="">Choose Designation</option>
                                         @foreach($designations as $designation)
                                             <option value="{{$designation->id}}" {{ isset($employee) ? $employee->designation_id == $designation->id ? 'selected' : '' : '' }}>{{$designation->title}}</option>
@@ -195,23 +195,39 @@
 @push('script')
     <script>
     $(document).ready(function (){
-
-        var desgID = $('#designation_id').val();
-        if (desgID != 1) {
+        if ( $('#reported_to').val() != '' && $('#reported_to').val() != null  ){
+            $('#reportedDiv').show();
+        }else {
             $('#reportedDiv').hide();
         }
-
     });
 
     $('#designation_id').change(function(){
-        // console.log($('#designation_id').val());
          var desgID = $('#designation_id').val();
-         if (desgID == 1){
+         if (desgID == 1 || desgID == 4){
              $('#reportedDiv').show();
+             $.ajax({
+                 method: 'get',
+                 url: "{{ url('get-employee-report-to')}}/"+desgID,
+                 success: function (data) {
+                     //console.log(data);
+                     $('#reported_to').empty();
+                     var html = `<option selected disabled value="">-- Select Reported to --</option>`;
+                     for (var i=0 ;i< data.length;i++){
+                         html += `<option value="`+ data[i].id + `">`+ data[i].first_name + ' '+ data[i].last_name +`</option>`;
+                     }
+                     $('#reported_to').append(html);
+                 },
+             });
          }else{
-             $('#reported_to').val();
-             $('#reportedDiv').hide();
-         }
+                 $('#reported_to').empty();
+                 $('#reportedDiv').hide();
+             }
+
+
+         // if (desgID == 1){
+         //     $('#reportedDiv').show();
+         // }
     });
     // ============ Employee Supplier =====
     function getSupplier(id)
@@ -272,10 +288,6 @@
                         '<td>'+ data[i].region_name +'</td>'+
                         '</tr>');
                 }
-
-                // data.data.forEach((i,v) => {
-                //     $(".data-list").append("<button onclick='getList("+i.id+" , "+i.region_id+")' class='btn btn-default get-children'>"+i.name+"</button><br>");
-                // });
             },
         });
     });

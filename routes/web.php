@@ -135,6 +135,7 @@ Route::get('all_regions_report', 'App\Http\Controllers\pre_configuration\RegionC
 
 Route::resource('regions', 'App\Http\Controllers\pre_configuration\RegionController')->middleware('auth');
 Route::resource('employees', 'App\Http\Controllers\pre_configuration\EmployeeController')->middleware('auth');
+Route::get('get-employee-report-to/{id}',[EmployeeController::class,'get_employee_reported_to']);
 
 Route::post('employee-supplier',[EmployeeController::class,"employee_supplier_store"])->middleware('auth');
 Route::post('employee-supplier-delete',[EmployeeController::class,'employee_supplier_delete'])->middleware('auth');
@@ -213,6 +214,7 @@ Route::get('getBatcheWiseProduct', 'App\Http\Controllers\SaleInvoiceController@g
 Route::get('getProductBonus',[SaleInvoiceController::class,'getProductBonus'])->middleware('auth');
 
 Route::get('getProductDiscount',[SaleInvoiceController::class,'getProductDiscount'])->middleware('auth');
+Route::get('get-sales-deliveryman/{id}',[SaleInvoiceController::class,'get_sales_deliveryman']);
 
 // ===================== Product Sale Side======
 /*----------   Store Transfer  Resource Route  ----------*/

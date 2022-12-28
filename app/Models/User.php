@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\employee\Employee;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,7 +25,7 @@ class User extends Authenticatable
     //     'email',
     //     'password',
     //     'type',
-    //     'dob', 
+    //     'dob',
     //     'avatar',
     // ];
 
@@ -39,6 +40,11 @@ class User extends Authenticatable
     public function branch()
       {
           return $this->belongsTo(Branch::class,'branch_id','id');
+      }
+
+      public function employee()
+      {
+          return $this->belongsTo(Employee::class,'employee_id','id');
       }
 
     /**

@@ -68,12 +68,12 @@
                                                             <select class="form-control select2" id="salesman"
                                                                     name="salesman">
                                                                 <option disabled selected> Select Salesman</option>
-                                                                @foreach($salesman as $saleman)
+                                                                @foreach($salesmans as $salesman)
                                                                     <option
-                                                                        value="{{ $saleman->id }}" {{ isset($sale) ? ($sale->salesman_id == $saleman->id ? 'selected' : '' ) : '' }}>{{ $saleman->first_name.' '.$saleman->last_name }}</option>
+                                                                        value="{{ $salesman->id }}" {{ isset($sale) ? ($sale->salesman_id == $salesman->id ? 'selected' : '' ) : '' }}>{{ $salesman->first_name.' '.$salesman->last_name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            @error('product_id')
+                                                            @error('salesman')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>
@@ -117,6 +117,12 @@
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label" for="deliveryman">Delivery Man</label>
                                                             <select class="form-select select2" name="deliveryman" id="deliveryman">
+                                                                <option selected disabled value="">-- Select Delivery Man --</option>
+                                                                @if(isset($sale))
+                                                                    @foreach($delivery_man as $data)
+                                                                        <option value="{{ $data->id }}" {{ isset($sale) ? ($sale->delivery_man == $data->id ? 'selected' : '' ) : '' }}> {{ $data->first_name. ' '.$data->last_name }} </option>
+                                                                    @endforeach
+                                                                @endif
                                                             </select>
                                                             @error('deliveryman')
                                                             <span class="text-danger">{{$message}}</span>
@@ -151,7 +157,6 @@
                                                     <th class="text-center">Sales Tax</th>
                                                     <th class="text-center">Advance Tax</th>
                                                     <th class="text-end">Advance Tax value</th>
-                                                    <th scope="row">Allow Discount</th>
                                                     <th class="text-center">Discount %</th>
                                                     <th class="text-end">Discount Amount</th>
                                                     <th class="text-end">Line Total</th>
@@ -173,7 +178,7 @@
                                                                        name="product_id[]"
                                                                        value="{{ $saleD->product_id }}"/>
                                                             </td>
-                                                            <td width='7%'>
+                                                            <td>
                                                                 <button type="button" data-bs-toggle="modal"
                                                                         class="btn btn-primary btn-sm edit_modal batch_no_id"
                                                                         data-bs-toggle="modal"
@@ -182,7 +187,7 @@
                                                                     <i class="dripicons-document-edit"></i>
                                                                 </button>
                                                             </td>
-                                                            <td width='7%'>
+                                                            <td>
                                                                 <input type="number"
                                                                        class="form-control text-center all_qty"
                                                                        min="1" value="" step="any" disabled/>
@@ -227,11 +232,11 @@
                                                                        value="{{ $saleD->adv_tax_value }}"
                                                                        name="adv_tax_value[]" step="any" required/>
                                                             </td>
-                                                            <td width='3%'>
-                                                                <input
-                                                                    class="form-control form-check-input discount-check"
-                                                                    type="checkbox" name="discount_check[]">
-                                                            </td>
+{{--                                                            <td width='3%'>--}}
+{{--                                                                <input--}}
+{{--                                                                    class="form-control form-check-input discount-check"--}}
+{{--                                                                    type="checkbox" name="discount_check[]">--}}
+{{--                                                            </td>--}}
                                                             <td width='7%'>
                                                                 <input type="number"
                                                                        class="form-control text-center discount"
@@ -273,7 +278,6 @@
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
-                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -492,9 +496,6 @@
 <td width='7%'>
 <input type="number" class="form-control text-end adv_tax_value"  value="` + data.productArr.product.sale_tax_value + `" name="adv_tax_value[]" step="any" />
 </td>
-<td width='3%'>
-<input type="checkbox" class="form-control form-check-input discount-check" name="discount_check[]"  />
-</td>
 <td width='7%'>
 <input type="number" class="form-control text-center discount" value="0" name="purchase_discount[]" step="any" readonly />
 </td>
@@ -522,20 +523,15 @@
         $(document).on('click', '.delete_row', function () {
             delete_record($(this).closest('tr').attr('id'));
             $(this).closest('tr').remove();
-
         });
-
         function delete_record(id) {
             var tempLineTotal = $("#" + id).find('.line_total').val();
             var gTotal = $("._tfootTotal").text();
             var ggTotal = (parseFloat(gTotal) - parseFloat(tempLineTotal)).toFixed(2);
             $("._tfootTotal").text(ggTotal);
             $(".hidden_total").val(grandTotal);
-
         }
-
         var grandTotal = 0;
-
         function calc(id) {
             // console.log(id);
             var tempLineTotal = $("#" + id).find('.line_total').val();
@@ -550,7 +546,6 @@
             $("#" + id).find('.adv_tax_value').val(advTaxValue);
             lineTotal = (parseFloat(lineTotal) + parseFloat(advTaxValue)).toFixed(2);
             // console.log($("#" + id).find(".discount-check").is(":checked"));
-            if ($("#" + id).find(".discount-check").is(":checked") == false) {
                 $.ajax({
                     type: 'GET',
                     url: '{{url("getProductDiscount")}}',
@@ -564,7 +559,7 @@
                         $("#" + id).find('.discount').val(data.general_discount.discount);
                     }
                 });
-            }
+
             var purchase_discount = $("#" + id).find(".discount").val();
             var price_after_discount = parseFloat((lineTotal * purchase_discount) / 100).toFixed(2);
             $("#" + id).find('.after_discount').val(price_after_discount);
@@ -585,20 +580,9 @@
                     $("#" + id).find('.bouns').val(data.bonus);
                 }
             });
-
         }
 
-        $(document).on('click', '.discount-check', function () {
-            // console.log($(this).closest('tr').attr('id'));
-            var rowID = $(this).closest('tr').attr('id');
-            if ($(this).is(":checked")) {
-                // console.log('checked');
-                $("#" + rowID).find('.discount').removeAttr('readonly');
-            } else {
-                // console.log('unchecked');
-                $("#" + rowID).find('.discount').attr('readonly', 'readonly');
-            }
-        });
+
 
         // function do_calculation() {
         //     // Declare variable for grand calculation

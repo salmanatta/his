@@ -36,23 +36,24 @@ class SaleInvoiceController extends Controller
         // To get max id branch wise
         // $maxID = SaleInvoice::where('branch_id',auth()->user()->branch_id)->max('invoice_no');
         // dd($maxID);
+        if (auth()->user()->employee != null && auth()->user()->employee->designation_id == 3){
+            $salesmans = Employee::where('id',auth()->user()->employee_id)->get();
+        }else{
+            $salesmans = Employee::where('designation_id', '3')->where('branch_id', auth()->user()->branch_id)->get();
+        }
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE';
-        $salesman = Employee::where('designation_id', '3')
-            ->where('branch_id', auth()->user()->branch_id)
-            ->get();
-
-        return view("pages/sale/invoice", compact('invoice_no', 'transType', 'salesman'));
+        return view("pages/sale/invoice", compact('invoice_no', 'transType','salesmans'));
     }
 
     public function invoiceReturn()
     {
         $invoice_no = mt_rand(0, 8889);
         $transType = 'SALE RETURN';
-        $salesman = Employee::where('designation_id', '1')
+        $salesmans = Employee::where('designation_id', '3')
             ->where('branch_id', auth()->user()->branch_id)
             ->get();
-        return view("pages/sale/invoice", compact('invoice_no', 'transType', 'salesman'));
+        return view("pages/sale/invoice", compact('invoice_no', 'transType', 'salesmans'));
     }
 
     public function getStock(Request $request, $id)
@@ -166,11 +167,11 @@ class SaleInvoiceController extends Controller
         $sale = SaleInvoice::find($id);
         $customer = Customer::find($sale->customer_id);
         $saleDetail = SaleInvoiceDetail::with('product', 'batch')->where('sale_invoice_id', $sale->id)->get();
-        $salesman = Employee::where('designation_id', '1')
-            ->where('branch_id', auth()->user()->branch_id)
-            ->get();
-        // dd($saleDetail);
-        return view("pages/sale/invoice", compact('sale', 'customer', 'saleDetail', 'salesman'));
+        $salesmans = Employee::where('designation_id', '3')->where('branch_id', auth()->user()->branch_id)->get();
+        $delivery_man = Employee::where('reported_to',$sale->salesman_id)->get();
+
+
+        return view("pages/sale/invoice", compact('sale', 'customer', 'saleDetail', 'salesmans','delivery_man'));
 
     }
 
@@ -199,12 +200,13 @@ class SaleInvoiceController extends Controller
                 // 'description' => 'string|nullable',
                 // 'product_id'=>'required|exists:products,id',
                 'customer_id' => 'required|exists:customers,id',
-                // 'branch_id'=>'required|exists:branches,id',
+                'salesman'=>'required',
+                'deliveryman' => 'required',
             ],
             [
-                'product_id.required' => 'Please select any Product, Thank You.',
-                'customer_id.required' => 'Please select any Customer, Thank You.',
-                // 'branch_id.required' => 'Please select any Branch, Thank You.',
+                'delivery_man.required' => 'Please select Delivery Man.',
+                'customer_id.required' => 'Please select Customer.',
+                'salesman.required' => 'Please select Salesman.',
             ]
         );
         $order_data = $request->only(['customer_id', 'description', 'total', 'trans_type']);
@@ -215,6 +217,7 @@ class SaleInvoiceController extends Controller
         $order_data['branch_id'] = auth()->user()->branch_id;
         $order_data['inv_status'] = 'Un-Post';
         $order_data['salesman_id'] = $request->salesman;
+        $order_data['delivery_man'] = $request->deliveryman;
         $order_data['invoice_date'] = Carbon::createFromFormat('m/d/Y', $request->invoice_date)->format('Y-m-d');
         $order = SaleInvoice::create($order_data);
         if ($order) {
@@ -294,6 +297,7 @@ class SaleInvoiceController extends Controller
         $saleM = SaleInvoice::find($saleInvoice->id);
         $saleM->description = $request->description;
         $saleM->salesman_id = $request->salesman;
+        $saleM->delivery_man = $request->deliveryman;
         if ($request->has('update-post')) {
             $saleM->inv_status = 'Post';
             $saleM->status_changed_by = auth()->user()->id;

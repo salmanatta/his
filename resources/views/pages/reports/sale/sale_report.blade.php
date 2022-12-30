@@ -4,8 +4,6 @@
     <div class="text-center">
         <h3> Sale Invoice Approval</h3>
     </div><br>
-
-
     <div class="row">
         <!-- <form method="get" id="add_form" action=""> -->
         <form method="GET" action="{{ url('purchaseSale') }}">

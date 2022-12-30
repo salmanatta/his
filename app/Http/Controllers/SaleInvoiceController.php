@@ -444,6 +444,27 @@ class SaleInvoiceController extends Controller
         return response()->json($delivery_man);
     }
 
+    public function sale_drawing_summary(Request $request)
+    {
+        if (count($request->all()) > 0) {
+            $this->validate(
+                $request,
+                [
+                    'salesman'=>'required',
+                    'deliveryman' => 'required',
+                ],
+                [
+                    'delivery_man.required' => 'Please select Delivery Man.',
+                    'salesman.required' => 'Please select Salesman.',
+                ]
+            );
+        }else{
+            $salesman = Employee::where('designation_id', '3')->where('branch_id', auth()->user()->branch_id)->get();
+            return view('pages.sale.sale_drawing_summary',compact('salesman'));
+        }
+
+    }
+
 
 }
 

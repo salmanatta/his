@@ -233,6 +233,7 @@
                             <a href="{{url('sale/invoiceReturn')}}" class="dropdown-item" key="t-saas"> Sale Return
                                 Invoice </a>
                             <a href="{{url('purchaseSale')}}" class="dropdown-item" key="t-saas">Sale Invoice Approval</a>
+                            <a href="{{url('sale-drawing-summary')}}" class="dropdown-item" key="t-saas">Sale Drawing Summary</a>
                         </div>
                     </li>
 

@@ -215,7 +215,7 @@ Route::get('getProductBonus',[SaleInvoiceController::class,'getProductBonus'])->
 
 Route::get('getProductDiscount',[SaleInvoiceController::class,'getProductDiscount'])->middleware('auth');
 Route::get('get-sales-deliveryman/{id}',[SaleInvoiceController::class,'get_sales_deliveryman']);
-
+Route::get('sale-drawing-summary',[SaleInvoiceController::class,'sale_drawing_summary'])->middleware('auth');
 // ===================== Product Sale Side======
 /*----------   Store Transfer  Resource Route  ----------*/
 Route::get('storetostore',[StoreController::class,'storeToStore'])->name('storeToStore')->middleware("auth");

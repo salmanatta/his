@@ -78,7 +78,6 @@
                                                             @enderror
                                                         </div>
                                                         <div class="col-12 mb-3">
-                                                            @if(!isset($customer))
                                                                 <label class="form-label"
                                                                        for="description">Product</label>
                                                                 <select
@@ -88,7 +87,7 @@
                                                                 @error('product_id')
                                                                 <span class="text-danger">{{$message}}</span>
                                                                 @enderror
-                                                            @endif
+
                                                         </div>
                                                     </div>
                                                     <div class="col-4"></div>
@@ -144,7 +143,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table mb-0 order-list _saleTable">
+                                            <table id="sale_table1" class="table mb-0 order-list _saleTable">
                                                 <thead>
                                                 <tr>
                                                     <th scope="row">#</th>
@@ -171,7 +170,7 @@
                                                     ?>
                                                     @foreach($saleDetail as $saleD)
                                                         <tr onkeyup="calc(id.valueOf())" class="table_append_rows"
-                                                            id="table_append_rows_{{$row_id}}">
+                                                            id="{{$row_id}}">
                                                             <td>{{ $counter }}</td>
                                                             <td>{{ $saleD->product->name }}
                                                                 <input type="hidden" class="product_id"
@@ -445,7 +444,18 @@
 
         custom_select2("._products_select", "{{url('get-all-sale-products')}}", 'Search for a product');
         $("._products_select").on('change', function (data) {
-            var id = $(this).val();
+            var wid = $('#sale_table1 tr');
+            var last_id = 0;
+            console.log(wid);
+            if(wid.length>2){
+                last_id = parseInt($(wid[wid.length-2]).attr('id'))+1;
+            }else{
+                last_id = 1;
+            }
+            // console.log(wid[wid.length-2]);
+            alert(last_id);
+
+            var id =  $(this).val();
             $.ajax({
                 type: 'GET',
                 url: '{{url("get-stock")}}/' + id,
@@ -462,7 +472,7 @@
 
                     // == 1 ? data.productArr.product.adv_tax_filer : data.productArr.product.adv_tax_non_filer;
                     var table_body = $("table.order-list tbody"); // assign table body to variable used in different area
-                    var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="table_append_rows_` + row_id + `">
+                    var new_row = `<tr onkeyup='calc(id.valueOf())' class="table_append_rows" id="` + last_id + `">
 <td class="product_count" width='2%'>` + product_count + `</td>
 <td class="name" width='8%'>
     <input type="hidden" name="id[]" value="` + data.productArr.id + `"/>
@@ -511,7 +521,7 @@
 <input type="hidden" name="id[]" value="">
 </tr>`;
                     table_body.append(new_row); // append new row to table body
-                    calc("table_append_rows_" + row_id);
+                    calc(last_id);
                     product_count++;
                     row_id++;
                     empty_select2("._products_select"); // empty the product selection after row appending
@@ -525,12 +535,15 @@
             $(this).closest('tr').remove();
         });
         function delete_record(id) {
+
             var tempLineTotal = $("#" + id).find('.line_total').val();
             var gTotal = $("._tfootTotal").text();
             var ggTotal = (parseFloat(gTotal) - parseFloat(tempLineTotal)).toFixed(2);
             $("._tfootTotal").text(ggTotal);
             $(".hidden_total").val(grandTotal);
+
         }
+
         var grandTotal = 0;
         function calc(id) {
             // console.log(id);
@@ -565,7 +578,8 @@
             $("#" + id).find('.after_discount').val(price_after_discount);
             lineTotal = (parseFloat(lineTotal) - parseFloat(price_after_discount)).toFixed(2);
             $("#" + id).find('.line_total').val(lineTotal);
-            grandTotal = (parseFloat(grandTotal) + parseFloat(lineTotal) - parseFloat(tempLineTotal || 0)).toFixed(2);
+            var temp_total = parseFloat($("._tfootTotal").text());
+            grandTotal = (parseFloat(temp_total) + parseFloat(lineTotal) - parseFloat(tempLineTotal || 0)).toFixed(2);
             $("._tfootTotal").text(grandTotal);
             $(".hidden_total").val(grandTotal);
 

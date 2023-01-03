@@ -446,15 +446,11 @@
         $("._products_select").on('change', function (data) {
             var wid = $('#sale_table1 tr');
             var last_id = 0;
-            console.log(wid);
             if(wid.length>2){
                 last_id = parseInt($(wid[wid.length-2]).attr('id'))+1;
             }else{
                 last_id = 1;
             }
-            // console.log(wid[wid.length-2]);
-            alert(last_id);
-
             var id =  $(this).val();
             $.ajax({
                 type: 'GET',

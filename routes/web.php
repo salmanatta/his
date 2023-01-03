@@ -37,6 +37,7 @@ use App\Http\Controllers\pre_configuration\EmployeeController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SalesTargetController;
+
 //use App\Models\sales\Customer;
 
 //use app\Models\sales\Customer;
@@ -314,6 +315,8 @@ Route::post('supplier-discount-create',[GeneralController::class,'supplier_disco
 Route::get('supplier-discount-edit/{id}',[GeneralController::class,'supplier_discount_edit'])->middleware('auth');
 Route::patch('supplier-discount-update/{id}',[GeneralController::class,'supplier_discount_update'])->middleware('auth');
 // ============= End Supplier Discount =========
+// ============== Sale Bookings ==================
+Route::resource('sale-booking','App\Http\Controllers\SaleBookingController')->middleware('auth');
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');

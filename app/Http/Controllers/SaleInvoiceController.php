@@ -117,29 +117,36 @@ class SaleInvoiceController extends Controller
 
     public function allSaleProducts(Request $request)
     {
-        if (request()->has('q')) {
-            $product = Product::where('name', 'like', '%' . $request->q . '%')
-                ->join('stocks', 'products.id', '=', 'stocks.product_id')
-                ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
-                ->where('stocks.branch_id', '=', auth()->user()->branch_id)
-                ->select('products.*')
-                ->groupBy('name', 'stocks.product_id')
-                ->get();
+        if ($request->has('search_type') && request()->has('q')){
+            if ($request->search_type == 'code'){
+                $product = Product::where('product_code', '=', $request->q)
+                    ->join('stocks', 'products.id', '=', 'stocks.product_id')
+//                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
+                    ->where('stocks.branch_id', '=', auth()->user()->branch_id)
+                    ->select('products.*')
+                    ->groupBy('name', 'stocks.product_id')
+                    ->get();
+            }else{
+                $product = Product::where('name', 'like', '%' . $request->q . '%')
+                    ->join('stocks', 'products.id', '=', 'stocks.product_id')
+//                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
+                    ->where('stocks.branch_id', '=', auth()->user()->branch_id)
+                    ->select('products.*')
+                    ->groupBy('name', 'stocks.product_id')
+                    ->get();
+            }
+            $product = $product->map(function ($item, $key) {
+                return ['id' => $item['id'],
+                    'text' => $item['name'] . ' - ' . $item['product_code'],
+                ];
+            });
+            return response()->json(['items' => $product]);
+        }
             // return $product;
             // $product = Stock::whereHas('product' , function($q) use ($request) {
             //             return $q->where('name', 'like', '%' . $request->q . '%');
             //         })->where('quantity', '>', '0')->get();
 
-
-            $product = $product->map(function ($item, $key) {
-                return ['id' => $item['id'],
-                    'text' => $item['name'] . ' - ' . $item['product_code']
-                ];
-
-            });
-            return response()->json(['items' => $product]);
-        }
-        return response()->json($response);
     }
 
     public function searchSaleReport(Request $request)

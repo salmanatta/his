@@ -229,7 +229,8 @@
                             <div class="arrow-down"></div>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                            <a href="{{url('sale-booking')}}" class="dropdown-item" key="t-saas"> Sale Booking </a>
+                            <a href="{{url('sale-booking/create')}}" class="dropdown-item" key="t-saas"> Sale Booking </a>
+                            <a href="{{url('sale-booking')}}" class="dropdown-item" key="t-saas"> Sale Booking List </a>
                             <a href="{{url('sale/invoice')}}" class="dropdown-item" key="t-saas"> Sale Invoice </a>
                             <a href="{{url('sale/invoiceReturn')}}" class="dropdown-item" key="t-saas"> Sale Return
                                 Invoice </a>

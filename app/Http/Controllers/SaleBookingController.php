@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\employee\Employee;
 use App\Models\SaleBooking;
+use App\Models\SaleBookingDetail;
 use App\Models\sales\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,10 +16,40 @@ class SaleBookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
-        return view('pages.sale-booking.sale_booking',compact('customers'));
+        $salesman = Employee::where('designation_id', '3')->where('branch_id', auth()->user()->branch_id)->get();
+        if (count($request->all()) > 0) {
+            if (isset($request->customer) && isset($request->salesman)){
+                $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])
+                    ->where('customer_id',$request->customer)
+                    ->where('salesman_id',$request->salesman)
+                    ->get();
+                dd('1');
+                return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
+            }
+            if (isset($request->customer)){
+                $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])
+                    ->where('customer_id',$request->customer)
+                    ->get();
+                dd('2');
+                return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
+            }
+            if (isset($request->salesman)){
+                $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])
+                    ->where('salesman_id',$request->salesman)
+                    ->get();
+                dd('4');
+                return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
+            }
+            $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])->get();
+            return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
+        }else{
+//            $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
+//            $salesman = Employee::where('designation_id', '3')->where('branch_id', auth()->user()->branch_id)->get();
+            return view('pages.sale-booking.sale_booking_list',compact('customers','salesman'));
+        }
     }
 
     /**
@@ -27,7 +59,8 @@ class SaleBookingController extends Controller
      */
     public function create()
     {
-
+        $customers = Customer::where('branch_id',auth()->user()->branch_id)->get();
+        return view('pages.sale-booking.sale_booking',compact('customers'));
     }
 
     /**
@@ -46,14 +79,23 @@ class SaleBookingController extends Controller
         [
             'customer.required' => 'Please select Customer.',
         ]);
+//        dd($request->all());
         $booking = new SaleBooking();
         $booking->sale_date         = Carbon::now();
         $booking->invoice_no        = SaleBooking::maxId(auth()->user()->branch_id);
         $booking->branch_id       = auth()->user()->branch_id;
         $booking->customer_id       = $request->customer;
         $booking->salesman_id       = auth()->user()->id;
+        $booking->created_by       = auth()->user()->id;
         $booking->save();
-
+        $rows = $request->input('product_id');
+        foreach ($rows as $key => $row) {
+            $bookingDetails = new SaleBookingDetail();
+            $bookingDetails->sale_booking_id    = $booking->id;
+            $bookingDetails->product_id    = $request->product_id[$key];
+            $bookingDetails->qty    = $request->qty[$key];
+            $bookingDetails->save();
+        }
         return back()->with('success', "Data Added Successfully!");
     }
 

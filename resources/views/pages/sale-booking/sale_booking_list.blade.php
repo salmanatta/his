@@ -49,7 +49,7 @@
                                             <option value="">-- Select Customer --</option>
                                             @if(isset($customers))
                                                 @foreach($customers as $customer)
-                                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                                    <option value="{{ $customer->id }}" {{ isset($_GET['customer']) ? $_GET['customer'] == $customer->id ? 'selected' : '' : ''  }}>{{ $customer->name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -61,14 +61,14 @@
                             <div class="col-4">
                                 <div class="row d-flex align-items-center">
                                     <div class="col-4">
-                                        <label for="formrow-inputCity" class="form-label">Salesman</label>
+                                        <label for="salesman" class="form-label">Salesman</label>
                                     </div>
                                     <div class="col-8">
                                         <select class="form-control select2" name="salesman" id="salesman">
                                             <option value="">-- Select Salesman --</option>
                                             @if(isset($salesman))
                                                 @foreach($salesman as $data)
-                                                    <option value="{{ $data->id }}">{{ $data->first_name.' '.$data->last_name }}</option>
+                                                    <option value="{{ $data->id }}" {{ isset($_GET['salesman']) ? $_GET['salesman'] == $data->id ? 'selected' : '' : ''  }}>{{ $data->first_name.' '.$data->last_name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -79,15 +79,12 @@
                     </div>
                     <div class="d-flex justify-content-between d-print-none">
                         <button type="submit" id="search"
-                                class="btn btn-primary search_btn float-left printBlock">
-                            Search
+                                class="btn btn-primary search_btn float-left printBlock">Search
                         </button>
                     </div>
                 </div>
             </form>
         </div>
-
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -100,8 +97,8 @@
                                     <th scope="col">Date</th>
                                     <th scope="col">Salesman</th>
                                     <th scope="col">Customer</th>
-                                    <th scope="col">Total Items</th>
-                                    <th scope="col" class="d-print-none" style="text-align: center;">View</th>
+                                    <th class="text-center">Total Items</th>
+{{--                                    <th scope="col" class="d-print-none" style="text-align: center;">View</th>--}}
                                     <th scope="col" class="d-print-none" style="text-align: center;">Action</th>
                                 </tr>
                                 </thead>
@@ -111,27 +108,22 @@
                                         <tr>
                                             <td style="text-align: center;">{{ $data->invoice_no }}</td>
                                             <td>{{ date('d-m-Y', strtotime($data->sale_date)) }}</td>
+                                            <td>{{ $data->salesman->first_name.' '.$data->salesman->last_name }}</td>
                                             <td>{{ $data->customer->name }}</td>
-                                            <td>{{ $data->salesman->first_name.' '. }}</td>
-                                            <td>{{ $data->trans_type }}</td>
-                                            @if($data->inv_status == 'Un-Post' )
-                                                <td style="text-align: center;">
-                                                    <a href="{{ url('viewSaleInvoice/'.$data->id) }}"
-                                                       class="text-danger">
-                                                        <i class="mdi mdi-pencil font-size-18 waves-effect waves-light"
-                                                           style="border-radius: 44px;"></i>
-                                                    </a>
-                                                </td>
-                                            @else
-                                                <td></td>
-                                            @endif
+                                            <td class="text-center">{{ $data->countItems }}</td>
+{{--                                            <td style="text-align: center;">--}}
+{{--                                                <a href="{{ url('sale-invoice/'.$data->id)}}"--}}
+{{--                                                   style="border-radius: 44px;"--}}
+{{--                                                   class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">--}}
+{{--                                                    View Booking </a>--}}
+{{--                                            </td>--}}
                                             <td style="text-align: center;">
-
-                                                <a href="{{ url('sale-invoice/'.$data->id)}}"
+                                                <a href="{{ url('create-invoice/'.$data->id)}}"
                                                    style="border-radius: 44px;"
                                                    class="btn btn-primary btn-sm btn-rounded waves-effect waves-light d-print-none">
-                                                    Print Invoice </a>
+                                                    Create Invoice </a>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 @endif

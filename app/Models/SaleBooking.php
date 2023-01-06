@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class SaleBooking extends Model
 {
     use HasFactory;
+    protected $appends = ['countItems'];
 
     public function scopeMaxId($query, $branch)
     {
@@ -25,6 +26,17 @@ class SaleBooking extends Model
     public function salesman()
     {
         return $this->belongsTo(Employee::class,'salesman_id','id');
+    }
+
+    public function saleBookingDetail()
+    {
+        return $this->hasMany(SaleBookingDetail::class,'sale_booking_id','id');
+    }
+
+    public function getCountItemsAttribute()
+    {
+        return $this->saleBookingDetail()->count('sale_booking_id');
+
     }
 
 }

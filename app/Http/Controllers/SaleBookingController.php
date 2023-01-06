@@ -26,21 +26,18 @@ class SaleBookingController extends Controller
                     ->where('customer_id',$request->customer)
                     ->where('salesman_id',$request->salesman)
                     ->get();
-                dd('1');
                 return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
             }
             if (isset($request->customer)){
                 $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])
                     ->where('customer_id',$request->customer)
                     ->get();
-                dd('2');
                 return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
             }
             if (isset($request->salesman)){
                 $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])
                     ->where('salesman_id',$request->salesman)
                     ->get();
-                dd('4');
                 return view('pages.sale-booking.sale_booking_list',compact('customers','salesman','booking'));
             }
             $booking = SaleBooking::whereBetween('sale_date',[$request->from_date,$request->to_date])->get();
@@ -142,5 +139,14 @@ class SaleBookingController extends Controller
     public function destroy(SaleBooking $saleBooking)
     {
         //
+    }
+
+    public function createInvoice($id)
+    {
+        $booking = SaleBooking::with('salesman','customer')->find($id);
+//        dd($booking->salesman);
+        $bookingDetail = SaleBookingDetail::where('sale_booking_id',$id);
+        $delivery_man = Employee::where('reported_to',$booking->salesman_id)->get();
+        return view('pages.sale.create_invoice',compact('booking','delivery_man'));
     }
 }

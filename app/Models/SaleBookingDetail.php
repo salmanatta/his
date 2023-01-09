@@ -14,4 +14,9 @@ class SaleBookingDetail extends Model
     {
         return $this->belongsTo(Product::class,'product_id','id');
     }
+
+    public function stock()
+    {
+        return $this->belongsTo(Stock::class,'product_id','product_id');
+    }
 }

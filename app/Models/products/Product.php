@@ -206,6 +206,5 @@ class Product extends Model
     {
         return $this->purchQty - $this->purchReturnQty - $this->saleQty + $this->saleReturnQty + $this->transInQty - $this->transOutqty;
     }
-
 }
 

@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Batch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\products\Product;
-use App\Models\Batch;
 use App\Models\branch\Branch;
 class Stock extends Model
 {
     use HasFactory;
       protected $guarded = [];
       protected $appends = ['currentQty'];
- 
+
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -20,6 +20,10 @@ class Stock extends Model
     public function batch()
     {
         return $this->belongsTo(Batch::class);
+    }
+    public function latestbatch()
+    {
+        return $this->belongsTo(Batch::class , 'batch_id' , 'id')->orderBy('date' , 'ASC');
     }
     public function branch()
     {
@@ -29,5 +33,5 @@ class Stock extends Model
     {
         return $this->quantity - $this->reserve_qty;
     }
-    
+
 }

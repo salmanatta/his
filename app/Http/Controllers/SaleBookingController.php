@@ -144,11 +144,10 @@ class SaleBookingController extends Controller
     public function createInvoice($id)
     {
         $booking = SaleBooking::with('salesman','customer')->find($id);
-//        dd($booking->salesman);
         $bookingDetail = SaleBookingDetail::with('product','stock.latestbatch')->where('sale_booking_id',$id)->get();
-        return $bookingDetail;
+//        return $bookingDetail;
         $delivery_man = Employee::where('reported_to',$booking->salesman_id)->get();
 
-        return view('pages.sale.create_invoice',compact('booking','delivery_man'));
+        return view('pages.sale.create_invoice',compact('booking','delivery_man','bookingDetail'));
     }
 }

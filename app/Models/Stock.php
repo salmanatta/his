@@ -19,7 +19,7 @@ class Stock extends Model
     }
     public function batch()
     {
-        return $this->belongsTo(Batch::class);
+        return $this->belongsTo(Batch::class, 'batch_id' , 'id');
     }
     public function latestbatch()
     {

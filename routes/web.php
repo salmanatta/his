@@ -1,8 +1,5 @@
-
-
 <?php
 use App\Http\Controllers\ProductMaxSalQuantityController;
-// use App\Http\Controllers\SaleInvoiceController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Pharmacy\LogController;
 use App\Http\Controllers\pre_configuration\PermissionController;
@@ -15,7 +12,6 @@ use App\Http\Controllers\Stock;
 use App\Models\sales\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\SaleInvoiceController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -23,7 +19,6 @@ use App\Http\Controllers\BatchController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProducBonusController;
 use App\Http\Controllers\StockController;
-// use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SaleInvoiceController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductDiscountController;
@@ -31,17 +26,11 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseInvoice;
 use App\Http\Controllers\StockAdjustmentsController;
 use App\Http\Controllers\pre_configuration\EmployeeController;
-// use App\Http\Controllers\PurchaseController;
-// use App\Http\Controllers\PurchaseInvoice;
-// use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SalesTargetController;
 use App\Http\Controllers\SaleBookingController;
 
-//use App\Models\sales\Customer;
-
-//use app\Models\sales\Customer;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -319,6 +308,7 @@ Route::patch('supplier-discount-update/{id}',[GeneralController::class,'supplier
 // ============== Sale Bookings ==================
 Route::resource('sale-booking','App\Http\Controllers\SaleBookingController')->middleware('auth');
 Route::get('create-invoice/{id}',[SaleBookingController::class,'createInvoice']);
+
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');
@@ -329,22 +319,8 @@ Route::get('/clear-cache', function () {
 Route::get('backuprun',function(){
  $exitCode =Artisan::call('backup:run');
  dd($exitCode);
-// return back();
 });
 
-// Route::get('/database-backup', function () {
-//     \Artisan::call('backup:run');
-//     return 'backup success Iside StorageFolder';
-// });
-// Route::get('/database-import', function () {
-    // return 'database:import db-data-backup-'.date('Y-m-d').'.sql';
-    // try {
-    //     \Artisan::call('database:import db-data-backup-'.date('Y-m-d').'.sql');
-    //     return 'import success Iside StorageFolder';
-    // } catch (\Exception $e) {
-    //     dd($e->getMessage());
-    // }
-// });
 
 
 

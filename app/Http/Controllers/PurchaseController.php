@@ -241,7 +241,7 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, PurchaseInvoice $PurchaseInvoice)
     {
-        // dd($request->all());
+//        dd($request->all());
         $purchaseM = PurchaseInvoice::find($PurchaseInvoice->id);
         $purchaseM->description = $request->description;
         $purchaseM->freight = $request->freight;
@@ -289,13 +289,13 @@ class PurchaseController extends Controller
             }
             $inv_total += $request->line_total[$key];
             $batch = Batch::where('batch_no', $request->batch[$key])
-                ->where('date', $request->expiry_date[$key])
+                ->whereDate('date', date('Y-m-d', strtotime($request->input('expiry_date')[$key])))
                 ->where('branch_id', auth()->user()->branch_id)
                 ->first();
             if (!isset($batch)) {
                 $tansID = Batch::create([
                     'batch_no' => $request->input('batch')[$key],
-                    'date' => $request->input('expiry_date')[$key],
+                    'date' =>  date('Y-m-d', strtotime($request->input('expiry_date')[$key])),
                     'branch_id' => auth()->user()->branch_id,
                 ]);
                 $batch_id = $tansID->id;

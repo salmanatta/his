@@ -139,7 +139,7 @@
                                     <input type="hidden" value="{{ $purchase->batch->id }}" name="batch_id[]">
                                 </td>
                                 <td class="expiry_date">
-                                    <input type="text" class="form-control text-center expiry_date" value="{{ date('d/m/Y', strtotime($purchase->batch->date)) }}" name="expiry_date[]" step="any" readonly />
+                                    <input type="text   " class="form-control text-center expiry_date" value="{{ date('d/m/Y', strtotime($purchase->batch->date)) }}" name="expiry_date[]" step="any" readonly/>
                                 </td>
                                 <td class="quanity">
                                     <input type="number" class="form-control quanity" style="text-align:center" min="1" onKeyup="do_calculation()" name="quanity[]" value="{{ $purchase->qty }}" step="any" required />

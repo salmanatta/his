@@ -72,8 +72,8 @@
                                                             <div class="col-12 mb-3">
                                                                 <label class="form-label" for="Customer">Customer Name</label>
                                                                 <input type="hidden" name="filer" value="" id="filer">
-                                                                <input type="text" class="form-control" name="salesman_name" value="{{ $booking->customer->name }}" readonly>
-                                                                <input type="hidden" class="form-control" name="salesman_id" value="{{ $booking->customer->id }}">
+                                                                <input type="text" class="form-control" name="customer_name" value="{{ $booking->customer->name }}" readonly>
+                                                                <input type="hidden" class="form-control" name="customer_id" value="{{ $booking->customer->id }}">
 
                                                             </div>
                                                             <div class="col-12 mb-3">
@@ -125,11 +125,11 @@
                                                     </thead>
                                                     <?php $granttotal = 0; ?>
                                                     <tbody>
-                                                    @if(isset($saleDetail))
+                                                    @if(isset($bookingDetail))
                                                         <?php $counter = 1;
                                                         $row_id = 1;
                                                         ?>
-                                                        @foreach($saleDetail as $saleD)
+                                                        @foreach($bookingDetail as $saleD)
                                                             <tr onkeyup="calc(id.valueOf())" class="table_append_rows"
                                                                 id="{{$row_id}}">
                                                                 <td>{{ $counter }}</td>
@@ -143,14 +143,14 @@
                                                                             class="btn btn-primary btn-sm edit_modal batch_no_id"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target=".bs-example-modal-lg"
-                                                                            data-product_id="{{ $saleD->product_id }}"> {{ $saleD->batch->batch_no }}
+                                                                            data-product_id="{{ $saleD->product_id }}"> {{ $saleD->stock->latestbatch->batch_no }}
                                                                         <i class="dripicons-document-edit"></i>
                                                                     </button>
                                                                 </td>
                                                                 <td>
                                                                     <input type="number"
                                                                            class="form-control text-center all_qty"
-                                                                           min="1" value="" step="any" disabled/>
+                                                                           min="1" value="{{ $saleD->stock->currentQty }}" step="any" disabled/>
                                                                 </td>
                                                                 <td class="qty" width='7%'>
                                                                     <input type="number"
@@ -162,59 +162,59 @@
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center bouns"
-                                                                           value="{{ $saleD->bonus }}" name="bouns[]"
+                                                                           value="" name="bouns[]"
                                                                            step="any"/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-end purchase_price price"
-                                                                           value="{{ $saleD->price }}"
+                                                                           value="{{ $saleD->product->trade_price }}"
                                                                            name="purchase_price[]" step="any" required/>
                                                                     <input type="hidden" class="total_rate"
                                                                            name=total_rate[]
-                                                                           value="{{  $saleD->price * $saleD->qty }}"/>
+                                                                           value="{{ $saleD->product->trade_price* $saleD->qty }}"/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center sales_tax"
-                                                                           value="{{ $saleD->sales_tax }}"
+                                                                           value=""
                                                                            name="sales_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center adv_tax"
-                                                                           value="{{ $saleD->adv_tax }}"
+                                                                           value=""
                                                                            name="adv_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-end adv_tax_value"
-                                                                           value="{{ $saleD->adv_tax_value }}"
+                                                                           value=""
                                                                            name="adv_tax_value[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center discount"
-                                                                           value="{{ $saleD->discount }}"
+                                                                           value=""
                                                                            name="purchase_discount[]" step="any"
                                                                            readonly/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-end after_discount"
-                                                                           value="{{ $saleD->after_discount }}"
+                                                                           value=""
                                                                            name="after_discount[]" step="any" readonly/>
                                                                 </td>
                                                                 <td>
                                                                     <input type="number"
                                                                            class="form-control text-end line_total"
-                                                                           value="{{ $saleD->line_total }}"
+                                                                           value=""
                                                                            name="line_total[]" step="any" readonly/>
                                                                     <input type="hidden" class="hidden_total"
                                                                            name="total" value="0">
                                                                     <input type="hidden" class="table_batch_id"
                                                                            name="table_batch_id[]"
-                                                                           value="{{ $saleD->batch_id }}">
+                                                                           value="{{ $saleD->stock->latestbatch->id }}">
                                                                     <input type="hidden" name="id[]"
                                                                            value="{{ $saleD->id }}">
                                                                 </td>

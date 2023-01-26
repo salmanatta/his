@@ -97,12 +97,10 @@ class SaleInvoiceController extends Controller
             $to = $request->to_date;
             $fromDate = date('Y-m-d', strtotime($from));
             $todate = date('Y-m-d', strtotime($to));
-
             $saleData = SaleInvoice::Customer_sale_report( $fromDate, $todate,$request->customer_id,$request->trans_type,auth()->user()->branch_id)
                                     ->with('customer', 'branch', 'user')
                                     ->orderBy('invoice_no', 'desc')
                                     ->get();
-
             return view('pages.reports.sale.sale_report', compact('customers','saleData'));
         } else {
             $fromDate = Carbon::now();
@@ -110,38 +108,38 @@ class SaleInvoiceController extends Controller
             $todate = Carbon::now();
             $todate = date('Y-m-d', strtotime($todate));
         }
-
-        // dd($saleData);
         return view('pages.reports.sale.sale_report', compact('customers'));
     }
 
     public function allSaleProducts(Request $request)
     {
-        if ($request->has('search_type') && request()->has('q')){
-            if ($request->search_type == 'code'){
-                $product = Product::where('product_code', '=', $request->q)
-                    ->join('stocks', 'products.id', '=', 'stocks.product_id')
-//                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
-                    ->where('stocks.branch_id', '=', auth()->user()->branch_id)
-                    ->select('products.*')
-                    ->groupBy('name', 'stocks.product_id')
-                    ->get();
+
+        if ($request->has('search_type') && $request->has('q')){
+            $product = Product::join('stocks', 'products.id', '=', 'stocks.product_id')
+                ->select('products.*')
+                ->where('stocks.branch_id', '=', auth()->user()->branch_id);
+            if ($request->search_type == 'code') {
+                $product->where('product_code' , $request->q);
             }else{
-                $product = Product::where('name', 'like', '%' . $request->q . '%')
-                    ->join('stocks', 'products.id', '=', 'stocks.product_id')
-//                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
-                    ->where('stocks.branch_id', '=', auth()->user()->branch_id)
-                    ->select('products.*')
-                    ->groupBy('name', 'stocks.product_id')
-                    ->get();
+                $product->where('name', 'like' , "%".$request->q."%");
             }
+            $product = $product->groupBy('name', 'stocks.product_id')->get();
+        }else{
+            $product = Product::where('name', 'like', '%' . $request->q."%")
+                ->join('stocks', 'products.id', '=', 'stocks.product_id')
+    //                    ->whereRaw('((stocks.quantity - stocks.reserve_qty) > 0)')
+                ->where('stocks.branch_id', '=', auth()->user()->branch_id)
+                ->select('products.*')
+                ->groupBy('name', 'stocks.product_id')
+                ->get();
+        }
             $product = $product->map(function ($item, $key) {
                 return ['id' => $item['id'],
                     'text' => $item['name'] . ' - ' . $item['product_code'],
                 ];
             });
             return response()->json(['items' => $product]);
-        }
+
             // return $product;
             // $product = Stock::whereHas('product' , function($q) use ($request) {
             //             return $q->where('name', 'like', '%' . $request->q . '%');

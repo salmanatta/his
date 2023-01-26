@@ -4,22 +4,8 @@
             <!-- LOGO -->
 
             <div class="navbar-brand-box">
-{{--                <a href="{{url('/')}}" class="logo logo-dark">--}}
-{{--                    <span class="logo-sm">--}}
-{{--                        <img src="{{ URL::asset ('/assets/images/logo.svg') }}" alt="" height="22">--}}
-{{--                    </span>--}}
-{{--                    <span class="logo-lg">--}}
-{{--                        <img src="{{ URL::asset ('/assets/images/logo-dark.png') }}" alt="" height="17">--}}
-{{--                    </span>--}}
-{{--                </a>--}}
                 <a href="{{url('/')}}" class="logo logo-light">
-{{--                    <span class="logo-sm">--}}
-{{--                        <img src="{{ URL::asset ('/assets/images/logo-light.svg') }}" alt="" height="22">--}}
-{{--                    </span>--}}
-{{--                    <span class="logo-lg">--}}
-{{--                        <img src="{{ URL::asset ('/assets/images/logo-light.png') }}" alt="" height="19">--}}
-{{--                    </span>--}}
-                   <h3 class="mt-2" style="color:white">Haroon Enterprises - {{ auth()->user()->branch->name }}</h3>
+                   <h3 class="mt-2" style="color:white">Haroon Enterprises - {{ auth()->user() ? auth()->user()->branch->name : '' }}</h3>
                 </a>
             </div>
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
@@ -34,9 +20,7 @@
                 </div>
             </form>
         </div>
-
         <div class="d-flex">
-
             <div class="dropdown d-inline-block d-lg-none ml-2">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -100,7 +84,6 @@
                     <i class="bx bx-fullscreen"></i>
                 </button>
             </div>
-
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect"
                         id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -132,10 +115,7 @@
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-{{--                    <img class="rounded-circle header-profile-user"--}}
-{{--                         src="{{ (Auth::user()->avatar !='') ? asset(Auth::user()->avatar) : asset('/images/avatar.jpg') }}"--}}
-{{--                         alt="Header Avatar">--}}
-                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ucfirst(Auth::user()->name)}}</span>
+                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ auth()->user() ? auth()->user()->name : ''}}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">

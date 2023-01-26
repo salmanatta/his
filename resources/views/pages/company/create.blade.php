@@ -14,7 +14,6 @@
                         <form method="POST" action="{{route('companies.store')}}" enctype="multipart/form-data">
                         @endif
                             @csrf
-{{--                            @if(!isset($company))--}}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">
@@ -24,7 +23,6 @@
                                     </div>
                                 </div>
                             </div>
-{{--                            @endif--}}
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="mb-3">

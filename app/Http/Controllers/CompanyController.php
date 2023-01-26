@@ -26,7 +26,6 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        // $data['suppliers']=Supplier::all();
         return view('pages.company.create');
     }
 
@@ -47,10 +46,7 @@ class CompanyController extends Controller
         $company->address = $request->address;
         $company->isActive = $request->isActive;
         $company->save();
-//        $this->logsAction(["action" => "Store", "remarks" => "Company id " . auth()-User()->id]);
-
-        return redirect()->route('companies.index')
-            ->with('success', 'Data Added Successfully!');
+        return redirect()->route('companies.index')->with('success', 'Data Added Successfully!');
     }
 
     /**
@@ -86,10 +82,6 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $company = Company::find($id);
-//        $company->update($request->all());
-//        $this->logsAction(["action" => "Update", "remarks" => "Company id " . $id]);
-
         $company = Company::find($id);
         $company->name      = $request->name;
         $company->email     = $request->email;
@@ -101,9 +93,6 @@ class CompanyController extends Controller
             $company->logo      = $request->logo->store('/', ['disk' => 'company']);
         }
         $company->save();
-
-
-
         return redirect()->route('companies.index')->with('info', 'Data Updated Successfully!');
     }
 

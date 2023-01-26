@@ -71,7 +71,7 @@
                                                         <div class="col-4">
                                                             <div class="col-12 mb-3">
                                                                 <label class="form-label" for="Customer">Customer Name</label>
-                                                                <input type="hidden" name="filer" value="" id="filer">
+                                                                <input type="hidden" name="filer" value="{{  $booking->customer->isfiler }}" id="filer">
                                                                 <input type="text" class="form-control" name="customer_name" value="{{ $booking->customer->name }}" readonly>
                                                                 <input type="hidden" class="form-control" name="customer_id" value="{{ $booking->customer->id }}">
 
@@ -177,13 +177,13 @@
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center sales_tax"
-                                                                           value=""
+                                                                           value="{{ $saleD->product->sale_tax_value }}"
                                                                            name="sales_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>
                                                                     <input type="number"
                                                                            class="form-control text-center adv_tax"
-                                                                           value=""
+                                                                           value="{{ $booking->customer->isfiler == 1 ? $saleD->product->adv_tax_filer : $saleD->product->adv_tax_non_filer }}"
                                                                            name="adv_tax[]" step="any" required/>
                                                                 </td>
                                                                 <td width='7%'>

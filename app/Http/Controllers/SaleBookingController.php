@@ -144,6 +144,7 @@ class SaleBookingController extends Controller
     public function createInvoice($id)
     {
         $booking = SaleBooking::with('salesman','customer')->find($id);
+//        return $booking;
         $bookingDetail = SaleBookingDetail::with('product','stock.latestbatch')->where('sale_booking_id',$id)->get();
 //        return $bookingDetail;
         $delivery_man = Employee::where('reported_to',$booking->salesman_id)->get();
